@@ -1,3 +1,4 @@
+package SumBigInt;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -19,14 +20,11 @@ public class Solution {
 	}
 }
 
-class JUtils {
-	public static List<String> split(String input, String separator) {
-		return Collections.newList(input.split(separator));
-	}
+class L extends Logger {
 
 }
 
-class L {
+class Logger {
 	public static final void d(Object message) {
 		System.out.println("" + message);
 	}
@@ -72,6 +70,7 @@ class Input {
 }
 
 class Collections {
+	@SuppressWarnings("unchecked")
 	public static final <T> List<T> newList(T... array) {
 		List<T> result = new List<T>();
 		for (int i = 0; i < array.length; i++) {
@@ -126,3 +125,10 @@ class List<T> extends ArrayList<T> {
 		return r;
 	}
 }
+
+// class JUtils {
+// public static List<String> split(String input, String separator) {
+// return Collections.newList(input.split(separator));
+// }
+//
+// }
