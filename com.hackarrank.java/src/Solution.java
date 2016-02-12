@@ -1,18 +1,21 @@
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.ArrayList;
 
 public class Solution {
 
 	public static void main(String[] args) throws IOException {
-		String data = Input.readLine();
-		L.d("input", data);
-		List<String> nums = JUtils.split(data, " ", "\r");
-		nums.print("print");
+		int N = Input.readInt();
+		List<BigInteger> ints = Input.readIntegers(N);
+		// ints.print("ints");
+		BigInteger result = new BigInteger("0");
+		for (int i = 0; i < ints.size(); i++) {
+			BigInteger add = ints.get(i);
+			result = result.add(add);
+		}
+		L.d(result.toString());
 
-		// L.d(args.length);
-		// List<String> input=Collections.toList(args);
-		// L.d(input);
 	}
 }
 
@@ -34,29 +37,37 @@ class L {
 }
 
 class Input {
-	public static final String readAll() throws IOException {
-		int read = 0;
+
+	private static String readSection(char... c) throws IOException {
+		List<Integer> list_of_termenators = Collections.newCharList(c);
+		Integer read = 0;
 		String data = "";
 		for (;;) {
 			read = System.in.read();
-			if (read == -1) {
+			if (read == -1 || list_of_termenators.contains(read)) {
 				return data;
 			}
-			data = data + (char) read;
+			data = data + (char) (int) read;
 		}
+	}
 
+	public static List<BigInteger> readIntegers(int n) throws IOException {
+		List<BigInteger> result = Collections.newList();
+		for (int i = 0; i < n; i++) {
+			String int_string = readSection(' ', '\n', '\r');
+			// L.d("int_string", int_string);
+			BigInteger e = new BigInteger(int_string);
+			result.add(e);
+		}
+		return result;
+	}
+
+	public static int readInt() throws NumberFormatException, IOException {
+		return Integer.parseInt(readLine());
 	}
 
 	public static String readLine() throws IOException {
-		int read = 0;
-		String data = "";
-		for (;;) {
-			read = System.in.read();
-			if (read == -1 || read == '\n') {
-				return data;
-			}
-			data = data + (char) read;
-		}
+		return readSection('\n');
 	}
 }
 
@@ -65,6 +76,14 @@ class Collections {
 		List<T> result = new List<T>();
 		for (int i = 0; i < array.length; i++) {
 			result.add(array[i]);
+		}
+		return result;
+	}
+
+	public static List<Integer> newCharList(char[] array) {
+		List<Integer> result = new List<Integer>();
+		for (int i = 0; i < array.length; i++) {
+			result.add((int) array[i]);
 
 		}
 		return result;
@@ -78,12 +97,14 @@ class Collections {
 
 class List<T> extends ArrayList<T> {
 
+	private static final long serialVersionUID = 6518468021004909830L;
+
 	public void print(String string) {
 		L.d(string + " > " + listToString(string.length() + 3, this));
 	}
 
 	private String listToString(int indent, List<?> array) {
-		String canonocal_name = "Collection[]";
+		String canonocal_name = "List[]";
 		final int n = array.size();
 		if (n == 0) {
 			return canonocal_name;
