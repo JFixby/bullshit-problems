@@ -1,5 +1,5 @@
-import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Solution {
 
@@ -14,7 +14,7 @@ public class Solution {
 
 	private static void test(Scanner scanner) {
 		int N = scanner.nextInt();
-		Vector<Integer> list = new Vector<Integer>();
+		ArrayList<Integer> list = new ArrayList<Integer>();
 		for (int i = 0; i < N; i++) {
 			int e = scanner.nextInt();
 			list.add(e);
