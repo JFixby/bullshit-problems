@@ -70,15 +70,18 @@ public class SolutionRunner {
 		final Solution solution = this.solutionClass.newInstance();
 
 		final FileInputStream is = inputFile.newInputStream();
-		is.open();
 		final FileOutputStream os = actualOutputFile.newOutputStream();
+
+		is.open();
 		os.open();
 
 		solution.input = is.toJavaInputStream();
+
 		final OutputStream jos = os.toJavaOutputStream();
 		solution.output = new PrintStream(jos);
 
 		solution.main(new String[0]);
+
 		solution.output.flush();
 
 		os.close();
@@ -94,6 +97,11 @@ public class SolutionRunner {
 		final String actual = actualOutputFile.readToString();
 		final TestResult result = new TestResult(input, expected, actual);
 		return result;
+	}
+
+	public static void run (final Class<Solution> class1) throws Throwable {
+		final SolutionRunner runner = new SolutionRunner(SolveMeFirst.Solution.class);
+		runner.run();
 	}
 
 }
