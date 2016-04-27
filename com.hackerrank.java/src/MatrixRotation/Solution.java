@@ -1,23 +1,26 @@
+
 package MatrixRotation;
+
+import java.io.InputStream;
 import java.util.Scanner;
 
 public class Solution {
 
-	public static void main(String[] args) {
+	public static void main (final String[] args) {
 
-		Scanner scanner = new Scanner(System.in);
-		int H = scanner.nextInt();
-		int W = scanner.nextInt();
-		Vector frame = new Vector(W, H);
+		final Scanner scanner = new Scanner(input());
+		final int H = scanner.nextInt();
+		final int W = scanner.nextInt();
+		final Vector frame = new Vector(W, H);
 
-		F input = readInput(frame, scanner);
+		final F input = readInput(frame, scanner);
 		// print("input", input, frame);
 		F output = input;
 		if (W < H) {
 			output = rotateLeft(output, frame);
 		}
-		
-		long rot = scanner.nextLong();
+
+		final long rot = scanner.nextLong();
 
 		// // W>H;
 		// int alpha = frame.y;
@@ -29,7 +32,11 @@ public class Solution {
 		print(output, frame);
 	}
 
-	private static F rotate(F input, long rot, int alpha, Vector frame) {
+	private static InputStream input () {
+		return System.in;
+	}
+
+	private static F rotate (final F input, final long rot, final int alpha, final Vector frame) {
 		if (rot == 0) {
 			return input;
 		}
@@ -52,38 +59,38 @@ public class Solution {
 
 	}
 
-	private static F rotateRight(F input, Vector frame) {
+	private static F rotateRight (final F input, final Vector frame) {
 		F output = swapXY(input, frame);
 		output = flipX(output, frame);
 		return output;
 
 	}
 
-	private static F rotateLeft(F input, Vector frame) {
+	private static F rotateLeft (final F input, final Vector frame) {
 		F output = flipX(input, frame);
 		output = swapXY(output, frame);
 		return output;
 	}
 
-	private static F flipX(F output, Vector frame) {
+	private static F flipX (final F output, final Vector frame) {
 		return (x, y) -> output.value(frame.x - x - 1, y);
 	}
 
-	private static F flipY(F output, Vector frame) {
+	private static F flipY (final F output, final Vector frame) {
 		return (x, y) -> output.value(x, frame.y - y - 1);
 	}
 
-	private static F swapXY(F input, Vector frame) {
+	private static F swapXY (final F input, final Vector frame) {
 		frame.swap();
 		return (x, y) -> input.value(y, x);
 	}
 
-	private static void print(String string, F input, Vector frame) {
+	private static void print (final String string, final F input, final Vector frame) {
 		L.d(string + "[" + frame.x + "," + frame.y + "]");
 		print(input, frame);
 	}
 
-	private static void print(F input, Vector frame) {
+	private static void print (final F input, final Vector frame) {
 		for (int y = 0; y < frame.y; y++) {
 			String tmp = "";
 			for (int x = 0; x < frame.x; x++) {
@@ -93,8 +100,8 @@ public class Solution {
 		}
 	}
 
-	private static F readInput(Vector frame, Scanner scanner) {
-		long[][] A = new long[frame.x][frame.y];
+	private static F readInput (final Vector frame, final Scanner scanner) {
+		final long[][] A = new long[frame.x][frame.y];
 		for (int y = 0; y < frame.y; y++) {
 			for (int x = 0; x < frame.x; x++) {
 				A[x][y] = scanner.nextLong();
@@ -105,36 +112,36 @@ public class Solution {
 	}
 
 	public interface F {
-		public long value(int x, int y);
+		public long value (int x, int y);
 	}
 
 }
 
 class Vector {
-	public Vector(int x, int y) {
+	public Vector (final int x, final int y) {
 		this.x = x;
 		this.y = y;
 	}
 
-	public void swap() {
-		int tmp = this.y;
+	public void swap () {
+		final int tmp = this.y;
 		this.y = this.x;
 		this.x = tmp;
 	}
 
-	public Vector(Vector position) {
+	public Vector (final Vector position) {
 		this(position.x, position.y);
 	}
 
 	int x;
 	int y;
 
-	public Vector add(Vector addition) {
-		return new Vector(x + addition.x, y + addition.y);
+	public Vector add (final Vector addition) {
+		return new Vector(this.x + addition.x, this.y + addition.y);
 	}
 
-	public Vector negate() {
-		return new Vector(-x, -y);
+	public Vector negate () {
+		return new Vector(-this.x, -this.y);
 	}
 }
 
@@ -143,11 +150,11 @@ class L extends Logger {
 }
 
 class Logger {
-	public static final void d(Object message) {
+	public static final void d (final Object message) {
 		System.out.println("" + message);
 	}
 
-	public static final void d(String tag, Object message) {
+	public static final void d (final String tag, final Object message) {
 		d(tag + " > " + message);
 	}
 }

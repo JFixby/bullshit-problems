@@ -3,7 +3,7 @@ import java.util.Scanner;
 
 public class Solution {
 
-	public static void main(String[] args) {
+	public static void main (String[] args) {
 		Scanner scanner = new Scanner(System.in);
 		int n = scanner.nextInt();
 		for (int i = 0; i < n; i++) {
@@ -12,7 +12,7 @@ public class Solution {
 
 	}
 
-	private static void test(Scanner scanner) {
+	private static void test (Scanner scanner) {
 		int N = scanner.nextInt();
 		ArrayList<Integer> list = new ArrayList<Integer>();
 		for (int i = 0; i < N; i++) {
