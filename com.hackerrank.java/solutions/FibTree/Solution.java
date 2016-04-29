@@ -37,7 +37,7 @@ public class Solution extends AbstractSolution {
 		final Scanner in = new Scanner(input);
 		final int numberOfNodes = in.nextInt();
 		final int numberOfOperations = in.nextInt();
-		log(Fibonacci.valueOf(100));
+// log(Fibonacci.valueOf(100));
 // log(numberOfOperations);
 		final BinaryTree tree = new BinaryTree(numberOfNodes);
 
@@ -50,10 +50,10 @@ public class Solution extends AbstractSolution {
 		}
 		tree.normalize();
 // tree.print();
-		final Operation[] operations = new Operation[numberOfOperations];
+
 		for (int i = 0; i < numberOfOperations; i++) {
 			final Operation operation = new Operation();
-			operations[i] = operation;
+
 			final String operationName = in.next();
 			operation.type = OPERATION_TYPE.valueOf(operationName);
 			if (operation.type == OPERATION_TYPE.Q) {
@@ -79,19 +79,6 @@ public class Solution extends AbstractSolution {
 				}
 			}
 
-//
-		}
-
-		solve(tree, operations);
-
-	}
-
-	private static void solve (final BinaryTree tree, final Operation[] operations) {
-
-// final Path path = tree.findPath(tree.getNode(3), tree.getNode(3));
-// path.print();
-		for (int i = 0; i < operations.length; i++) {
-			final Operation operation = operations[i];
 			if (operation.type == OPERATION_TYPE.Q) {
 				final Path path = tree.findPath(operation.X, operation.Y);
 				final BigInteger pathValue = path.getPathValue();
@@ -101,15 +88,16 @@ public class Solution extends AbstractSolution {
 // tree.print();
 			}
 
+//
 		}
-// log(Arrays.toString(operations));
+
 	}
 
 	static BigInteger MODULO = new BigInteger("1000000007");
 
 	private static BigInteger rest (final BigInteger pathValue) {
-		return pathValue.remainder(MODULO);
-// return pathValue.mod(MODULO);
+// return pathValue.remainder(MODULO);
+		return pathValue.mod(MODULO);
 	}
 
 	static class Fibonacci {
@@ -176,6 +164,9 @@ public class Solution extends AbstractSolution {
 		final HashMap<String, Path> knownPaths = new HashMap<String, Path>();
 
 		public Path findPath (final Node x, final Node y) {
+			if (x.name.compareTo(y.name) > 0) {
+				return this.findPath(y, x);
+			}!!!
 			final String pathName = this.pathName(x, y);
 			final Path knownPath = this.knownPaths.get(pathName);
 			if (knownPath != null) {
@@ -188,6 +179,7 @@ public class Solution extends AbstractSolution {
 				this.findPath(x, y, result);
 			}
 			this.knownPaths.put(pathName, result);
+// this.knownPaths.put(this.pathName(y, x), result);
 			return result;
 		}
 
@@ -314,6 +306,7 @@ public class Solution extends AbstractSolution {
 			for (int i = 0; i < this.steps.size(); i++) {
 				final Node step = this.steps.get(i);
 				this.value = step.value.add(this.value);
+				this.value = rest(this.value);
 			}
 
 			return this.value;
