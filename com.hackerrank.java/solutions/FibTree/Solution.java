@@ -37,7 +37,7 @@ public class Solution extends AbstractSolution {
 		final Scanner in = new Scanner(input);
 		final int numberOfNodes = in.nextInt();
 		final int numberOfOperations = in.nextInt();
-// log(numberOfNodes);
+		log(Fibonacci.valueOf(100));
 // log(numberOfOperations);
 		final BinaryTree tree = new BinaryTree(numberOfNodes);
 
@@ -95,7 +95,7 @@ public class Solution extends AbstractSolution {
 			if (operation.type == OPERATION_TYPE.Q) {
 				final Path path = tree.findPath(operation.X, operation.Y);
 				final BigInteger pathValue = path.getPathValue();
-				log(pathValue);
+				log(rest(pathValue));
 			} else if (operation.type == OPERATION_TYPE.U) {
 				tree.update(operation.X, operation.K);
 // tree.print();
@@ -103,6 +103,13 @@ public class Solution extends AbstractSolution {
 
 		}
 // log(Arrays.toString(operations));
+	}
+
+	static BigInteger MODULO = new BigInteger("1000000007");
+
+	private static BigInteger rest (final BigInteger pathValue) {
+		return pathValue.remainder(MODULO);
+// return pathValue.mod(MODULO);
 	}
 
 	static class Fibonacci {
