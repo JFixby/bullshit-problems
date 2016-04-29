@@ -17,13 +17,11 @@ import com.jfixby.cmns.api.file.FileOutputStream;
 import com.jfixby.cmns.api.file.LocalFileSystem;
 import com.jfixby.cmns.api.log.L;
 
-import SolveMeFirst.Solution;
+public class SolutionRunner<T extends AbstractSolution> {
 
-public class SolutionRunner {
+	private final Class<T> solutionClass;
 
-	private final Class<Solution> solutionClass;
-
-	public SolutionRunner (final Class<Solution> solutionClass) {
+	public SolutionRunner (final Class<T> solutionClass) {
 		this.solutionClass = solutionClass;
 
 	}
@@ -67,7 +65,7 @@ public class SolutionRunner {
 	@SuppressWarnings("static-access")
 	private TestResult runTest (final File inputFile, final File expectedOutputFile, final File actualOutputFile)
 		throws Throwable {
-		final Solution solution = this.solutionClass.newInstance();
+		final T solution = this.solutionClass.newInstance();
 
 		final FileInputStream is = inputFile.newInputStream();
 		final FileOutputStream os = actualOutputFile.newOutputStream();
@@ -80,7 +78,7 @@ public class SolutionRunner {
 		final OutputStream jos = os.toJavaOutputStream();
 		solution.output = new PrintStream(jos);
 
-		solution.main(new String[0]);
+		solution.run(new String[0]);
 
 		solution.output.flush();
 
@@ -99,8 +97,8 @@ public class SolutionRunner {
 		return result;
 	}
 
-	public static void run (final Class<Solution> class1) throws Throwable {
-		final SolutionRunner runner = new SolutionRunner(SolveMeFirst.Solution.class);
+	public static <T extends AbstractSolution> void run (final Class<T> class1) throws Throwable {
+		final SolutionRunner<T> runner = new SolutionRunner<T>(class1);
 		runner.run();
 	}
 

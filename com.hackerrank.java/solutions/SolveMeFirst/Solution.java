@@ -1,14 +1,12 @@
 
 package SolveMeFirst;
 
-import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.Scanner;
 
-public class Solution {
+import com.jfixby.hrank.AbstractSolution;
 
-	public static InputStream input = System.in;
-	public static PrintStream output = System.out;
+public class Solution extends AbstractSolution {
 
 	public static void main (final String[] args) {
 		final Scanner in = new Scanner(input);
@@ -24,6 +22,11 @@ public class Solution {
 
 	static int solveMeFirst (final int a, final int b) {
 		return a + b;
+	}
+
+	@Override
+	public void run (final String[] args) {
+		main(args);
 	}
 
 }
