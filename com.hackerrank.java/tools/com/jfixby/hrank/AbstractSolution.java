@@ -8,10 +8,9 @@ public abstract class AbstractSolution {
 	public static InputStream input = System.in;
 	public static PrintStream output = System.out;
 
-	public abstract void run (String[] strings);
-
 	public static void log (final Object msg) {
 		output.println(msg);
 	}
 
+	public abstract void run (String[] strings);
 }
