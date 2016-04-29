@@ -10,4 +10,8 @@ public abstract class AbstractSolution {
 
 	public abstract void run (String[] strings);
 
+	public static void log (final Object msg) {
+		output.println(msg);
+	}
+
 }

@@ -47,10 +47,6 @@ public class Solution extends AbstractSolution {
 // log(Arrays.toString(clouds));
 	}
 
-	private static void log (final String msg) {
-		output.println(msg);
-	}
-
 	private static int findBestValue (final int myIndex, final Cloud[] clouds) {
 		int best = Integer.MAX_VALUE;
 		final int max = Math.min(clouds.length, myIndex + 3);
