@@ -166,7 +166,7 @@ public class Solution extends AbstractSolution {
 		public Path findPath (final Node x, final Node y) {
 			if (x.name.compareTo(y.name) > 0) {
 				return this.findPath(y, x);
-			}!!!
+			}
 			final String pathName = this.pathName(x, y);
 			final Path knownPath = this.knownPaths.get(pathName);
 			if (knownPath != null) {
