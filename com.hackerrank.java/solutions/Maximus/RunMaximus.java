@@ -2,12 +2,12 @@
 package Maximus;
 
 import com.jfixby.hrank.SolutionRunner;
-import com.jfixby.red.desktop.DesktopAssembler;
+import com.jfixby.red.desktop.DesktopSetup;
 
 public class RunMaximus {
 
 	public static void main (final String[] args) throws Throwable {
-		DesktopAssembler.setup();
+		DesktopSetup.deploy();
 		SolutionRunner.run(Maximus.Solution.class);
 	}
 

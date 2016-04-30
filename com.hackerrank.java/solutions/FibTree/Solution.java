@@ -24,40 +24,10 @@ public class Solution extends AbstractSolution {
 		main(args);
 	}
 
-	public enum OPERATION_TYPE {
-		Q, U;
-	}
-
-	public static class Operation {
-		OPERATION_TYPE type;
-		public Node X;
-		public Node Y;
-		public int K;
-
-		@Override
-		public String toString () {
-			return this.type + "(X=" + name(this.X) + " Y=" + name(this.Y) + " K=" + this.K + ")";
-		}
-
-	}
-
-	static {
-		final int N = 1000;
-// Fibonacci.valueOf(N);
-		for (int i = 0; i < N; i++) {
-			final Long f = Fibonacci.valueOf(i);
-
-// log(i + " -> " + f);
-// log(" ->" + f2);
-		}
-	}
-
 	public static void main (final String[] args) {
 		final Scanner in = new Scanner(input);
 		final int numberOfNodes = in.nextInt();
 		final int numberOfOperations = in.nextInt();
-// log(Fibonacci.valueOf(100));
-// log(numberOfOperations);
 		final BinaryTree tree = new BinaryTree(numberOfNodes);
 
 		for (int i = 0; i < numberOfNodes - 1; i++) {
@@ -67,48 +37,18 @@ public class Solution extends AbstractSolution {
 
 			tree.connect(nodeIndex, nodeParentIndex);
 		}
-// tree.normalize();
-// tree.print();
-
 		for (int i = 0; i < numberOfOperations; i++) {
-			final Operation operation = new Operation();
 
 			final String operationName = in.next();
-			operation.type = OPERATION_TYPE.valueOf(operationName);
-			if (operation.type == OPERATION_TYPE.Q) {
-				{
-					final int nodeIndex = in.nextInt();
-					final Node n = tree.getNode(nodeIndex);
-					operation.X = n;
-				}
-				{
-					final int nodeIndex = in.nextInt();
-					final Node n = tree.getNode(nodeIndex);
-					operation.Y = n;
-				}
-			} else {
-				{
-					final int nodeIndex = in.nextInt();
-					final Node n = tree.getNode(nodeIndex);
-					operation.X = n;
-				}
-				{
-					final int K = in.nextInt();
-					operation.K = K;
 
-				}
-			}
-
-			if (operation.type == OPERATION_TYPE.Q) {
-				final Path path = tree.findPath(operation.X, operation.Y);
+			if (operationName.equals("Q")) {
+				final Path path = tree.findPath(tree.getNode(in.nextInt()), tree.getNode(in.nextInt()));
 				final Long pathValue = path.getPathValue();
 				log(rest(pathValue));
-			} else if (operation.type == OPERATION_TYPE.U) {
-				tree.update(operation.X, operation.K);
-// tree.print();
+			} else {
+				tree.update(tree.getNode(in.nextInt()), in.nextInt());
 			}
 
-//
 		}
 
 	}
@@ -117,47 +57,14 @@ public class Solution extends AbstractSolution {
 		return pathValue % MODULO();
 	}
 
-	private static Long MODULO () {
+	public static int MODULO () {
 		if (MODULO == null) {
-			MODULO = 1000000007L;
+			MODULO = 1000000007;
 		}
 		return MODULO;
 	}
 
-	public static Long MODULO = null;
-
-	static class Fibonacci {
-
-		static ArrayList<Long> numbers = new ArrayList<Long>();
-		static {
-			numbers.add(1L);
-			numbers.add(1L);
-			numbers.add(1L);
-
-		}
-
-		public static Long valueOf (final int index) {
-			if (index >= numbers.size()) {
-				grow(index);
-			}
-
-			return numbers.get(index);
-		}
-
-		private static void grow (final int input) {
-
-			Long f2 = numbers.get(numbers.size() - 2);
-			Long f1 = numbers.get(numbers.size() - 1);
-			for (int i = numbers.size() - 1; i < input + 1; i++) {
-				Long f0 = f2 + (f1);
-				f0 = rest(f0);
-				numbers.add(f0);
-				f2 = f1;
-				f1 = f0;
-			}
-		}
-
-	}
+	public static Integer MODULO = null;
 
 	static class BinaryTree {
 		final Node[] nodes;
@@ -173,20 +80,12 @@ public class Solution extends AbstractSolution {
 			if (x == null) {
 				return;
 			}
-			x.value = x.value + (Fibonacci.valueOf(k));
-			this.update(x.childLeft, k + 1);
-			this.update(x.childRight, k + 1);
-// for (int i = 0; i < x.children.size(); i++) {
-// final Node child = x.children.get(i);
-// this.update(child, k + 1);
-// }
-		}
-
-		public void normalize () {
-			for (int i = 0; i < this.nodes.length; i++) {
-				final Node node = this.nodes[i];
-				node.normalize();
+			x.value = x.value + Fibonacci.valueOf(k);
+			x.value = rest(x.value);
+			for (int i = 0; i < x.children.size(); i++) {
+				this.update(x.children.get(i), k + 1);
 			}
+
 		}
 
 		final HashMap<String, Path> knownPaths = new HashMap<String, Path>();
@@ -248,30 +147,6 @@ public class Solution extends AbstractSolution {
 			return x.name + ":" + y.name;
 		}
 
-// private boolean findPath (final Node x, final Node y, final Path currentPath) {
-// final ArrayList<Node> directions = x.neighbours;
-// for (int i = 0; i < directions.size(); i++) {
-// final Node candidate = directions.get(i);
-// if (candidate == y) {
-// currentPath.addState(y);
-// return true;
-// }
-// if (currentPath.contains(candidate)) {
-// continue;
-// } else {
-// currentPath.addState(candidate);
-// final boolean success = this.findPath(candidate, y, currentPath);
-// if (success) {
-// return true;
-// } else {
-// currentPath.removeState(candidate);
-// continue;
-// }
-// }
-// }
-// return false;
-// }
-
 		public Node getNode (final int nodeIndex) {
 			return this.nodes[BinaryTree.toArrayIndex(nodeIndex)];
 		}
@@ -286,13 +161,7 @@ public class Solution extends AbstractSolution {
 			final int nodeArrayIndex = BinaryTree.toArrayIndex(nodeIndex);
 
 			this.nodes[nodeArrayIndex].parent = this.nodes[nodeParentArrayIndex];
-			if (this.nodes[nodeParentArrayIndex].childLeft == null) {
-				this.nodes[nodeParentArrayIndex].childLeft = this.nodes[nodeArrayIndex];
-			} else if (this.nodes[nodeParentArrayIndex].childRight == null) {
-				this.nodes[nodeParentArrayIndex].childRight = this.nodes[nodeArrayIndex];
-			} else {
-				throw new Error();
-			}
+			this.nodes[nodeParentArrayIndex].children.add(this.nodes[nodeArrayIndex]);
 		}
 
 		public static int toArrayIndex (final int i) {
@@ -319,30 +188,11 @@ public class Solution extends AbstractSolution {
 		}
 
 		public void normalize () {
-// this.neighbours.clear();
-// this.children.clear();
-// Node.addNeighbour(this.childLeft, this.neighbours);
-// Node.addNeighbour(this.childRight, this.neighbours);
-// Node.addNeighbour(this.parent, this.neighbours);
-//
-// Node.addNeighbour(this.childLeft, this.children);
-// Node.addNeighbour(this.childRight, this.children);
 
 		}
-
-		static private void addNeighbour (final Node candicate, final ArrayList<Node> list) {
-			if (candicate != null) {
-				list.add(candicate);
-			}
-		}
-
-// final ArrayList<Node> neighbours = new ArrayList<Node>();
-// final ArrayList<Node> children = new ArrayList<Node>();
 
 		Node parent;
-		Node childLeft;
-		Node childRight;
-
+		final List<Node> children = new ArrayList<Node>();
 		public Long value = 0L;
 
 // @Override
@@ -360,7 +210,6 @@ public class Solution extends AbstractSolution {
 
 	static class Path {
 		final ArrayList<Node> steps = new ArrayList<Node>();
-		private Long value;
 
 		@Override
 		public String toString () {
@@ -368,23 +217,26 @@ public class Solution extends AbstractSolution {
 		}
 
 		public void addState (final Node x) {
+			if (this.steps.contains(x)) {
+				throw new Error();
+			}
 			this.steps.add(x);
 		}
 
 		public void addAll (final List<Node> steps) {
-			this.steps.addAll(steps);
+			for (int i = 0; i < steps.size(); i++) {
+				this.addState(steps.get(i));
+			}
 		}
 
 		public Long getPathValue () {
-
-			this.value = 0L;
+			long value = 0L;
 			for (int i = 0; i < this.steps.size(); i++) {
 				final Node step = this.steps.get(i);
-				this.value = step.value + (this.value);
-// this.value = rest(this.value);
+				value = step.value + (value);
+				value = rest(value);
 			}
-
-			return this.value;
+			return value;
 		}
 
 		public void print () {
@@ -400,4 +252,36 @@ public class Solution extends AbstractSolution {
 		}
 	}
 
+	public static final class Fibonacci extends F {
+		public static int N = MODULO();
+		static ArrayList<Long> appendix = new ArrayList<Long>();
+
+		public static Long valueOf (final int k) {
+			if (k < values.length) {
+				return values[k];
+			} else {
+				final int appendixIndex = appendixIndex(k);
+				if (appendix.size() > appendixIndex) {
+					return appendix.get(appendixIndex);
+				} else {
+					grow(appendixIndex + 1);
+					return appendix.get(appendixIndex);
+				}
+			}
+		}
+
+		private static void grow (final int target) {
+			while (appendix.size() < target) {
+				final Long m2 = appendix.get(appendix.size() - 2);
+				final Long m1 = appendix.get(appendix.size() - 1);
+				appendix.add(m1 + m2);
+			}
+
+		}
+
+		private static int appendixIndex (final int k) {
+			return values.length - k;
+		}
+
+	}
 }
