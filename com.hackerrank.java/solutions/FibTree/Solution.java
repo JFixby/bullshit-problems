@@ -1,7 +1,6 @@
 
 package FibTree;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -13,6 +12,12 @@ import java.util.Vector;
 import com.jfixby.hrank.AbstractSolution;
 
 public class Solution extends AbstractSolution {
+
+// public static java.io.InputStream input = System.in;
+// public static java.io.PrintStream output = System.out;
+// public static void log (final Object msg) {
+// output.println(msg);
+// }
 
 	@Override
 	public void run (final String[] args) {
@@ -36,6 +41,17 @@ public class Solution extends AbstractSolution {
 
 	}
 
+	static {
+		final int N = 1000;
+// Fibonacci.valueOf(N);
+		for (int i = 0; i < N; i++) {
+			final Long f = Fibonacci.valueOf(i);
+
+// log(i + " -> " + f);
+// log(" ->" + f2);
+		}
+	}
+
 	public static void main (final String[] args) {
 		final Scanner in = new Scanner(input);
 		final int numberOfNodes = in.nextInt();
@@ -51,7 +67,7 @@ public class Solution extends AbstractSolution {
 
 			tree.connect(nodeIndex, nodeParentIndex);
 		}
-		tree.normalize();
+// tree.normalize();
 // tree.print();
 
 		for (int i = 0; i < numberOfOperations; i++) {
@@ -79,12 +95,13 @@ public class Solution extends AbstractSolution {
 				{
 					final int K = in.nextInt();
 					operation.K = K;
+
 				}
 			}
 
 			if (operation.type == OPERATION_TYPE.Q) {
 				final Path path = tree.findPath(operation.X, operation.Y);
-				final BigInteger pathValue = path.getPathValue();
+				final Long pathValue = path.getPathValue();
 				log(rest(pathValue));
 			} else if (operation.type == OPERATION_TYPE.U) {
 				tree.update(operation.X, operation.K);
@@ -96,45 +113,48 @@ public class Solution extends AbstractSolution {
 
 	}
 
-	static BigInteger MODULO = new BigInteger("1000000007");
-
-	private static BigInteger rest (final BigInteger pathValue) {
-// return pathValue.remainder(MODULO);
-		return pathValue.mod(MODULO);
+	private static Long rest (final Long pathValue) {
+		return pathValue % MODULO();
 	}
 
+	private static Long MODULO () {
+		if (MODULO == null) {
+			MODULO = 1000000007L;
+		}
+		return MODULO;
+	}
+
+	public static Long MODULO = null;
+
 	static class Fibonacci {
-		private static final BigInteger ONE = BigInteger.ONE;
-		private static final BigInteger TWO = ONE.add(ONE);
-		static HashMap<BigInteger, BigInteger> numbers = new HashMap<BigInteger, BigInteger>();
 
-		public static BigInteger valueOf (final BigInteger input) {
-			BigInteger value = numbers.get(input);
-			if (value == null) {
-				value = calculate(input);
-				numbers.put(input, value);
-			}
-			return value;
+		static ArrayList<Long> numbers = new ArrayList<Long>();
+		static {
+			numbers.add(1L);
+			numbers.add(1L);
+			numbers.add(1L);
+
 		}
 
-		public static BigInteger valueOf (final int i) {
-			return valueOf(new BigInteger(i + ""));
-		}
-
-		private static BigInteger calculate (final BigInteger input) {
-			if (input.compareTo(TWO) <= 0) {
-				return ONE;
+		public static Long valueOf (final int index) {
+			if (index >= numbers.size()) {
+				grow(index);
 			}
 
-			final BigInteger input_m1 = input.subtract(ONE);
-			final BigInteger input_m2 = input_m1.subtract(ONE);
+			return numbers.get(index);
+		}
 
-			final BigInteger f_m1 = valueOf(input_m1);
-			final BigInteger f_m2 = valueOf(input_m2);
+		private static void grow (final int input) {
 
-			final BigInteger result = f_m1.add(f_m2);
-
-			return result;
+			Long f2 = numbers.get(numbers.size() - 2);
+			Long f1 = numbers.get(numbers.size() - 1);
+			for (int i = numbers.size() - 1; i < input + 1; i++) {
+				Long f0 = f2 + (f1);
+				f0 = rest(f0);
+				numbers.add(f0);
+				f2 = f1;
+				f1 = f0;
+			}
 		}
 
 	}
@@ -150,11 +170,16 @@ public class Solution extends AbstractSolution {
 		}
 
 		public void update (final Node x, final int k) {
-			x.value = x.value.add(Fibonacci.valueOf(k));
-			for (int i = 0; i < x.children.size(); i++) {
-				final Node child = x.children.get(i);
-				this.update(child, k + 1);
+			if (x == null) {
+				return;
 			}
+			x.value = x.value + (Fibonacci.valueOf(k));
+			this.update(x.childLeft, k + 1);
+			this.update(x.childRight, k + 1);
+// for (int i = 0; i < x.children.size(); i++) {
+// final Node child = x.children.get(i);
+// this.update(child, k + 1);
+// }
 		}
 
 		public void normalize () {
@@ -223,29 +248,29 @@ public class Solution extends AbstractSolution {
 			return x.name + ":" + y.name;
 		}
 
-		private boolean findPath (final Node x, final Node y, final Path currentPath) {
-			final ArrayList<Node> directions = x.neighbours;
-			for (int i = 0; i < directions.size(); i++) {
-				final Node candidate = directions.get(i);
-				if (candidate == y) {
-					currentPath.addState(y);
-					return true;
-				}
-				if (currentPath.contains(candidate)) {
-					continue;
-				} else {
-					currentPath.addState(candidate);
-					final boolean success = this.findPath(candidate, y, currentPath);
-					if (success) {
-						return true;
-					} else {
-						currentPath.removeState(candidate);
-						continue;
-					}
-				}
-			}
-			return false;
-		}
+// private boolean findPath (final Node x, final Node y, final Path currentPath) {
+// final ArrayList<Node> directions = x.neighbours;
+// for (int i = 0; i < directions.size(); i++) {
+// final Node candidate = directions.get(i);
+// if (candidate == y) {
+// currentPath.addState(y);
+// return true;
+// }
+// if (currentPath.contains(candidate)) {
+// continue;
+// } else {
+// currentPath.addState(candidate);
+// final boolean success = this.findPath(candidate, y, currentPath);
+// if (success) {
+// return true;
+// } else {
+// currentPath.removeState(candidate);
+// continue;
+// }
+// }
+// }
+// return false;
+// }
 
 		public Node getNode (final int nodeIndex) {
 			return this.nodes[BinaryTree.toArrayIndex(nodeIndex)];
@@ -294,14 +319,14 @@ public class Solution extends AbstractSolution {
 		}
 
 		public void normalize () {
-			this.neighbours.clear();
-			this.children.clear();
-			Node.addNeighbour(this.childLeft, this.neighbours);
-			Node.addNeighbour(this.childRight, this.neighbours);
-			Node.addNeighbour(this.parent, this.neighbours);
-
-			Node.addNeighbour(this.childLeft, this.children);
-			Node.addNeighbour(this.childRight, this.children);
+// this.neighbours.clear();
+// this.children.clear();
+// Node.addNeighbour(this.childLeft, this.neighbours);
+// Node.addNeighbour(this.childRight, this.neighbours);
+// Node.addNeighbour(this.parent, this.neighbours);
+//
+// Node.addNeighbour(this.childLeft, this.children);
+// Node.addNeighbour(this.childRight, this.children);
 
 		}
 
@@ -311,26 +336,36 @@ public class Solution extends AbstractSolution {
 			}
 		}
 
-		final ArrayList<Node> neighbours = new ArrayList<Node>();
-		final ArrayList<Node> children = new ArrayList<Node>();
+// final ArrayList<Node> neighbours = new ArrayList<Node>();
+// final ArrayList<Node> children = new ArrayList<Node>();
 
 		Node parent;
 		Node childLeft;
 		Node childRight;
 
-		public BigInteger value = BigInteger.ZERO;
+		public Long value = 0L;
+
+// @Override
+// public String toString () {
+// return "Node(" + this.name + ") L=" + name(this.childLeft) + " R=" + name(this.childRight) + " parent="
+// + name(this.parent) + ">";
+// }
 
 		@Override
 		public String toString () {
-			return "Node(" + this.name + ") L=" + name(this.childLeft) + " R=" + name(this.childRight) + " parent="
-				+ name(this.parent) + ">";
+			return "Node(" + this.name + ") " + this.value;
 		}
 
 	}
 
 	static class Path {
 		final ArrayList<Node> steps = new ArrayList<Node>();
-		private BigInteger value;
+		private Long value;
+
+		@Override
+		public String toString () {
+			return "Path" + this.steps + "";
+		}
 
 		public void addState (final Node x) {
 			this.steps.add(x);
@@ -340,13 +375,13 @@ public class Solution extends AbstractSolution {
 			this.steps.addAll(steps);
 		}
 
-		public BigInteger getPathValue () {
+		public Long getPathValue () {
 
-			this.value = BigInteger.ZERO;
+			this.value = 0L;
 			for (int i = 0; i < this.steps.size(); i++) {
 				final Node step = this.steps.get(i);
-				this.value = step.value.add(this.value);
-				this.value = rest(this.value);
+				this.value = step.value + (this.value);
+// this.value = rest(this.value);
 			}
 
 			return this.value;
