@@ -1,0 +1,15 @@
+---History------------------
+   Move [disk=(1)[D], from=A, to=D]
+   Move [disk=(2)[D], from=A, to=C]
+   Move [disk=(1)[D], from=D, to=C]
+   Move [disk=(3)[B], from=A, to=B]
+   Move [disk=(1)[D], from=C, to=B]
+   Move [disk=(2)[D], from=C, to=D]
+   Move [disk=(1)[D], from=B, to=D]
+---------------------------
+---Towers------------------
+   Tower<A> disks=[(4)[A]]
+   Tower<B> disks=[]
+   Tower<C> disks=[]
+   Tower<D> disks=[(1)[D], (2)[D]]
+---------------------------

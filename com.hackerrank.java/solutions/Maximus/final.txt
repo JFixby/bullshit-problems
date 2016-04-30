@@ -1,19 +1,22 @@
+
+
+
+import java.util.HashMap;
 import java.util.Scanner;
 
 
 
-public class Solution  {
-
-	public static java.io.InputStream input = System.in;
+public class Solution {
+public static java.io.InputStream input = System.in;
 	public static java.io.PrintStream output = System.out;
 
 	public static void log (final Object msg) {
 		output.println(msg);
 	}
-    
+
 	public static void main (final String[] args) {
 		final Scanner in = new Scanner(input);
-
+		memoization.clear();
 		final int arraySize = in.nextInt();
 		final int numberOfQuries = in.nextInt();
 
@@ -45,11 +48,46 @@ public class Solution  {
 	}
 
 	private static long max (final int[] A, final int l, final int r) {
-		long max = A[l - 1];
-		for (int i = l - 1; i <= r - 1; i++) {
-			max = Math.max(max, A[i]);
+		final Long memo = getMemo(l, r);
+		if (memo != null) {
+			return memo;
 		}
+
+		final int d = 1 + r - l;
+		long mid = -1;
+		long max = A[l - 1];
+		if (d == 1) {
+
+		} else if (d > 2) {
+			mid = (l + r) / 2;
+			final long m1 = max(A, l, (int)mid);
+			final long m2 = max(A, (int)mid, r);
+			max = Math.max(m1, m2);
+		} else {
+			
+			for (int i = l - 1; i <= r - 1; i++) {
+				max = Math.max(max, A[i]);
+			}
+		}
+		addMemo(max, l, r);
 		return max;
+	}
+
+	private static void addMemo (final long max, final int x, final int y) {
+		final String key = key(x, y);
+		memoization.put(key, max);
+	}
+
+	static final HashMap<String, Long> memoization = new HashMap<String, Long>();
+
+	private static Long getMemo (final int x, final int y) {
+		final String key = key(x, y);
+		final Long value = memoization.get(key);
+		return value;
+	}
+
+	private static String key (final int x, final int y) {
+		return x + "#" + y;
 	}
 
 }
