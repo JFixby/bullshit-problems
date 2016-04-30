@@ -5,7 +5,10 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Scanner;
+import java.util.Vector;
 
 import com.jfixby.hrank.AbstractSolution;
 
@@ -164,23 +167,56 @@ public class Solution extends AbstractSolution {
 		final HashMap<String, Path> knownPaths = new HashMap<String, Path>();
 
 		public Path findPath (final Node x, final Node y) {
-			if (x.name.compareTo(y.name) > 0) {
-				return this.findPath(y, x);
-			}
-			final String pathName = this.pathName(x, y);
-			final Path knownPath = this.knownPaths.get(pathName);
-			if (knownPath != null) {
-				return knownPath;
+			final Path result = new Path();
+
+			if (x == y) {
+				result.addState(x);
+				return result;
 			}
 
-			final Path result = new Path();
-			result.addState(x);
-			if (x != y) {
-				this.findPath(x, y, result);
+			final LinkedList<Node> stepsX = new LinkedList<Node>();
+			final Vector<Node> stepsY = new Vector<Node>();
+// final HashSet<Node> visited = new HashSet<Node>();
+
+			stepsX.add(x);
+			stepsY.add(y);
+// visited.add(x);
+// visited.add(y);
+			final boolean pathFound = false;
+			while (!pathFound) {
+				{
+					final Node lastX = stepsX.getLast();
+					if (stepsY.contains(lastX)) {
+						result.addAll(stepsX);
+						final int start = stepsY.indexOf(lastX);
+						for (int i = start + 1; i < stepsY.size(); i++) {
+							result.addState(stepsY.get(i));
+						}
+						return result;
+					}
+					final Node xParent = lastX.parent;
+					if (xParent != null) {
+						stepsX.add(xParent);
+					}
+				}
+				{
+					final Node lastY = stepsY.get(0);
+					if (stepsX.contains(lastY)) {
+						final int end = stepsX.indexOf(lastY);
+						for (int i = 0; i < end; i++) {
+							result.addState(stepsX.get(i));
+						}
+						result.addAll(stepsY);
+						return result;
+					}
+					final Node yParent = lastY.parent;
+					if (yParent != null) {
+						stepsY.insertElementAt(yParent, 0);
+					}
+				}
+
 			}
-			this.knownPaths.put(pathName, result);
-// this.knownPaths.put(this.pathName(y, x), result);
-			return result;
+
 		}
 
 		private String pathName (final Node x, final Node y) {
@@ -286,8 +322,8 @@ public class Solution extends AbstractSolution {
 
 		@Override
 		public String toString () {
-			return "Node(" + this.name + ")>" + this.value + "< L=" + name(this.childLeft) + " R=" + name(this.childRight)
-				+ " parent=" + name(this.parent) + ">";
+			return "Node(" + this.name + ") L=" + name(this.childLeft) + " R=" + name(this.childRight) + " parent="
+				+ name(this.parent) + ">";
 		}
 
 	}
@@ -298,6 +334,10 @@ public class Solution extends AbstractSolution {
 
 		public void addState (final Node x) {
 			this.steps.add(x);
+		}
+
+		public void addAll (final List<Node> steps) {
+			this.steps.addAll(steps);
 		}
 
 		public BigInteger getPathValue () {

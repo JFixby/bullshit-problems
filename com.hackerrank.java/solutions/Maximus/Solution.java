@@ -1,8 +1,7 @@
 
 package Maximus;
 
-import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import com.jfixby.hrank.AbstractSolution;
@@ -36,175 +35,60 @@ public class Solution extends AbstractSolution {
 
 	}
 
-	public static class SigmaAlgebra {
+	static class A {
 
-		final LinkedList<Segment> base = new LinkedList<Segment>();
-		final LinkedList<Segment> all = new LinkedList<Segment>();
-
-		public void add (final int x, final int y) {
-			final Segment segment = new Segment(x, y);
-			this.base.add(segment);
-			this.all.add(segment);
-			final int N = Math.min(0, this.base.size());
-			for (int i = this.base.size(); i < N; i++) {
-				final Segment other = this.base.get(i);
-				final Segment[] parts = other.intersect(segment);
-			}
-
+		public A (final int[] array) {
 		}
+
+	}
+
+	static class SigmaAlgebra {
+		final ArrayList<Segment> base = new ArrayList<Segment>();
 
 		public Segment getBase (final int i) {
 			return this.base.get(i);
 		}
-	}
 
-	static int N = 3;
+	}
 
 	public static void main (final String[] args) {
 		final Scanner in = new Scanner(input);
-		memoization.clear();
 		final int arraySize = in.nextInt();
 		final int numberOfQuries = in.nextInt();
 
-		final int[] A = new int[arraySize];
+		final int[] array = new int[arraySize];
 		for (int i = 0; i < arraySize; i++) {
 			final int value = in.nextInt();
-			A[i] = value;
+			array[i] = value;
 		}
-		N = 1 + (int)Math.pow(arraySize, 0.5);
 		final SigmaAlgebra algebra = new SigmaAlgebra();
 // log(Arrays.toString(A));
 		for (int i = 0; i < numberOfQuries; i++) {
 			final int L = in.nextInt();
 			final int R = in.nextInt();
-			algebra.add(L, R);
 
 		}
+		final A A = new A(array);
 
 		for (int i = 0; i < numberOfQuries; i++) {
 			final Segment LR = algebra.getBase(i);
 			final int L = LR.L;
 			final int R = LR.R;
-			clounter = 0;
 			final long value = F(A, L, R);
 			log(value);
 		}
-		log("clounter " + clounter);
 	}
 
-	private static long F (final int[] A, final int L, final int R) {
-		long result = 0;
-		final long MID = (R + L) / 2;
-		final int mid = (int)MID;
+	private static long F (final A A, final int L, final int R) {
+		final long result = 0;
+		for (int x = L; x <= R; x++) {
+			for (int y = L; y <= R; y++) {
+// result = result+A()
 
-		for (int l = L; l <= mid; l++) {
-			for (int r = l; r <= mid; r++) {
-				result = result + max(A, l, r);
-			}
-			for (int r = mid + 1; r <= R; r++) {
-				result = result + max(A, l, r);
 			}
 		}
-		for (int l = mid + 1; l <= R; l++) {
-			for (int r = l; r <= mid; r++) {
-				result = result + max(A, l, r);
-			}
-			for (int r = mid + 1; r <= R; r++) {
-				result = result + max(A, l, r);
-			}
-		}
-
 		return result;
-	}
 
-	static long clounter = 0;
-
-	private static long max (final int[] A, final int l, final int r) {
-
-		clounter++;
-
-		final int d = 1 + r - l;
-		long mid = -1;
-		long max = A[l - 1];
-
-		if (d == 1) {
-			return max;
-		} else if (d <= N) {
-			for (int i = 1; i < d; i++) {
-				max = Math.max(A[l - 1 + i], max);
-			}
-			return max;
-		}
-
-		// (d > 3)
-		{
-
-// mid = l + 1;
-			final Long memo = getMemo(l, r);
-			if (memo != null) {
-// log("MEM->max(" + l + "," + r + ")");
-				return memo;
-			}
-// log("HEAVY->max(" + l + "," + r + ")");
-			log("->max(" + l + "," + r + ")");
-			if (false) {
-				mid = (l + r) / 2;
-				final int midi = (int)mid;
-				final long m1 = max(A, l, l + 1);
-				final long m3 = max(A, l + 1, r - 1);
-				final long m2 = max(A, r - 1, r);
-				max = Math.max(m1, m2);
-				max = Math.max(max, m3);
-			}
-			if (false) {
-				mid = (l + r) / 2;
-				final int midi = (int)mid;
-				final long m1 = max(A, l, midi);
-				final long m2 = max(A, midi + 1, r);
-
-				max = Math.max(m1, m2);
-
-			}
-			if (!false) {
-				final long m1 = max(A, l, l + 1);
-				final long m2 = max(A, r - 1, r);
-
-				mid = (l + 1 + r - 1) / 2;
-				final int midi = (int)mid;
-
-				final long m3 = max(A, l + 1, midi);
-				final long m4 = max(A, midi + 1, r - 1);
-
-				max = Math.max(m1, m2);
-				max = Math.max(max, m3);
-				max = Math.max(max, m4);
-			}
-			addMemo(max, l, r);
-
-			return max;
-		}
-	}
-
-	private static void addMemo (final long max, final int x, final int y) {
-		final String key = key(x, y);
-// log("memo " + key);
-		if (memoization.containsKey(key)) {
-			throw new Error(key);
-		}
-		memoization.put(key, max);
-	}
-
-	static final HashMap<String, Long> memoization = new HashMap<String, Long>();
-
-	private static Long getMemo (final int x, final int y) {
-// log("max(" + x + "," + y + ")");
-		final String key = key(x, y);
-		final Long value = memoization.get(key);
-		return value;
-	}
-
-	private static String key (final int x, final int y) {
-		return x + "#" + y;
 	}
 
 }
