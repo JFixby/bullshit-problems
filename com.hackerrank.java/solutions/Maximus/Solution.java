@@ -82,53 +82,86 @@ public class Solution extends AbstractSolution {
 			final Segment LR = algebra.getBase(i);
 			final int L = LR.L;
 			final int R = LR.R;
+			clounter = 0;
 			final long value = F(A, L, R);
 			log(value);
 		}
-
+		log("clounter " + clounter);
 	}
 
 	private static long F (final int[] A, final int L, final int R) {
 		long result = 0;
 		for (int l = L; l <= R; l++) {
-			for (int r = l; r <= R; r++) {
-				result = result + max(A, l, r);
+// final int tL = R - l + L;
+			final int tL = l;
+
+			for (int r = tL; r <= R; r++) {
+
+// final int tR = R - r + tL;
+				final int tR = r;
+// result = result + max(A, l, r);
+				result = result + max(A, tL, tR);
 			}
 		}
 
 		return result;
 	}
 
+	static long clounter = 0;
+
 	private static long max (final int[] A, final int l, final int r) {
-// log("max(" + l + "," + r + ")");
-		final Long memo = getMemo(l, r);
-		if (memo != null) {
-			return memo;
-		}
+		log("->max(" + l + "," + r + ")");
+		clounter++;
 
 		final int d = 1 + r - l;
 		long mid = -1;
 		long max = A[l - 1];
+		final int N = 6;
 		if (d == 1) {
-
-		} else if (d > 2 || false) {
-			mid = l + 1;
-			mid = (l + r) / 2;
-			final long m1 = max(A, l, (int)mid);
-			final long m2 = max(A, (int)mid, r);
-			max = Math.max(m1, m2);
-		} else {
-// log("max(" + l + "," + r + ")");
-			for (int i = l - 1; i <= r - 1; i++) {
-				max = Math.max(max, A[i]);
+			return max;
+		} else if (d < N) {
+			for (int i = 0; i < d; i++) {
+				max = Math.max(A[l - 1 + i], max);
 			}
+			return max;
 		}
-		addMemo(max, l, r);
-		return max;
+
+		// (d > 3)
+		{
+// mid = l + 1;
+			final Long memo = getMemo(l, r);
+			if (memo != null) {
+				return memo;
+			}
+			log("HEAVY->max(" + l + "," + r + ")");
+			mid = (l + r) / 2;
+			final int midi = (int)mid;
+			if (false) {
+				final long m1 = max(A, l, l + 1);
+				final long m3 = max(A, l + 1, r - 1);
+				final long m2 = max(A, r - 1, r);
+				max = Math.max(m1, m2);
+				max = Math.max(max, m3);
+			}
+			if (!false) {
+				final long m1 = max(A, l, midi);
+				final long m2 = max(A, midi + 1, r);
+
+				max = Math.max(m1, m2);
+
+			}
+			addMemo(max, l, r);
+
+			return max;
+		}
 	}
 
 	private static void addMemo (final long max, final int x, final int y) {
 		final String key = key(x, y);
+// log("memo " + key);
+		if (memoization.containsKey(key)) {
+			throw new Error(key);
+		}
 		memoization.put(key, max);
 	}
 
