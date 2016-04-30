@@ -2,7 +2,6 @@
 package Hanoi;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Vector;
 
@@ -17,16 +16,16 @@ public class Solution extends AbstractSolution {
 
 	static class Disk {
 
-		static HashMap<Integer, Disk> ALL_DISKS = new HashMap<Integer, Disk>();
+// static HashMap<Integer, Disk> ALL_DISKS = new HashMap<Integer, Disk>();
 
 		private final int size;
 
 		public Disk (final int size) {
 			this.size = size;
-			if (ALL_DISKS.containsKey(size)) {
-				throw new Error(ALL_DISKS.toString());
-			}
-			ALL_DISKS.put(size, this);
+// if (ALL_DISKS.containsKey(size)) {
+// throw new Error(ALL_DISKS.toString());
+// }
+// ALL_DISKS.put(size, this);
 		}
 
 		@Override
@@ -39,13 +38,13 @@ public class Solution extends AbstractSolution {
 
 		Tower currentTower;
 
-		public static Tower towerOf (final int diskSize) {
-			final Disk disk = ALL_DISKS.get(diskSize);
-			if (disk == null) {
-				throw new Error("Bad disk: " + diskSize);
-			}
-			return disk.currentTower;
-		}
+// public static Tower towerOf (final int diskSize) {
+// final Disk disk = ALL_DISKS.get(diskSize);
+// if (disk == null) {
+// throw new Error("Bad disk: " + diskSize);
+// }
+// return disk.currentTower;
+// }
 
 		public static int indexToSize (final int i) {
 			return i + 1;
@@ -89,14 +88,27 @@ public class Solution extends AbstractSolution {
 		}
 
 		public void addDisk (final Disk disk) {
+			if (this.willCorrupt(disk.size)) {
+				throw new Error(this.corruptMessage(disk));
+			}
+
 			disk.currentTower = this;
 			this.disks.insertElementAt(disk, 0);
-			if (this.disks.size() > 1) {
-				final Disk nextDisk = this.disks.get(1);
-				if (nextDisk.size < disk.size) {
-					throw new Error("Tower is corrupted: " + this);
+
+		}
+
+		private String corruptMessage (final Disk disk) {
+			return "Tower is corrupted: " + this + " , disk=" + disk;
+		}
+
+		public boolean willCorrupt (final int size) {
+			if (this.disks.size() > 0) {
+				final Disk nextDisk = this.disks.get(0);
+				if (nextDisk.size < size) {
+					return true;
 				}
 			}
+			return false;
 		}
 
 		public void insertDisk (final Disk disk) {
@@ -116,7 +128,7 @@ public class Solution extends AbstractSolution {
 					return i;
 				}
 			}
-			throw new Error("Disk not found: " + diskSize + " at " + this);
+			return -1;
 		}
 
 	}
@@ -144,6 +156,17 @@ public class Solution extends AbstractSolution {
 			}
 			log("---------------------------");
 		}
+
+		public Tower towerOf (final int diskSize) {
+			for (int i = 0; i < this.array.length; i++) {
+				final Tower tower = this.array[i];
+				final int index = tower.indexOfDiskSize(diskSize);
+				if (index != -1) {
+					return tower;
+				}
+			}
+			return null;
+		}
 	}
 
 	static class History {
@@ -156,7 +179,7 @@ public class Solution extends AbstractSolution {
 			}
 
 			private final Tower from;
-			private final Tower to;
+			private Tower to;
 			private final Disk disk;
 
 			public Move (final Tower from, final Tower to, final Disk disk) {
@@ -170,8 +193,23 @@ public class Solution extends AbstractSolution {
 		final ArrayList<Move> steps = new ArrayList<Move>();
 
 		public void addMove (final Tower from, final Tower to, final Disk disk) {
-			final Move move = new Move(from, to, disk);
-			this.steps.add(move);
+			final Move nextMove = new Move(from, to, disk);
+// if (this.steps.size() > 0) {
+// final Move lastMove = this.steps.get(this.size() - 1);
+// if (lastMove.disk == nextMove.disk) {
+// this.merge(nextMove, lastMove);
+// return;
+// }
+// }
+
+			this.steps.add(nextMove);
+		}
+
+		private void merge (final Move next, final Move last) {
+			if (next.from != last.to) {
+				throw new Error("Failed to merge: " + next + " " + last);
+			}
+			last.to = next.to;
 		}
 
 		public void print () {
@@ -216,7 +254,7 @@ public class Solution extends AbstractSolution {
 		for (int i = 0; i < numberOfDisks; i++) {
 			final int diskIndex = numberOfDisks - 1 - i;
 			final int diskSize = Disk.indexToSize(diskIndex);
-			final Tower towerFrom = Disk.towerOf(diskSize);
+			final Tower towerFrom = towers.towerOf(diskSize);
 
 			final int towerName = targetStateSizeLocation[diskIndex];
 
@@ -225,8 +263,8 @@ public class Solution extends AbstractSolution {
 			final int positionInTower = towerFrom.indexOfDiskSize(diskSize);
 			move(towerFrom, targetTower, positionInTower + 1, towers, history);
 		}
-		log(history.size() - 1);
-// history.print();
+		log(history.size());
+		history.print();
 // towers.print();
 
 // A.fill(numberOfDisks);
@@ -249,39 +287,78 @@ public class Solution extends AbstractSolution {
 			return;
 		}
 		if (numberOfDisks == 1) {
-			final String fromString = from.toString();
-			final Disk disk = from.removeTopDisk();
-			final String toString = to.toString();
-			to.addDisk(disk);
 
-// log("disk=" + disk + " : " + from.name + " -> " + to.name);
+			final Disk disk = from.removeTopDisk();
+			if (to.willCorrupt(disk.size)) {
+				history.print();
+				towers.print();
+				throw new Error(to.corruptMessage(disk));
+			}
+
+			to.addDisk(disk);
 			history.addMove(from, to, disk);
+			return;
+		}
+
+		if (numberOfDisks == 2) {
+
+			final Tower buffer = findBuffer(towers, from, to);
+			final Disk disk1 = from.removeTopDisk();
+			buffer.addDisk(disk1);
+			history.addMove(from, buffer, disk1);
+
+			final Disk disk2 = from.removeTopDisk();
+			to.addDisk(disk2);
+			history.addMove(from, to, disk2);
+
+			buffer.removeTopDisk();
+			to.addDisk(disk1);
+			history.addMove(buffer, to, disk1);
 
 			return;
 		}
 
-		if (numberOfDisks > 1) {
-			final int disksToMove = numberOfDisks - 1;
-			final Tower buffer = findBuffer(from, to, towers, disksToMove);
-			move(from, buffer, disksToMove, towers, history);
+		if (numberOfDisks > 2) {
+			final int disksToMoveTop = numberOfDisks - 2;
+			final Tower buffer1 = findBuffer(towers, from, to);
+			move(from, buffer1, disksToMoveTop, towers, history);
 
-			move(from, to, 1, towers, history);
+			final Tower buffer2 = findBuffer(towers, from, to, buffer1);
+			move(from, buffer2, 1, towers, history);
 
-			move(buffer, to, disksToMove, towers, history);
+			move(buffer1, to, disksToMoveTop, towers, history);
+
+			move(buffer2, to, 1, towers, history);
 			return;
 		}
 	}
 
-	private static Tower findBuffer (final Tower from, final Tower to, final Towers towers, final int disksToMove) {
+	public static <T> boolean contains2 (final T[] array, final T v) {
+		if (v == null) {
+			for (final T e : array) {
+				if (e == null) {
+					return true;
+				}
+			}
+		} else {
+			for (final T e : array) {
+				if (e == v || v.equals(e)) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	private static Tower findBuffer (final Towers towers, final Tower... used) {
 		for (int i = 0; i < towers.array.length; i++) {
 			final int index = towers.array.length - 1 - i;
 			final Tower tower = towers.array[index];
-			if (tower == from) {
+			if (contains2(used, tower)) {
 				continue;
 			}
-			if (tower == to) {
-				continue;
-			}
+
 // tower.disks.get(disksToMove - 1);
 			return tower;
 

@@ -1,7 +1,6 @@
 
 package com.jfixby.hrank;
 
-import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
@@ -46,15 +45,12 @@ public class SolutionRunner<T extends AbstractSolution> {
 				Err.reportError("Missing expected output file " + expectedOutputFile);
 			}
 			actualOutputFile.parent().makeFolder();
-			try {
-				final TestResult result = this.runTest(inputFile, expectedOutputFile, actualOutputFile);
-				if (result.isPassed()) {
-					result.print(testFileName);
-				} else {
-					result.print(testFileName);
-				}
-			} catch (final Throwable e) {
-				Err.reportError("Test failed", e);
+
+			final TestResult result = this.runTest(inputFile, expectedOutputFile, actualOutputFile);
+			if (result.isPassed()) {
+				result.print(testFileName);
+			} else {
+				result.print(testFileName);
 			}
 
 		};
@@ -63,38 +59,47 @@ public class SolutionRunner<T extends AbstractSolution> {
 	}
 
 	@SuppressWarnings("static-access")
-	private TestResult runTest (final File inputFile, final File expectedOutputFile, final File actualOutputFile)
-		throws Throwable {
-		final T solution = this.solutionClass.newInstance();
-
+	private TestResult runTest (final File inputFile, final File expectedOutputFile, final File actualOutputFile) {
 		final FileInputStream is = inputFile.newInputStream();
 		final FileOutputStream os = actualOutputFile.newOutputStream();
-
 		is.open();
 		os.open();
+		try {
+			final T solution = this.solutionClass.newInstance();
 
-		solution.input = is.toJavaInputStream();
+			solution.input = is.toJavaInputStream();
 
-		final OutputStream jos = os.toJavaOutputStream();
-		solution.output = new PrintStream(jos);
+			final OutputStream jos = os.toJavaOutputStream();
+			solution.output = new PrintStream(jos);
 
-		solution.run(new String[0]);
+			solution.run(new String[0]);
 
-		solution.output.flush();
+			solution.output.flush();
 
+			return this.compareResults(inputFile, expectedOutputFile, actualOutputFile);
+
+		} catch (final Throwable e) {
+			e.printStackTrace();
+// IO.forceClose(solution.output);
+
+		}
 		os.close();
 		is.close();
-
-		return this.compareResults(inputFile, expectedOutputFile, actualOutputFile);
+		final TestResult result = this.compareResults(inputFile, expectedOutputFile, actualOutputFile);
+		return result;
 	}
 
-	private TestResult compareResults (final File inputFile, final File expectedOutputFile, final File actualOutputFile)
-		throws IOException {
-		final String input = inputFile.readToString();
-		final String expected = expectedOutputFile.readToString();
-		final String actual = actualOutputFile.readToString();
-		final TestResult result = new TestResult(input, expected, actual);
-		return result;
+	private TestResult compareResults (final File inputFile, final File expectedOutputFile, final File actualOutputFile) {
+		try {
+			final String input = inputFile.readToString();
+			final String expected = expectedOutputFile.readToString();
+			final String actual = actualOutputFile.readToString();
+			final TestResult result = new TestResult(input, expected, actual);
+			return result;
+		} catch (final Throwable e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public static <T extends AbstractSolution> void run (final Class<T> class1) throws Throwable {

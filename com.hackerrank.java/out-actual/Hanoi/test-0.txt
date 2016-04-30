@@ -1,1 +1,7 @@
-3
+4
+---History------------------
+   Move [disk=(1)[A], from=A, to=C]
+   Move [disk=(2)[D], from=A, to=D]
+   Move [disk=(1)[A], from=C, to=D]
+   Move [disk=(1)[A], from=D, to=A]
+---------------------------
