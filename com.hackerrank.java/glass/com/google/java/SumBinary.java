@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Sum {
+public class SumBinary {
 
 	public static void main (final String[] args) {
 		final Integer[] input = new Integer[] {1, -2, -1, 2};
@@ -14,7 +14,7 @@ public class Sum {
 // Collections.shuffle(numbers);
 		final ArrayList<Integer> list = new ArrayList<Integer>();
 
-		sum(numbers, list, -1, 0);
+		sum(numbers, list, 0, 0);
 
 //
 
@@ -42,9 +42,7 @@ public class Sum {
 	}
 
 	private static int current (final List<Integer> list) {
-		if (0 == list.size()) {
-			return Integer.MIN_VALUE;
-		}
+
 		long sum = 0;
 		for (int i = 0; i < list.size(); i++) {
 			sum = sum + list.get(i);
