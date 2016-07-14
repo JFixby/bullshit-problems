@@ -30,6 +30,12 @@ public class SumFlag {
 		return sum;
 	}
 
+	public static interface lambdaSet<T> {
+
+		public T getElementAt (final int index);
+
+	}
+
 	static class BinaryFlag {
 		boolean[] flags;
 		private boolean isWithinLimit;
@@ -52,7 +58,7 @@ public class SumFlag {
 				this.isWithinLimit = false;
 				return;
 			}
-			if (!this.flags[i]) {
+			if (this.flags[i] == false) {
 				this.flags[i] = true;
 				return;
 			}
