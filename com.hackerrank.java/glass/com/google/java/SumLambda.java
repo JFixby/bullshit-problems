@@ -3,7 +3,7 @@ package com.google.java;
 
 import java.util.ArrayList;
 
-public class SumFlag {
+public class SumLambda {
 
 	public static void main (final String[] args) {
 		final int[] input = new int[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
