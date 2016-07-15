@@ -5,28 +5,28 @@ public class StringCompressor {
 
 	public static void main (final String[] args) {
 
-		final String input = "aaaaaaaabbbbbcdddddaaaaxyzaaaabbbbsssss";
+		final String input = "aaaaa   aaabbbbbcdddddaaaaxyzaaaabbbbsssss";
 
 		final StringBuilder buffer = new StringBuilder();
-		STATE state = STATE.NEW;
+		MODE state = MODE.NEW;
 		int counter = 0;
 		char current = ' ';
 		for (int i = 0; i < input.length(); i++) {
 			final char c = input.charAt(i);
 
-			if (state == STATE.COLLECTING) {
+			if (state == MODE.COLLECTING) {
 				if (c == current) {
 					counter++;
 					continue;
 				} else {
-					state = STATE.NEW;
+					state = MODE.NEW;
 					flush(buffer, current, counter);
 				}
 			}
 
-			if (state == STATE.NEW) {
+			if (state == MODE.NEW) {
 				counter = 1;
-				state = STATE.COLLECTING;
+				state = MODE.COLLECTING;
 				current = c;
 				continue;
 			}
@@ -50,7 +50,7 @@ public class StringCompressor {
 		System.out.println(message);
 	}
 
-	static enum STATE {
+	static enum MODE {
 		NEW, COLLECTING
 
 	}
