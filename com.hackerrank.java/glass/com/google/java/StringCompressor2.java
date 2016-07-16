@@ -8,10 +8,10 @@ public class StringCompressor2 {
 		final String input = "aaaaa   aaabbbbbcdddddaaaaxyzaaaabbbbsssss";
 
 		final StringCompressor2 compressor = new StringCompressor2();
-		compressor.reset();
 		compressor.append(input);
+
 		System.out.println(input + " >>> " + compressor.toString());
-		compressor.reset();
+
 	}
 
 	boolean isNew = true;
