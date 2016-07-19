@@ -21,27 +21,37 @@ public class Graph {
 
 	public static void main (final String[] args) {
 
-		final Graph graph = new Graph(13);
-		graph.connect(0, 1);
-		graph.connect(0, 5);
-		graph.connect(0, 6);
-		graph.connect(2, 0);
-		graph.connect(2, 3);
-		graph.connect(5, 4);
-		graph.connect(3, 5);
-		graph.connect(6, 4);
-		graph.connect(7, 6);
-		graph.connect(8, 7);
-		graph.connect(6, 9);
-		graph.connect(9, 10);
-		graph.connect(9, 12);
-		graph.connect(9, 11);
-		graph.connect(11, 12);
-		graph.print();
+// final Graph graph = new Graph(13);
+// graph.connect(0, 1);
+// graph.connect(0, 5);
+// graph.connect(0, 6);
+// graph.connect(2, 0);
+// graph.connect(2, 3);
+// graph.connect(5, 4);
+// graph.connect(3, 5);
+// graph.connect(6, 4);
+// graph.connect(7, 6);
+// graph.connect(8, 7);
+// graph.connect(6, 9);
+// graph.connect(9, 10);
+// graph.connect(9, 12);
+// graph.connect(9, 11);
+// graph.connect(11, 12);
+//
 
+		final Graph graph = new Graph(6);
+		graph.connect(5, 2);
+		graph.connect(5, 0);
+		graph.connect(4, 0);
+		graph.connect(4, 1);
+		graph.connect(2, 3);
+		graph.connect(3, 1);
+
+		graph.print();
 		final GraphSearch search = new GraphSearch(graph);
 		search.DFS();
 		search.BFS();
+		search.topoSort();
 
 	}
 
@@ -56,6 +66,48 @@ public class Graph {
 
 		public GraphSearch (final Graph graph) {
 			this.graph = graph;
+		}
+
+		public void topoSort () {
+			this.reset();
+			System.out.println("---[Topo]---------------");
+			final LinkedList<Integer> visitingQueue = new LinkedList<Integer>();
+			final int level = 0;
+			for (int i = 0; i < this.graph.size; i++) {
+// for (int i = this.graph.size - 1; i >= 0; i--) {
+				if (this.painted.contains(i)) {
+					continue;
+				}
+				this.topo(i, level, visitingQueue);
+			}
+
+			System.out.println(visitingQueue);
+			int multi = 1;
+			for (int i = 0; i < visitingQueue.size(); i++) {
+				final int option = visitingQueue.get(i);
+				if (option < 0) {
+					multi = multi * -option;
+				}
+			}
+			System.out.println("topo options: " + multi);
+		}
+
+		private void topo (final int vertex, final int level, final LinkedList<Integer> visitingQueue) {
+			this.paint(vertex, level);
+			final int numOfChildren = this.graph.getNumberOfChildren(vertex);
+			for (int childIndex = 0; childIndex < numOfChildren; childIndex++) {
+// for (int childIndex = numOfChildren - 1; childIndex >= 0; childIndex--) {
+				final int child = this.graph.getChildOf(vertex, childIndex);
+				if (this.painted.contains(child)) {
+					continue;
+				}
+				this.topo(child, level + 1, visitingQueue);
+			}
+			if (numOfChildren != 0) {
+				visitingQueue.add(0, -numOfChildren);
+			}
+			visitingQueue.add(0, vertex);
+
 		}
 
 		private void reset () {
@@ -103,8 +155,12 @@ public class Graph {
 		private void BFS (int level, final LinkedList<Integer> queue) {
 			while (queue.size() > 0) {
 				final int vertex = queue.remove();
-				if (vertex < 0) {
+				if (vertex == -1) {
 					level++;
+					continue;
+				}
+				if (vertex == -2) {
+					level--;
 					continue;
 				}
 				if (this.painted.contains(vertex)) {
@@ -113,6 +169,9 @@ public class Graph {
 				this.paint(vertex, level);
 				this.addChildrenOf(vertex, queue);
 				queue.add(-1);
+// queue.add(0, -2);
+// this.preChildrenOf(vertex, queue);
+// queue.add(0, -1);
 			}
 		}
 
@@ -123,6 +182,16 @@ public class Graph {
 					continue;
 				}
 				queue.add(child);
+			}
+		}
+
+		private void preChildrenOf (final int vertex, final LinkedList<Integer> queue) {
+			for (int childIndex = this.graph.getNumberOfChildren(vertex) - 1; childIndex >= 0; childIndex--) {
+				final int child = this.graph.getChildOf(vertex, childIndex);
+				if (this.painted.contains(child)) {
+					continue;
+				}
+				queue.add(0, child);
 			}
 		}
 
