@@ -1,5 +1,7 @@
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashSet;
 
 import com.jfixby.cmns.adopted.gdx.json.RedJson;
 import com.jfixby.cmns.api.collections.Collections;
@@ -36,18 +38,13 @@ public class WPExport {
 		final Map<String, String> failed = Collections.newMap();
 
 		final File fileValid = LocalFileSystem.ApplicationHome().child("valid-replacements.json");
+		final File fileBroken = LocalFileSystem.ApplicationHome().child("broken-replacements.json");
 		Json.invoke();
-		final MapList replace;
-		if (!fileValid.exists()) {
-			replace = new MapList();
-		} else {
-			final String json = fileValid.readToString();
-			replace = Json.deserializeFromString(MapList.class, json);
-			if (replace == null) {
-				Sys.exit();
-			}
-		}
+		final MapList valid = retrive(fileValid);
+		final MapList broken = retrive(fileBroken);
+		broken.clear();
 
+		final HashSet<String> processed = new HashSet<String>();
 		while (end < data.length() && start >= max) {
 			final String prefix = "href=\"http";
 			start = data.indexOf(prefix, end);
@@ -57,7 +54,8 @@ public class WPExport {
 			end = data.indexOf("\"", start + prefix.length());
 			max = Math.max(start, max);
 			final String url = data.substring(start + 6, end);
-			if (url.contains("//jfix.by/") && url.contains("uploads")) {
+			if (url.contains("//jfix.by/") && url.contains("uploads") && !processed.contains(processed)) {
+				processed.add(url);
 				String transfer = url.replaceAll(byPrefix, wpPrefix).toLowerCase();
 				final RelativePath relative = JUtils.newRelativePath(transfer);
 				String name = relative.nameWithoutExtension();
@@ -70,7 +68,7 @@ public class WPExport {
 				transfer = transfer.replaceAll(":/jfix", "://jfix");
 // L.d(url + " >>>> " + transfer);
 
-				if (null != replace.contains(url, transfer)) {
+				if (null != valid.find(url, transfer)) {
 					continue;
 				}
 				final int code = checkCode(transfer);
@@ -81,12 +79,17 @@ public class WPExport {
 						L.d(url + " >>>> " + transfer);
 						L.d("    [" + code + "] ");
 						failed.put(url, transfer);
+						if (!broken.put(url, transfer)) {
+// Collections.newList(processed).print("processed");
+// Sys.exit();
+						}
+
 					} else {
 // L.d(" bad origin");
 					}
 				} else {
 					urlsToFix.put(url, transfer);
-					replace.put(url, transfer);
+					valid.put(url, transfer);
 				}
 
 			}
@@ -99,9 +102,28 @@ public class WPExport {
 		failed.sortKeys();
 		failed.print("failed");
 
-		fileValid.writeString(Json.serializeToString(replace).toString());
+		fileValid.writeString(Json.serializeToString(valid).toString());
+		fileBroken.writeString(Json.serializeToString(broken).toString());
 
 // L.d(data);
+	}
+
+	private static MapList retrive (final File fileValid) {
+		MapList valid;
+		if (!fileValid.exists()) {
+			valid = new MapList();
+		} else {
+			String json;
+			try {
+				json = fileValid.readToString();
+				valid = Json.deserializeFromString(MapList.class, json);
+			} catch (final IOException e) {
+				e.printStackTrace();
+				Sys.exit();
+				valid = null;
+			}
+		}
+		return valid;
 	}
 
 	private static int checkCode (final String transferURL) {

@@ -1,5 +1,7 @@
 import java.util.Vector;
 
+import com.jfixby.cmns.api.collections.Collections;
+
 public class MapList {
 
 	public MapList () {
@@ -7,7 +9,7 @@ public class MapList {
 
 	public final Vector<Mapping> list = new Vector<Mapping>();
 
-	public Mapping contains (final String url, final String transfer) {
+	public Mapping find (final String url, final String transfer) {
 		for (int i = 0; i < this.list.size(); i++) {
 			final Mapping e = this.list.get(i);
 			if (e.originalURL.equals(url)) {
@@ -17,15 +19,30 @@ public class MapList {
 		return null;
 	}
 
-	public void put (final String url, final String transfer) {
-		final Mapping e = this.contains(url, transfer);
+	public boolean put (final String url, final String transfer) {
+		final Mapping e = this.find(url, transfer);
 		if (e != null) {
-			throw new Error("already stored " + e);
+			Collections.newList(this.list).print("register");
+// throw new Error("already stored " + e);
+			return false;
 		}
 		final Mapping map = new Mapping();
 		map.originalURL = url;
 		map.newURL = transfer;
 		this.list.add(map);
+		return true;
+	}
+
+	public void clear () {
+		this.list.clear();
+	}
+
+	public int size () {
+		return this.list.size();
+	}
+
+	public Mapping get (final int i) {
+		return this.list.get(i);
 	}
 
 }
