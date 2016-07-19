@@ -1,11 +1,14 @@
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import com.jfixby.cmns.adopted.gdx.json.RedJson;
 import com.jfixby.cmns.api.collections.Collections;
 import com.jfixby.cmns.api.collections.Map;
 import com.jfixby.cmns.api.file.File;
 import com.jfixby.cmns.api.file.LocalFileSystem;
+import com.jfixby.cmns.api.json.Json;
 import com.jfixby.cmns.api.log.L;
+import com.jfixby.cmns.api.sys.Sys;
 import com.jfixby.cmns.api.util.JUtils;
 import com.jfixby.cmns.api.util.path.RelativePath;
 import com.jfixby.red.desktop.DesktopSetup;
@@ -15,6 +18,7 @@ public class WPExport {
 	public static void main (final String[] args) throws Throwable {
 
 		DesktopSetup.deploy();
+		Json.installComponent(new RedJson());
 
 // final String java_path = "D:\\[DEV]\\jfixby.wordpress.2016-07-19.xml";
 		final String java_path = "D:\\[DEV]\\posts-only-jfixby.wordpress.2016-07-19.xml";
@@ -30,6 +34,20 @@ public class WPExport {
 		final String byPrefix = "http://jfix.by/wp-content/uploads/";
 		final Map<String, String> urlsToFix = Collections.newMap();
 		final Map<String, String> failed = Collections.newMap();
+
+		final File fileValid = LocalFileSystem.ApplicationHome().child("valid-replacements.json");
+		Json.invoke();
+		final MapList replace;
+		if (!fileValid.exists()) {
+			replace = new MapList();
+		} else {
+			final String json = fileValid.readToString();
+			replace = Json.deserializeFromString(MapList.class, json);
+			if (replace == null) {
+				Sys.exit();
+			}
+		}
+
 		while (end < data.length() && start >= max) {
 			final String prefix = "href=\"http";
 			start = data.indexOf(prefix, end);
@@ -39,7 +57,7 @@ public class WPExport {
 			end = data.indexOf("\"", start + prefix.length());
 			max = Math.max(start, max);
 			final String url = data.substring(start + 6, end);
-			if (url.contains("//jfix.by/") || !true) {
+			if (url.contains("//jfix.by/") && url.contains("uploads")) {
 				String transfer = url.replaceAll(byPrefix, wpPrefix).toLowerCase();
 				final RelativePath relative = JUtils.newRelativePath(transfer);
 				String name = relative.nameWithoutExtension();
@@ -52,18 +70,23 @@ public class WPExport {
 				transfer = transfer.replaceAll(":/jfix", "://jfix");
 // L.d(url + " >>>> " + transfer);
 
+				if (null != replace.contains(url, transfer)) {
+					continue;
+				}
 				final int code = checkCode(transfer);
 				if (code != 200) {
 					final int original = checkCode(url);
-					L.d(url + " >>>> " + transfer);
-					L.d("    [" + code + "] ");
+
 					if (original == 200) {
+						L.d(url + " >>>> " + transfer);
+						L.d("    [" + code + "] ");
 						failed.put(url, transfer);
 					} else {
-						L.d("   bad origin");
+// L.d(" bad origin");
 					}
 				} else {
 					urlsToFix.put(url, transfer);
+					replace.put(url, transfer);
 				}
 
 			}
@@ -75,6 +98,8 @@ public class WPExport {
 		urlsToFix.print("transfer Ok to go");
 		failed.sortKeys();
 		failed.print("failed");
+
+		fileValid.writeString(Json.serializeToString(replace).toString());
 
 // L.d(data);
 	}
