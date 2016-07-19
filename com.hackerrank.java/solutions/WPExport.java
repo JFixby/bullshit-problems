@@ -6,6 +6,8 @@ import com.jfixby.cmns.api.collections.Map;
 import com.jfixby.cmns.api.file.File;
 import com.jfixby.cmns.api.file.LocalFileSystem;
 import com.jfixby.cmns.api.log.L;
+import com.jfixby.cmns.api.util.JUtils;
+import com.jfixby.cmns.api.util.path.RelativePath;
 import com.jfixby.red.desktop.DesktopSetup;
 
 public class WPExport {
@@ -35,39 +37,63 @@ public class WPExport {
 				break;
 			}
 			end = data.indexOf("\"", start + prefix.length());
-
+			max = Math.max(start, max);
 			final String url = data.substring(start + 6, end);
-			if (url.contains("/jfix.by/") || !true) {
-				final String transfer = url.replaceAll(byPrefix, wpPrefix).toLowerCase();
-//
-				final int code = checkTransfer(transfer);
+			if (url.contains("//jfix.by/") || !true) {
+				String transfer = url.replaceAll(byPrefix, wpPrefix).toLowerCase();
+				final RelativePath relative = JUtils.newRelativePath(transfer);
+				String name = relative.nameWithoutExtension();
+				name = name.replaceAll("\\.", "-");
+				final String ext = relative.getExtension();
+				if (ext == null) {
+					continue;
+				}
+				transfer = relative.parent() + "/" + name + "." + ext;
+				transfer = transfer.replaceAll(":/jfix", "://jfix");
+// L.d(url + " >>>> " + transfer);
+
+				final int code = checkCode(transfer);
 				if (code != 200) {
-					L.d("[" + code + "] " + url + " >>>> " + transfer);
-					failed.put(url, transfer);
+					final int original = checkCode(url);
+					L.d(url + " >>>> " + transfer);
+					L.d("    [" + code + "] ");
+					if (original == 200) {
+						failed.put(url, transfer);
+					} else {
+						L.d("   bad origin");
+					}
 				} else {
 					urlsToFix.put(url, transfer);
 				}
 
 			}
-			max = Math.max(start, max);
+
 // L.d(start);
 		}
 
 // urlsToFix.sortKeys();
 		urlsToFix.print("transfer Ok to go");
+		failed.sortKeys();
 		failed.print("failed");
 
 // L.d(data);
 	}
 
-	private static int checkTransfer (final String transferURL) throws Throwable {
-		final URL url = new URL(transferURL);
-		final HttpURLConnection urlConn = (HttpURLConnection)url.openConnection();
-		urlConn.connect();
+	private static int checkCode (final String transferURL) {
+		try {
+			final URL url = new URL(transferURL);
+			final HttpURLConnection urlConn = (HttpURLConnection)url.openConnection();
+			urlConn.setRequestMethod("HEAD");
+			urlConn.setConnectTimeout(5000); // set timeout to 5 seconds
+			urlConn.connect();
 
 // L.d(transferURL, urlConn.getResponseCode());
-		return urlConn.getResponseCode();
-
+			final int code = urlConn.getResponseCode();
+			return code;
+		} catch (final Throwable t) {
+			t.printStackTrace();
+			return -2;
+		}
 	}
 
 }
