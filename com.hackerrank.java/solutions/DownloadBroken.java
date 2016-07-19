@@ -32,6 +32,7 @@ public class DownloadBroken {
 			final HttpURL url = Http.newURL(urlString);
 
 			final RelativePath relative = url.getRelativePath();
+
 			L.d("relative", relative);
 
 // final HttpConnection connection = Http.newConnection(url);
