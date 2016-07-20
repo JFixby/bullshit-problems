@@ -28,8 +28,15 @@ public class Knapsack {
 		final LinkedList<SetMask> queue = new LinkedList<SetMask>();
 		queue.add(startMask);
 
-		while (queue.size() > 0) {
+		processAll(queue, testedCases, maxWeight, base);
 
+		final SetMask best = getBest(base, testedCases, maxWeight);
+		print(best, base, testedCases);
+	}
+
+	private static void processAll (final LinkedList<SetMask> queue, final HashSet<SetMask> testedCases, final double maxWeight,
+		final StartSet<Item> base) {
+		while (queue.size() > 0) {
 			final SetMask currentMask = queue.removeFirst();
 
 			if (testedCases.contains(currentMask)) {
@@ -42,44 +49,14 @@ public class Knapsack {
 				continue;
 			}
 
-// spreadBFS(currentMask, queue, testedCases);
-// spreadDFS(currentMask, queue, testedCases);
-			spreadSmart(currentMask, queue, testedCases);
-
-		}
-
-		final SetMask best = getBest(base, testedCases, maxWeight);
-		print(best, base, testedCases);
-	}
-
-	private static void spreadBFS (final SetMask currentMask, final LinkedList<SetMask> queue,
-		final HashSet<SetMask> testedCases) {
-		for (int i = 0; i < currentMask.size(); i++) {
-			if (currentMask.elementIsIncluded(i)) {
-				continue;
-			}
-
-			final SetMask subcase = currentMask.include(i);
-			queue.add(subcase);
-
+			spread(currentMask, queue, testedCases);
 		}
 	}
 
-	private static void spreadDFS (final SetMask currentMask, final LinkedList<SetMask> queue,
-		final HashSet<SetMask> testedCases) {
-		for (int i = 0; i < currentMask.size(); i++) {
-			if (currentMask.elementIsIncluded(i)) {
-				continue;
-			}
+	private static final boolean DFS = false;
+	private static final boolean BFS = false;
 
-			final SetMask subcase = currentMask.include(i);
-			queue.add(0, subcase);
-
-		}
-	}
-
-	private static void spreadSmart (final SetMask currentMask, final LinkedList<SetMask> queue,
-		final HashSet<SetMask> testedCases) {
+	private static void spread (final SetMask currentMask, final LinkedList<SetMask> queue, final HashSet<SetMask> testedCases) {
 		for (int i = 0; i < currentMask.size(); i++) {
 			if (currentMask.elementIsIncluded(i)) {
 				continue;
@@ -99,6 +76,12 @@ public class Knapsack {
 	}
 
 	private static boolean isGoodPre (final SetMask subcase, final int i) {
+		if (DFS) {
+			return true;
+		}
+		if (BFS) {
+			return false;
+		}
 		return i % 2 == 0;
 	}
 
