@@ -5,15 +5,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 public class Knapsack {
 
 	public static void main (final String[] args) {
 
-		final int items = 5;
-		final double[] values = new double[] {1, 6, 4, 7, 6};
-		final double[] weights = new double[] {3, 4, 5, 8, 9};
-		final double maxWeight = 13;
+		final double[] values = new double[] {15, 10, 9, 5};
+		final double[] weights = new double[] {1, 5, 3, 4};
+		final int items = values.length;
+		final double maxWeight = 8;
 		final StartSet<Item> base = new StartSet<Item>(items);
 
 		for (int i = 0; i < items; i++) {
@@ -24,14 +25,31 @@ public class Knapsack {
 
 		final HashMap<SetMask, ConfigValue> testedCases = new HashMap<SetMask, ConfigValue>();
 		final boolean inclusiveSearch = true;
-		final SetMask result = searchOptimalKnapsack(base, testedCases, startMask, null, inclusiveSearch, maxWeight);
+		searchOptimalKnapsack(base, testedCases, startMask, inclusiveSearch, maxWeight);
 
-		print(result, base, testedCases);
+		final SetMask best = getBest(base, testedCases, maxWeight);
+		print(best, base, testedCases);
+	}
 
+	private static SetMask getBest (final StartSet<Item> base, final HashMap<SetMask, ConfigValue> testedCases,
+		final double maxWeight) {
+		final Set<SetMask> keyset = testedCases.keySet();
+		SetMask best = null;
+		ConfigValue bestValue = null;
+		for (final SetMask mask : keyset) {
+			final ConfigValue value = testedCases.get(mask);
+			if (best == null || (value.isBetterThan(bestValue) && value.isWithIn(maxWeight))) {
+				best = mask;
+				bestValue = testedCases.get(mask);
+			}
+		}
+
+		return best;
 	}
 
 	private static void print (final SetMask caseMask, final StartSet<Item> base,
 		final HashMap<SetMask, ConfigValue> testedCases) {
+
 		final List<Item> includedItems = base.filter(caseMask);
 		ConfigValue value = testedCases.get(caseMask);
 		if (value == null) {
@@ -47,55 +65,28 @@ public class Knapsack {
 		System.out.println();
 	}
 
-	private static SetMask searchOptimalKnapsack (final StartSet<Item> base, final HashMap<SetMask, ConfigValue> testedCases,
-		final SetMask currentMask, SetMask best, final boolean inclusiveSearch, final double maxWeight) {
-		if (best == null) {
-			best = currentMask;
-			final ConfigValue value = valueOf(best, base);
-			testedCases.put(best, value);
+	private static void searchOptimalKnapsack (final StartSet<Item> base, final HashMap<SetMask, ConfigValue> testedCases,
+		final SetMask currentMask, final boolean inclusiveSearch, final double maxWeight) {
+		if (testedCases.containsKey(currentMask)) {
+			return;
 		}
-		ConfigValue bestValue = testedCases.get(best);
+		final ConfigValue value = valueOf(currentMask, base);
+		testedCases.put(currentMask, value);
 
-		if (inclusiveSearch) {
-			for (int i = 0; i < currentMask.size(); i++) {
-				if (currentMask.elementIsIncluded(i)) {
-					continue;
-				}
-				{
-					final SetMask subcase = currentMask.include(i);
+		if (!value.isWithIn(maxWeight)) {
+			return;
+		}
 
-					print(subcase, base, testedCases);
-
-					if (testedCases.containsKey(subcase)) {
-						continue;
-					}
-					final ConfigValue value = valueOf(subcase, base);
-					testedCases.put(subcase, value);
-
-					if (!value.isWithIn(maxWeight)) {
-						continue;
-					}
-
-					if (!value.isBetterThan(bestValue)) {
-						continue;
-					}
-
-					best = subcase;
-					bestValue = value;
-
-					final SetMask bestSubcase = searchOptimalKnapsack(base, testedCases, subcase, best, inclusiveSearch, maxWeight);
-					final ConfigValue bestSubcaseValue = testedCases.get(bestSubcase);
-
-					if (bestSubcaseValue.isBetterThan(bestValue)) {
-						best = bestSubcase;
-						bestValue = bestSubcaseValue;
-					}
-				}
+		for (int i = 0; i < currentMask.size(); i++) {
+			if (currentMask.elementIsIncluded(i)) {
+				continue;
 			}
-		} else {
-			throw new Error("Not implemented yet!");
+			{
+				final SetMask subcase = currentMask.include(i);
+				searchOptimalKnapsack(base, testedCases, subcase, inclusiveSearch, maxWeight);
+			}
 		}
-		return best;
+
 	}
 
 	private static ConfigValue valueOf (final SetMask subcase, final StartSet<Item> base) {
