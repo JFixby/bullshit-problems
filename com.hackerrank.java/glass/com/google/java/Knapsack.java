@@ -29,6 +29,7 @@ public class Knapsack {
 		queue.add(startMask);
 
 		processAll(queue, testedCases, maxWeight, base);
+		// O(N * W / w) where: N - number of items, W - capacity, w - smallest item weight
 
 		final SetMask best = getBest(base, testedCases, maxWeight);
 		print(best, base, testedCases);
