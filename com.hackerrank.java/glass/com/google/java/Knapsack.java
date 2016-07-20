@@ -24,7 +24,6 @@ public class Knapsack {
 		final SetMask startMask = new SetMask(items);
 
 		final HashSet<SetMask> testedCases = new HashSet<SetMask>();
-		final boolean inclusiveSearch = true;
 
 		final LinkedList<SetMask> queue = new LinkedList<SetMask>();
 		queue.add(startMask);
@@ -36,8 +35,8 @@ public class Knapsack {
 			if (testedCases.contains(currentMask)) {
 				continue;
 			}
-
 			testedCases.add(currentMask);
+
 			final ConfigValue value = valueOf(currentMask, base);
 			if (!value.isWithIn(maxWeight)) {
 				continue;
@@ -81,8 +80,6 @@ public class Knapsack {
 
 	private static void spreadSmart (final SetMask currentMask, final LinkedList<SetMask> queue,
 		final HashSet<SetMask> testedCases) {
-		final ArrayList<SetMask> preCandidates = new ArrayList<SetMask>();
-		final ArrayList<SetMask> postCandidates = new ArrayList<SetMask>();
 		for (int i = 0; i < currentMask.size(); i++) {
 			if (currentMask.elementIsIncluded(i)) {
 				continue;
@@ -93,17 +90,12 @@ public class Knapsack {
 			}
 
 			if (isGoodPre(subcase, i)) {
-				preCandidates.add(subcase);
+				queue.add(0, subcase);
 			} else {
-				postCandidates.add(subcase);
+				queue.add(subcase);
 			}
 		}
-		for (final SetMask candidate : preCandidates) {
-			queue.add(0, candidate);
-		}
-		for (final SetMask candidate : postCandidates) {
-			queue.add(candidate);
-		}
+
 	}
 
 	private static boolean isGoodPre (final SetMask subcase, final int i) {
