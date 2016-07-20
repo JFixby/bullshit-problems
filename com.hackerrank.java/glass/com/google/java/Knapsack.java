@@ -4,10 +4,11 @@ package com.google.java;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 
 public class Knapsack {
+
+	private static SetMask bestMask;
 
 	public static void main (final String[] args) {
 
@@ -47,7 +48,7 @@ public class Knapsack {
 
 		final HashMap<SetMask, ConfigValue> testedCases = new HashMap<SetMask, ConfigValue>();
 
-		final LinkedList<SetMask> queue = new LinkedList<SetMask>();
+		final ArrayList<SetMask> queue = new ArrayList<SetMask>();
 		queue.add(startMask);
 
 		processAll(queue, testedCases, maxWeight, base);
@@ -57,16 +58,19 @@ public class Knapsack {
 		print(best, base, testedCases);
 	}
 
-	private static void processAll (final LinkedList<SetMask> queue, final HashMap<SetMask, ConfigValue> testedCases,
+	private static void processAll (final List<SetMask> queue, final HashMap<SetMask, ConfigValue> testedCases,
 		final double maxWeight, final StartSet<Item> base) {
+		bestMask = queue.get(0);
+		ConfigValue bestValue = valueOf(bestMask, base, testedCases);
+		testedCases.clear();
 		while (queue.size() > 0) {
-			final SetMask currentMask = queue.removeFirst();
+			final SetMask currentMask = queue.remove(0);
 
 			if (testedCases.containsKey(currentMask)) {
 				continue;
 			}
 
-			testedCases.put(currentMask, null);
+// testedCases.put(currentMask, null);
 
 			final ConfigValue value = valueOf(currentMask, base, testedCases);
 
@@ -74,14 +78,20 @@ public class Knapsack {
 				continue;
 			}
 
+			if (value.isBetterThan(bestValue)) {
+				bestMask = currentMask;
+				bestValue = value;
+				print(bestMask, base, testedCases);
+			}
+
 			spread(currentMask, queue, testedCases, base);
 		}
 	}
 
-	private static final boolean DFS = false;
-	private static final boolean BFS = false;
+	private static final boolean DFS = true;
+	private static final boolean BFS = true;
 
-	private static void spread (final SetMask currentMask, final LinkedList<SetMask> queue,
+	private static void spread (final SetMask currentMask, final List<SetMask> queue,
 		final HashMap<SetMask, ConfigValue> testedCases, final StartSet<Item> base) {
 		for (int i = 0; i < currentMask.size(); i++) {
 
@@ -119,17 +129,17 @@ public class Knapsack {
 	private static SetMask getBest (final StartSet<Item> base, final HashMap<SetMask, ConfigValue> testedCases,
 		final double maxWeight) {
 
-		SetMask best = null;
-		ConfigValue bestValue = null;
-		for (final SetMask mask : testedCases.keySet()) {
-			final ConfigValue value = valueOf(mask, base, testedCases);
-			if (best == null || (value.isBetterThan(bestValue) && value.isWithIn(maxWeight))) {
-				best = mask;
-				bestValue = value;
-			}
-		}
+// SetMask best = null;
+// ConfigValue bestValue = null;
+// for (final SetMask mask : testedCases.keySet()) {
+// final ConfigValue value = valueOf(mask, base, testedCases);
+// if (best == null || (value.isBetterThan(bestValue) && value.isWithIn(maxWeight))) {
+// best = mask;
+// bestValue = value;
+// }
+// }
 
-		return best;
+		return bestMask;
 	}
 
 	private static void print (final SetMask caseMask, final StartSet<Item> base,
@@ -161,7 +171,7 @@ public class Knapsack {
 			valueOf.add(element, subcase.getOccurencesOf(i));
 		}
 		testedCases.put(subcase, valueOf);
-		System.out.println("processed " + testedCases.size());
+// System.out.println("processed " + testedCases.size());
 		return valueOf;
 	}
 
