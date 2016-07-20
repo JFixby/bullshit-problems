@@ -3,9 +3,8 @@ package com.google.java;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class Knapsack {
 
@@ -18,12 +17,12 @@ public class Knapsack {
 		final StartSet<Item> base = new StartSet<Item>(items);
 
 		for (int i = 0; i < items; i++) {
-			base.addElement(new Item(i, weights[i], values[i]));
+			base.addElement(new Item(i + 1, weights[i], values[i]));
 		}
 		base.print("maxWeight=" + maxWeight);
 		final SetMask startMask = new SetMask(items);
 
-		final HashMap<SetMask, ConfigValue> testedCases = new HashMap<SetMask, ConfigValue>();
+		final HashSet<SetMask> testedCases = new HashSet<SetMask>();
 		final boolean inclusiveSearch = true;
 		searchOptimalKnapsack(base, testedCases, startMask, inclusiveSearch, maxWeight);
 
@@ -31,30 +30,25 @@ public class Knapsack {
 		print(best, base, testedCases);
 	}
 
-	private static SetMask getBest (final StartSet<Item> base, final HashMap<SetMask, ConfigValue> testedCases,
-		final double maxWeight) {
-		final Set<SetMask> keyset = testedCases.keySet();
+	private static SetMask getBest (final StartSet<Item> base, final HashSet<SetMask> testedCases, final double maxWeight) {
+
 		SetMask best = null;
 		ConfigValue bestValue = null;
-		for (final SetMask mask : keyset) {
-			final ConfigValue value = testedCases.get(mask);
+		for (final SetMask mask : testedCases) {
+			final ConfigValue value = valueOf(mask, base);
 			if (best == null || (value.isBetterThan(bestValue) && value.isWithIn(maxWeight))) {
 				best = mask;
-				bestValue = testedCases.get(mask);
+				bestValue = value;
 			}
 		}
 
 		return best;
 	}
 
-	private static void print (final SetMask caseMask, final StartSet<Item> base,
-		final HashMap<SetMask, ConfigValue> testedCases) {
+	private static void print (final SetMask caseMask, final StartSet<Item> base, final HashSet<SetMask> testedCases) {
 
 		final List<Item> includedItems = base.filter(caseMask);
-		ConfigValue value = testedCases.get(caseMask);
-		if (value == null) {
-			value = valueOf(caseMask, base);
-		}
+		final ConfigValue value = valueOf(caseMask, base);
 
 		value.print("value");
 
@@ -65,14 +59,14 @@ public class Knapsack {
 		System.out.println();
 	}
 
-	private static void searchOptimalKnapsack (final StartSet<Item> base, final HashMap<SetMask, ConfigValue> testedCases,
+	private static void searchOptimalKnapsack (final StartSet<Item> base, final HashSet<SetMask> testedCases,
 		final SetMask currentMask, final boolean inclusiveSearch, final double maxWeight) {
-		if (testedCases.containsKey(currentMask)) {
+		if (testedCases.contains(currentMask)) {
 			return;
 		}
-		final ConfigValue value = valueOf(currentMask, base);
-		testedCases.put(currentMask, value);
+		testedCases.add(currentMask);
 
+		final ConfigValue value = valueOf(currentMask, base);
 		if (!value.isWithIn(maxWeight)) {
 			return;
 		}
