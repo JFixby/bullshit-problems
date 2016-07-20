@@ -4,6 +4,7 @@ package com.google.java;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Knapsack {
@@ -24,10 +25,89 @@ public class Knapsack {
 
 		final HashSet<SetMask> testedCases = new HashSet<SetMask>();
 		final boolean inclusiveSearch = true;
-		searchOptimalKnapsack(base, testedCases, startMask, inclusiveSearch, maxWeight);
+
+		final LinkedList<SetMask> queue = new LinkedList<SetMask>();
+		queue.add(startMask);
+
+		while (queue.size() > 0) {
+
+			final SetMask currentMask = queue.removeFirst();
+
+			if (testedCases.contains(currentMask)) {
+				continue;
+			}
+
+			testedCases.add(currentMask);
+			final ConfigValue value = valueOf(currentMask, base);
+			if (!value.isWithIn(maxWeight)) {
+				continue;
+			}
+
+// spreadBFS(currentMask, queue, testedCases);
+// spreadDFS(currentMask, queue, testedCases);
+			spreadSmart(currentMask, queue, testedCases);
+
+		}
 
 		final SetMask best = getBest(base, testedCases, maxWeight);
 		print(best, base, testedCases);
+	}
+
+	private static void spreadBFS (final SetMask currentMask, final LinkedList<SetMask> queue,
+		final HashSet<SetMask> testedCases) {
+		for (int i = 0; i < currentMask.size(); i++) {
+			if (currentMask.elementIsIncluded(i)) {
+				continue;
+			}
+
+			final SetMask subcase = currentMask.include(i);
+			queue.add(subcase);
+
+		}
+	}
+
+	private static void spreadDFS (final SetMask currentMask, final LinkedList<SetMask> queue,
+		final HashSet<SetMask> testedCases) {
+		for (int i = 0; i < currentMask.size(); i++) {
+			if (currentMask.elementIsIncluded(i)) {
+				continue;
+			}
+
+			final SetMask subcase = currentMask.include(i);
+			queue.add(0, subcase);
+
+		}
+	}
+
+	private static void spreadSmart (final SetMask currentMask, final LinkedList<SetMask> queue,
+		final HashSet<SetMask> testedCases) {
+		final ArrayList<SetMask> preCandidates = new ArrayList<SetMask>();
+		final ArrayList<SetMask> postCandidates = new ArrayList<SetMask>();
+		for (int i = 0; i < currentMask.size(); i++) {
+			if (currentMask.elementIsIncluded(i)) {
+				continue;
+			}
+			final SetMask subcase = currentMask.include(i);
+			if (testedCases.contains(subcase)) {
+				continue;
+			}
+
+			if (isGoodPre(subcase, i)) {
+				preCandidates.add(subcase);
+			} else {
+				postCandidates.add(subcase);
+			}
+		}
+		for (final SetMask candidate : preCandidates) {
+			queue.add(0, candidate);
+		}
+		for (final SetMask candidate : postCandidates) {
+			queue.add(candidate);
+		}
+	}
+
+	private static boolean isGoodPre (final SetMask subcase, final int i) {
+		return i % 2 == 0;
 	}
 
 	private static SetMask getBest (final StartSet<Item> base, final HashSet<SetMask> testedCases, final double maxWeight) {
@@ -57,30 +137,6 @@ public class Knapsack {
 			System.out.println("  [" + i + "] " + item);
 		}
 		System.out.println();
-	}
-
-	private static void searchOptimalKnapsack (final StartSet<Item> base, final HashSet<SetMask> testedCases,
-		final SetMask currentMask, final boolean inclusiveSearch, final double maxWeight) {
-		if (testedCases.contains(currentMask)) {
-			return;
-		}
-		testedCases.add(currentMask);
-
-		final ConfigValue value = valueOf(currentMask, base);
-		if (!value.isWithIn(maxWeight)) {
-			return;
-		}
-
-		for (int i = 0; i < currentMask.size(); i++) {
-			if (currentMask.elementIsIncluded(i)) {
-				continue;
-			}
-			{
-				final SetMask subcase = currentMask.include(i);
-				searchOptimalKnapsack(base, testedCases, subcase, inclusiveSearch, maxWeight);
-			}
-		}
-
 	}
 
 	private static ConfigValue valueOf (final SetMask subcase, final StartSet<Item> base) {
