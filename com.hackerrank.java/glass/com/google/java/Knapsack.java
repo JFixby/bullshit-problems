@@ -14,6 +14,11 @@ public class Knapsack {
 		final double maxWeight = 400;
 		final StartSet<Item> base = new StartSet<Item>();
 
+// base.addElement(new Item("1", 1, 15, 1));
+// base.addElement(new Item("2", 5, 10, 1));
+// base.addElement(new Item("3", 3, 9, 1));
+// base.addElement(new Item("4", 4, 5, 1));
+
 		base.addElement(new Item("map", 9, 150, 1));
 		base.addElement(new Item("compass", 13, 35, 1));
 		base.addElement(new Item("water", 153, 200, 3));
