@@ -20,7 +20,7 @@ public class Knapsack {
 		for (int i = 0; i < items; i++) {
 			base.addElement(new Item(i, weights[i], values[i]));
 		}
-		base.print(" maxWeight=" + maxWeight);
+		base.print("maxWeight=" + maxWeight);
 		final SetMask startMask = new SetMask(items);
 
 		final HashMap<SetMask, ConfigValue> testedCases = new HashMap<SetMask, ConfigValue>();
