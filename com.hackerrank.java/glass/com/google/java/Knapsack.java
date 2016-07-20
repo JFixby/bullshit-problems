@@ -11,7 +11,7 @@ public class Knapsack {
 
 	public static void main (final String[] args) {
 
-		final double maxWeight = 400;
+		final double maxWeight = 4_0_0;
 		final StartSet<Item> base = new StartSet<Item>();
 
 // base.addElement(new Item("1", 1, 15, 1));
@@ -161,6 +161,7 @@ public class Knapsack {
 			valueOf.add(element, subcase.getOccurencesOf(i));
 		}
 		testedCases.put(subcase, valueOf);
+		System.out.println("processed " + testedCases.size());
 		return valueOf;
 	}
 
