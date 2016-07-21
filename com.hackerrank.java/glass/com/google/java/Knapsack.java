@@ -6,13 +6,16 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import com.jfixby.cmns.api.log.L;
+import com.jfixby.red.desktop.DesktopSetup;
+
 public class Knapsack {
 
 	private static SetMask bestMask;
 
 	public static void main (final String[] args) {
-
-		final double maxWeight = 4_0_0;
+		DesktopSetup.deploy();
+		final double maxWeight = 200;
 		final StartSet<Item> base = new StartSet<Item>();
 
 // base.addElement(new Item("1", 1, 15, 1));
@@ -63,8 +66,10 @@ public class Knapsack {
 		bestMask = queue.get(0);
 		ConfigValue bestValue = valueOf(bestMask, base, testedCases);
 		testedCases.clear();
+		long totalStepsDone = 0;
 		while (queue.size() > 0) {
 			final SetMask currentMask = queue.remove(0);
+			totalStepsDone++;
 
 			if (testedCases.containsKey(currentMask)) {
 				continue;
@@ -81,15 +86,17 @@ public class Knapsack {
 			if (value.isBetterThan(bestValue)) {
 				bestMask = currentMask;
 				bestValue = value;
-				print(bestMask, base, testedCases);
+// print(bestMask, base, testedCases);
 			}
 
 			spread(currentMask, queue, testedCases, base);
 		}
+
+		L.d("totalStepsDone", totalStepsDone);
 	}
 
 	private static final boolean DFS = true;
-	private static final boolean BFS = true;
+	private static final boolean BFS = !true;
 
 	private static void spread (final SetMask currentMask, final List<SetMask> queue,
 		final HashMap<SetMask, ConfigValue> testedCases, final StartSet<Item> base) {
@@ -105,6 +112,7 @@ public class Knapsack {
 
 			final SetMask subcase = currentMask.include(i);
 			if (testedCases.containsKey(subcase)) {
+// L.d(" skip");
 				continue;
 			}
 			if (isGoodPre(subcase, i)) {
