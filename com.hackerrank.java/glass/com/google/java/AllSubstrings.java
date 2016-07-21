@@ -12,8 +12,10 @@ public class AllSubstrings {
 
 		final StringProcessor processor = new StringProcessor();
 		processor.appendAll(input);
-
 		processor.printCollected("collected");
+
+		// 1) readable code, easy to maintain, easy to scale
+		// 2) O(N^2) ops, O(N^2) memory
 
 	}
 
