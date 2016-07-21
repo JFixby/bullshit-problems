@@ -8,7 +8,7 @@ public class AllSubstrings {
 
 	public static void main (final String[] args) {
 
-		final String input = "123";
+		final String input = "112";
 
 		final StringProcessor processor = new StringProcessor();
 		processor.appendAll(input);
