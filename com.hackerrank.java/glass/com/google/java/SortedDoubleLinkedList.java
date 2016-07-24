@@ -8,6 +8,8 @@ import java.util.Collections;
 
 import org.junit.Test;
 
+import com.jfixby.cmns.api.debug.Debug;
+import com.jfixby.cmns.api.debug.DebugTimer;
 import com.jfixby.cmns.api.log.L;
 import com.jfixby.cmns.api.random.Random;
 import com.jfixby.red.desktop.DesktopSetup;
@@ -145,10 +147,11 @@ public class SortedDoubleLinkedList<E extends Comparable<E>> {
 	@Test
 	public void testa () {
 		DesktopSetup.deploy();
-
+		final DebugTimer timer = Debug.newTimer();
+		final int N = 1000;
+		timer.reset();
 		final ArrayList<Integer> checker = new ArrayList<Integer>();
 		final SortedDoubleLinkedList<Integer> toTest = new SortedDoubleLinkedList<Integer>();
-		final int N = 100;
 		for (int k = 0; k < N; k++) {
 			for (int i = 0; i < N; i++) {
 				final int add = Random.newInt32();
@@ -170,6 +173,7 @@ public class SortedDoubleLinkedList<E extends Comparable<E>> {
 			assertTrue(this.compareLists(checker, toTest));
 
 		}
+		timer.printTime("test done: N=" + N);
 	}
 
 	static boolean equals (final Object a, final Object b) {
