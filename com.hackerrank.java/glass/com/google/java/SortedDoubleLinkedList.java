@@ -146,34 +146,44 @@ public class SortedDoubleLinkedList<E extends Comparable<E>> {
 
 	@Test
 	public void testa () {
+
 		DesktopSetup.deploy();
 		final DebugTimer timer = Debug.newTimer();
 		final int N = 1000;
+
 		timer.reset();
+
+		final ArrayList<Integer> toRemove = new ArrayList<Integer>();
 		final ArrayList<Integer> checker = new ArrayList<Integer>();
 		final SortedDoubleLinkedList<Integer> toTest = new SortedDoubleLinkedList<Integer>();
 		for (int k = 0; k < N; k++) {
+			Random.setSeed(k);
+// L.d("seed", k);
 			for (int i = 0; i < N; i++) {
 				final int add = Random.newInt32();
 				checker.add(add);
 				toTest.addElement(add);
+// toTest.print("toTest");
+				if (Random.newCoin()) {
+					toRemove.add(add);
+				}
 			}
 			assertTrue(this.compareLists(checker, toTest));
-			int size = checker.size();
-			for (; size > 0;) {
-				final int index = Random.newInt(0, size - 1);
-				size--;
-				final Integer toRemoveA = checker.remove(index);
-				final Integer toRemoveB = toTest.removeElementAt(index);
-				assertTrue(equals(toRemoveA, toRemoveB));
+
+			for (int r = 0; r < toRemove.size(); r++) {
+				final Integer R = toRemove.get(r);
+				checker.remove(R);
+				toTest.removeElement(R);
 			}
 			assertTrue(this.compareLists(checker, toTest));
 			checker.clear();
 			toTest.clear();
+			toRemove.clear();
 			assertTrue(this.compareLists(checker, toTest));
 
 		}
 		timer.printTime("test done: N=" + N);
+
 	}
 
 	static boolean equals (final Object a, final Object b) {
