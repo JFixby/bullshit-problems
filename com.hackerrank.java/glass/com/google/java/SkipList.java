@@ -3,7 +3,7 @@ package com.google.java;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
+import java.util.HashSet;
 
 import org.junit.Test;
 
@@ -299,19 +299,21 @@ public class SkipList<E extends Comparable<E>> {
 		Node<E> current = this.left;
 		Node<E> currentL = this.left;
 
-		String t = "";
+		final StringBuilder t = new StringBuilder();
+
 		while (current != null) {
 			if (current == currentL) {
 				final String print = current.toString(level);
-				t = t + String.format("%7s", print);
+				t.append("" + String.format("%7s", print));
 				currentL = currentL.getRight(level);
 			} else {
-				t = t + String.format("%7s", " ");
+				t.append("" + String.format("%7s", " "));
 			}
 
 			current = current.getRight(0);
 		}
-		L.d("(" + level + ") " + t);
+		t.insert(0, "(" + level + ") ");
+		L.d(t);
 
 	}
 
@@ -385,51 +387,50 @@ public class SkipList<E extends Comparable<E>> {
 			timer.reset();
 			for (int k = 0; k < N; k++) {
 				final int candidate = check.get(k);
-				if (!toTest.contains(candidate)) {
-					assert (false);
-				}
+				toTest.contains(candidate);
+				toTest.contains(candidate + 1);
 			}
 			timer.printTime("SkipList contains: N=" + N);
 		}
 
-		{
-			final ArrayList<Integer> toTest = new ArrayList<Integer>(N);
-
-			timer.reset();
-			for (int k = 0; k < N; k++) {
-				final int candidate = check.get(k);
-				toTest.add(candidate);
-			}
-			timer.printTime("ArrayList insert:   N=" + N);
-
-			timer.reset();
-			for (int k = 0; k < N; k++) {
-				final int candidate = check.get(k);
-				if (!toTest.contains(candidate)) {
-					assert (false);
-				}
-			}
-			timer.printTime("ArrayList contains: N=" + N);
-		}
-		{
-			final LinkedList<Integer> toTest = new LinkedList<Integer>();
-
-			timer.reset();
-			for (int k = 0; k < N; k++) {
-				final int candidate = check.get(k);
-				toTest.add(candidate);
-			}
-			timer.printTime("LinkedList insert:   N=" + N);
-
-			timer.reset();
-			for (int k = 0; k < N; k++) {
-				final int candidate = check.get(k);
-				if (!toTest.contains(candidate)) {
-					assert (false);
-				}
-			}
-			timer.printTime("LinkedList contains: N=" + N);
-		}
+// {
+// final ArrayList<Integer> toTest = new ArrayList<Integer>(N);
+//
+// timer.reset();
+// for (int k = 0; k < N; k++) {
+// final int candidate = check.get(k);
+// toTest.add(candidate);
+// }
+// timer.printTime("ArrayList insert: N=" + N);
+//
+// timer.reset();
+// for (int k = 0; k < N; k++) {
+// final int candidate = check.get(k);
+// if (!toTest.contains(candidate)) {
+// assert (false);
+// }
+// }
+// timer.printTime("ArrayList contains: N=" + N);
+// }
+// {
+// final LinkedList<Integer> toTest = new LinkedList<Integer>();
+//
+// timer.reset();
+// for (int k = 0; k < N; k++) {
+// final int candidate = check.get(k);
+// toTest.add(candidate);
+// }
+// timer.printTime("LinkedList insert: N=" + N);
+//
+// timer.reset();
+// for (int k = 0; k < N; k++) {
+// final int candidate = check.get(k);
+// if (!toTest.contains(candidate)) {
+// assert (false);
+// }
+// }
+// timer.printTime("LinkedList contains: N=" + N);
+// }
 
 	}
 
@@ -466,33 +467,88 @@ public class SkipList<E extends Comparable<E>> {
 	}
 
 	public static void main (final String[] args) {
+
 		DesktopSetup.deploy();
-		Random.setSeed(0L);
-		final SkipList<Integer> list = new SkipList<Integer>();
-		for (int i = 0; i < 60; i++) {
-			final int add = Random.newInt(0, 100);
-
-			L.d("add", add);
-			list.addElement(add);
-			list.print("list: " + i);
-
+		final DebugTimer timer = Debug.newTimer();
+		final int N = 100_000;
+		final ArrayList<Integer> check = new ArrayList<Integer>(N);
+		Random.setSeed(0);
+		for (int k = 0; k < N; k++) {
+// final int add = Random.newInt(0, 10);
+			final int add = Random.newInt32();
+			check.add(add);
 		}
 
-		list.print("list");
+		{
+			final SkipList<Integer> toTest = new SkipList<Integer>();
 
+			timer.reset();
+			for (int k = 0; k < N; k++) {
+				final int candidate = check.get(k);
+// if (!check.contains(candidate)) {
+// toTest.addElement(candidate);
+// }
+				toTest.addElement(candidate);
+			}
+			timer.printTime("SkipList insert:   N=" + N);
+// toTest.print("toTest");
+			timer.reset();
+			for (int k = 0; k < N; k++) {
+				final int candidate = check.get(k);
+				toTest.contains(candidate);
+				toTest.contains(candidate + 1);
+			}
+			timer.printTime("SkipList contains: N=" + N);
+// toTest.print("toTest");
+		}
+
+		{
+			final HashSet<Integer> toTest = new HashSet<Integer>();
+
+			timer.reset();
+			for (int k = 0; k < N; k++) {
+				final int candidate = check.get(k);
+				toTest.add(candidate);
+			}
+			timer.printTime("HashSet insert:   N=" + N);
+// toTest.print("toTest");
+			timer.reset();
+			for (int k = 0; k < N; k++) {
+				final int candidate = check.get(k);
+				toTest.contains(candidate);
+				toTest.contains(candidate + 1);
+			}
+			timer.printTime("HashSet contains: N=" + N);
+// toTest.print("toTest");
+		}
+
+// DesktopSetup.deploy();
+// Random.setSeed(0L);
+// final SkipList<Integer> list = new SkipList<Integer>();
+// for (int i = 0; i < 60; i++) {
+// final int add = Random.newInt(0, 100);
+//
+// L.d("add", add);
+// list.addElement(add);
+// list.print("list: " + i);
+//
+// }
+//
+// list.print("list");
+//
+//// while (list.size() > 0) {
+//// final Integer element = list.removeElementAt(list.size() - 1);
+//// L.d("remove", element);
+//// list.print("list");
+//// }
+//
 // while (list.size() > 0) {
-// final Integer element = list.removeElementAt(list.size() - 1);
+// L.d();
+// final Integer element = list.getElementAt(list.size() - 1);
+// list.removeElement(element);
 // L.d("remove", element);
 // list.print("list");
 // }
-
-		while (list.size() > 0) {
-			L.d();
-			final Integer element = list.getElementAt(list.size() - 1);
-			list.removeElement(element);
-			L.d("remove", element);
-			list.print("list");
-		}
 
 	}
 
