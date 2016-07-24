@@ -18,7 +18,6 @@ public class SortedDoubleLinkedList<E extends Comparable<E>> {
 	}
 
 	int size = 0;
-
 	final Node<E> left = new Node<E>();
 	final Node<E> right = new Node<E>();
 
@@ -158,7 +157,7 @@ public class SortedDoubleLinkedList<E extends Comparable<E>> {
 			}
 			assertTrue(this.compareLists(checker, toTest));
 			int size = checker.size();
-			for (int i = 0; i < N; i++) {
+			for (; size > 0;) {
 				final int index = Random.newInt(0, size - 1);
 				size--;
 				final Integer toRemoveA = checker.remove(index);
