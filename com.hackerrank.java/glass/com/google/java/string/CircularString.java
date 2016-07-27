@@ -1,5 +1,5 @@
 
-package com.google.java;
+package com.google.java.string;
 
 import java.util.HashMap;
 
