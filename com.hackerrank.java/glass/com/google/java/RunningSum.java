@@ -17,24 +17,27 @@ public class RunningSum {
 
 		DesktopSetup.deploy();
 
-		final int N = 4_000;
+		final int N = 100;
 		final int[] array = new int[N];
 		Random.setSeed(0);
 		for (int i = 0; i < N; i++) {
 			array[i] = Random.newInt(0, 100);
 		}
 
+// array = new int[] {25, 12, 14, 22, 19, 15, 10, 23};
 		L.d("array(" + N + ")", Arrays.toString(array));
-		final int targetSum = sum(array, 0, N - 1) + 1;
+		final int targetSum = SUB_ARRAY_SUMM.valueOf(array, 0, array.length - 1) + 1;
+// targetSum = 55;
+		cahedSum.clear();
 		L.d("targetSum", targetSum);
 
 		final DebugTimer timer = Debug.newTimer();
 		timer.reset();
-		if (findSubsequenceBrut(array, targetSum)) {
+		if (findSubsequence(array, targetSum)) {
 			L.d("array [" + F + ", " + T + "]", Arrays.toString(Arrays.copyOfRange(array, F, T)));
 
 		}
-		timer.printTime("findSubsequenceBrut(" + N + ")");
+		timer.printTime("findSubsequence(" + N + ")");
 		L.d("ops", ops + "");
 
 	}
@@ -43,16 +46,18 @@ public class RunningSum {
 	private static int F;
 	private static int T;
 
-	private static boolean findSubsequenceBrut (final int[] array, final int targetSum) {
+	private static boolean findSubsequence (final int[] array, final int targetSum) {
 		if (array.length == 0) {
 			return false;
 		}
-		for (int i = 0; i < array.length; i++) {
-			for (int j = array.length - 1; j >= i; j--) {
-				final int sum = sum(array, i, j);
-				if (sum == targetSum) {
-					F = i;
-					T = j;
+		for (int segmentSize = 0; segmentSize < array.length; segmentSize++) {
+			for (int fromIndex = 0;; fromIndex++) {
+				F = fromIndex;
+				T = fromIndex + segmentSize;
+				if (T >= array.length) {
+					break;
+				}
+				if (SUB_ARRAY_SUMM.valueOf(array, fromIndex, T) == targetSum) {
 					return true;
 				}
 			}
@@ -60,39 +65,69 @@ public class RunningSum {
 		return false;
 	}
 
+	interface λ {
+		public Integer valueOf (final int[] array, int fromIndex, int toIndex);
+	}
+
 	final static HashMap<Long, Integer> cahedSum = new HashMap<Long, Integer>();
 
-	private static int sum (final int[] array, final int fromIndex, final int toIndex) {
-		if (USE_CACHE) {
+	final static λ SUB_ARRAY_SUMM = memo(lambda());
+
+	private static λ lambda () {
+		return (A, fromIndex, toIndex) -> {
+			ops++;
+			if (toIndex == fromIndex) {
+				return A[fromIndex];
+			}
+			final int mid = (fromIndex + toIndex) / 2;
+			return SUB_ARRAY_SUMM.valueOf(A, fromIndex, mid) + SUB_ARRAY_SUMM.valueOf(A, mid + 1, toIndex);
+		};
+	}
+
+	private static λ memo (final λ lambda) {
+		if (!USE_CACHE) {
+			return lambda;
+		}
+		return (A, fromIndex, toIndex) -> {
 			final long key = ((long)fromIndex << 32) | toIndex;
-
-			L.d("fromIndex", String.format("%08X", fromIndex));
-			L.d(" toIndex", String.format("%08X", toIndex));
-			L.d(" key", String.format("%016X", key));
-			L.d();
-
 			Integer sum = cahedSum.get(key);
 			if (sum != null) {
 				return sum;
 			}
-			if (fromIndex != toIndex) {
-				sum = sum(array, fromIndex + 1, toIndex) + array[fromIndex];
-				cahedSum.put(key, sum);
-			} else {
-				sum = array[fromIndex];
-			}
-			ops++;
-
+			sum = lambda.valueOf(A, fromIndex, toIndex);
+			cahedSum.put(key, sum);
 			return sum;
-		}
-
-		int sum = 0;
-		for (int i = fromIndex; i <= toIndex; i++) {
-			sum = sum + array[i];
-			ops++;
-		}
-
-		return sum;
+		};
 	}
+
+// private static int sum (final int[] array, final int fromIndex, final int toIndex) {
+// if (USE_CACHE) {
+//
+//
+// L.d("fromIndex", String.format("%08X", fromIndex));
+// L.d(" toIndex", String.format("%08X", toIndex));
+// L.d(" key", String.format("%016X", key));
+// L.d();
+//
+
+// if (fromIndex != toIndex) {
+// sum = sum(array, fromIndex + 1, toIndex) + array[fromIndex];
+// cahedSum.put(key, sum);
+// } else {
+// sum = array[fromIndex];
+// }
+// ops++;
+//
+// return sum;
+// }
+//
+// int sum = 0;
+// for (int i = fromIndex; i <= toIndex; i++) {
+// sum = sum + array[i];
+// ops++;
+// }
+//
+// return sum;
+// }
 
 }
