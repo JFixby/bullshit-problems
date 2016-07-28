@@ -16,7 +16,7 @@ public class HuffmanCompression {
 	public static void main (final String[] args) {
 		DesktopSetup.deploy();
 		Random.setSeed(0);
-		final String original = generateString(500);// chars
+		final String original = generateString(100000);// chars
 
 		final HuffmanCompression compressor = new HuffmanCompression();
 		compressor.collectOccurences(original);
@@ -24,7 +24,7 @@ public class HuffmanCompression {
 		compressor.buildCodingTable();
 		final String result = compressor.compress(original);
 		compressor.print();
-		final int maxPrint = 4000;
+		final int maxPrint = 1000;
 		L.d("original: " + original.length(), original.substring(0, Math.min(maxPrint, original.length() - 1)));
 		L.d("result  : " + result.length(), result.substring(0, Math.min(maxPrint, result.length() - 1)));
 	}
