@@ -14,11 +14,11 @@ public class StringHasher {
 
 	int size = 0;
 	long P = 937;
-// long P = 63;
-	long Q = 31;
+// long P = 31;
+	long Q = 256;
 	long value = 0;
 	final HashMap<Integer, Long> chachedPowersOfQ = new HashMap<Integer, Long>();
-	final StringBuilder buffer = new StringBuilder();
+// final StringBuilder buffer = new StringBuilder();
 
 // public StringHasher (final String a) {
 // this.appendRight(a);
@@ -67,15 +67,16 @@ public class StringHasher {
 
 	@Override
 	public String toString () {
-		return "StringHasher[size=" + this.size + ", P=" + this.P + ", Q=" + this.Q + "] value = " + this.value + " :: " + "<"
-			+ this.buffer + ">";
+		return "StringHasher[size=" + this.size + ", P=" + this.P + ", Q=" + this.Q + "] value = " + this.value;
+// return "StringHasher[size=" + this.size + ", P=" + this.P + ", Q=" + this.Q + "] value = " + this.value + " :: " + "<"
+// + this.buffer + ">";
 	}
 
 	public void appendLeft (final char c) {
-		this.value = this.value * this.Q + c;
-		this.value = this.value % this.P;
+		this.value = (this.value * this.Q + c) % this.P;
+// this.value = this.value % this.P;
 		this.size++;
-		this.buffer.insert(0, c);
+// this.buffer.insert(0, c);
 	}
 
 	public void discardLeft (final String string) {
@@ -85,17 +86,17 @@ public class StringHasher {
 	}
 
 	public void discardLeft (final char c) {
-		this.value = (this.value - c);
+		this.value = this.P + (this.value - c);
 		this.value = this.value * this.powQ(this.P - 2);
 		this.value = this.value % this.P;
 		this.size--;
-		this.buffer.deleteCharAt(0);
+// this.buffer.deleteCharAt(0);
 	}
 
 	public void discardRight (final char c) {
 		this.size--;
 		this.value = this.value - c * this.powQ(this.size);
-		this.buffer.deleteCharAt(this.size);
+// this.buffer.deleteCharAt(this.size);
 		if (this.value < 0) {
 			this.value = this.P + this.value % this.P;
 		}
@@ -107,7 +108,7 @@ public class StringHasher {
 // L.d(this.value);
 		this.size++;
 		this.value = this.value % this.P;
-		this.buffer.append(c);
+// this.buffer.append(c);
 // L.d(" >>" + this.value);
 	}
 
@@ -127,15 +128,26 @@ public class StringHasher {
 
 	private long powQ (long powerOfQ) {
 		powerOfQ = powerOfQ % (this.P - 1);
-		Long value = this.chachedPowersOfQ.get(powerOfQ);
-		if (value != null) {
-			return value.longValue();
+		if (powerOfQ == 0) {
+			return 1L;
 		}
-		value = this.computePowQ(powerOfQ);
-		this.chachedPowersOfQ.put((int)powerOfQ, value);
-		return value;
-// final double d = Math.pow(this.Q, powerOfQ);
-// return ((long)d) % this.P;
+		if (powerOfQ == 1) {
+			return this.Q % this.P;
+		}
+		long result = 1;
+		for (int k = 0; k < powerOfQ; k++) {
+			result = result * this.Q;
+			result = result % this.P;
+		}
+		return result;
+// Long value = this.chachedPowersOfQ.get(powerOfQ);
+// if (value != null) {
+// return value.longValue();
+// }
+// value = this.computePowQ(powerOfQ);
+// this.chachedPowersOfQ.put((int)powerOfQ, value);
+// return value;
+
 	}
 
 	private long computePowQ (final long powerOfQ) {

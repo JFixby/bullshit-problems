@@ -11,8 +11,8 @@ public class CircularString {
 	public static void main (final String[] args) {
 		DesktopSetup.deploy();
 		Random.setSeed(0);
-		final String A = generate(20000);
-		final String B = rotate(A, A.length() - 1);
+		final String A = generate(200_000_00);
+		final String B = rotate(A, 2);
 // System.out.println(A);
 // System.out.println(B);
 		final DebugTimer timer = Debug.newTimer();
@@ -30,17 +30,23 @@ public class CircularString {
 
 	private static int findOffsetHash (final String A, final String B) {
 		final int len = A.length();
-		final StringHasher hashA = new StringHasher().appendRight(A);
 
-		final StringHasher hashB = new StringHasher().appendRight(B);
+		final DebugTimer timer = Debug.newTimer();
+		timer.reset();
+		final StringHasher hashA = new StringHasher().appendLeft(A);
 
+		final StringHasher hashB = new StringHasher().appendLeft(B);
+		timer.printTime("appendLeft");
 		int offsetB = 0;
 // L.d("hashA", hashA);
 // L.d("hashB +" + offsetB, hashB);
 		while (!hashA.equals(hashB) && offsetB < len) {
-			hashB.appendRight(B.charAt(offsetB % len));
 			hashB.discardLeft(B.charAt(offsetB % len));
+			hashB.appendRight(B.charAt(offsetB % len));
 			offsetB++;
+			if (offsetB < 0) {
+				offsetB = offsetB + len;
+			}
 // L.d("hashB +" + offsetB, hashB);
 		}
 		return offsetB;
@@ -53,8 +59,8 @@ public class CircularString {
 	private static String generate (final int N) {
 		final StringBuilder tmp = new StringBuilder();
 		for (int i = 0; i < N; i++) {
-			final int M = Random.newInt(0, 100);
-			final char C = (char)('A' + Random.newInt(0, 1));
+			final int M = Random.newInt(1, 2);
+			final char C = (char)('A' + Random.newInt(0, 10));
 			for (int m = 0; m < M; m++) {
 				tmp.append(C);
 			}
