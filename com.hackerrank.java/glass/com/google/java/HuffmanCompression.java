@@ -16,43 +16,84 @@ public class HuffmanCompression {
 	public static void main (final String[] args) {
 		DesktopSetup.deploy();
 		Random.setSeed(0);
-		final String original = generateString(100000);// chars
+		final String original = generateString(1000);// chars
 
 		final HuffmanCompression compressor = new HuffmanCompression();
 		compressor.collectOccurences(original);
-		compressor.buildTree();
-		compressor.buildCodingTable();
-		final String result = compressor.compress(original);
 		compressor.print();
+		compressor.buildTree();
+		compressor.print();
+		compressor.buildCodingTable();
+		compressor.print();
+		final String result = compressor.compress(original);
+
 		final int maxPrint = 1000;
 		L.d("original: " + original.length(), original.substring(0, Math.min(maxPrint, original.length() - 1)));
 		L.d("result  : " + result.length(), result.substring(0, Math.min(maxPrint, result.length() - 1)));
+		final long expectedSize = original.length();
+// compressor.print();
+		final String restored = compressor.decompress(result, expectedSize);
+		L.d("restored: " + restored.length(), restored.substring(0, Math.min(maxPrint, restored.length() - 1)));
+
 	}
 
-	private void print () {
-		Collections.newMap(this.orrucences).print("orrucences");
-		Collections.newMap(this.characterToBinaryForm).print("characterToBinaryForm");
-	}
+	private String decompress (final String compressed, final long expectedSize) {
+		final StringBuilder buffer = new StringBuilder();
+		final StringBuilder result = new StringBuilder();
+		final int bitsToConvert = 16;
+		int index = 0;
+// buffer.append(compressed);
+// while () {
+		while (result.length() < expectedSize) {
+			final Character chr = this.recognizeChar(buffer);
+			if (chr != null) {
+				result.append(chr);
+			} else {
+				if (index == compressed.length()) {
+					break;
+				}
+				final char c = compressed.charAt(index);
+				final int code = c - '@' - 1;
+				final String binary = Integer.toBinaryString(code);
+				buffer.append(binary);
+				index++;
+			}
+		}
 
-	final HashMap<Character, String> characterToBinaryForm = new HashMap<Character, String>();
-
-	private void buildCodingTable () {
-
-		this.DFS(this.root, this.characterToBinaryForm, "");
+// final int pointer = 0;
+// for (final int i = 0; i < expectedSize;) {
 //
+// final char c = compressed.charAt(pointer);
+//// final char c = (char)(value + '@' + 1);
+//
+// while (buffer.length() % bitsToConvert == 0 && buffer.length() >= bitsToConvert) {
+//
+// if (chr == null) {
+// L.d("buffer " + buffer.length(), buffer.toString().subSequence(0, Math.min(1000, buffer.length() - 1)) + "...");
+// L.d("result " + result.length(), result.toString().subSequence(0, Math.min(1000, result.length() - 1)) + "...");
+// Err.reportError("");
+// } else {
+// L.d("buffer " + buffer.length(), buffer.toString().subSequence(0, Math.min(1000, buffer.length() - 1)) + "...");
+// L.d("result " + result.length(), result.toString().subSequence(0, Math.min(1000, result.length() - 1)) + "...");
+// }
+//
+// }
+//
+// }
+
+		return result.toString();
 	}
 
-	private void DFS (final Node node, final HashMap<Character, String> characterToBinaryForm, final String prefix) {
-		if (node == null) {
-			return;
+	private Character recognizeChar (final StringBuilder buffer) {
+		for (final String bin : this.binarytoCharacter.keySet()) {
+			if (buffer.indexOf(bin) == 0) {
+// L.d("buffer", buffer);
+// L.d(" bin", bin);
+				buffer.delete(0, bin.length());
+				return this.binarytoCharacter.get(bin);
+			}
 		}
-		if (node.isFinal) {
-			characterToBinaryForm.put(node.character.charAt(0), prefix);
-			return;
-		}
-
-		this.DFS(node.L, characterToBinaryForm, prefix + "0");
-		this.DFS(node.R, characterToBinaryForm, prefix + "1");
+		return null;
 	}
 
 	private String compress (final String original) {
@@ -61,7 +102,9 @@ public class HuffmanCompression {
 		final int bitsToConvert = 16;
 		for (int i = 0; i < original.length(); i++) {
 			final Character next = original.charAt(i);
+// L.d("next", next);
 			final String binaryCode = this.characterToBinaryForm.get(next);
+// L.d("binaryCode", binaryCode);
 			buffer.append(binaryCode);
 			while (buffer.length() % bitsToConvert == 0 && buffer.length() != 0) {
 				final char code = this.consumeNbits(buffer, bitsToConvert);
@@ -72,12 +115,41 @@ public class HuffmanCompression {
 			while (buffer.length() % bitsToConvert != 0) {
 				buffer.append("0");
 			}
+			final char code = this.consumeNbits(buffer, bitsToConvert);
+			result.append(code);
 		}
-		final char code = this.consumeNbits(buffer, bitsToConvert);
-		result.append(code);
 
 // L.d("result", result);
 		return result.toString();
+	}
+
+	private void print () {
+		Collections.newMap(this.orrucences).print("orrucences");
+		Collections.newMap(this.characterToBinaryForm).print("characterToBinaryForm");
+	}
+
+	final HashMap<Character, String> characterToBinaryForm = new HashMap<Character, String>();
+	final HashMap<String, Character> binarytoCharacter = new HashMap<String, Character>();
+
+	private void buildCodingTable () {
+
+		this.DFS(this.root, this.characterToBinaryForm, this.binarytoCharacter, "1");
+//
+	}
+
+	private void DFS (final Node node, final HashMap<Character, String> characterToBinaryForm,
+		final HashMap<String, Character> binarytoCharacter, final String prefix) {
+		if (node == null) {
+			return;
+		}
+		if (node.isFinal) {
+			characterToBinaryForm.put(node.character.charAt(0), prefix);
+			binarytoCharacter.put(prefix, node.character.charAt(0));
+			return;
+		}
+
+		this.DFS(node.L, characterToBinaryForm, binarytoCharacter, prefix + "0");
+		this.DFS(node.R, characterToBinaryForm, binarytoCharacter, prefix + "1");
 	}
 
 	private char consumeNbits (final StringBuilder buffer, final int bitsToConvert) {

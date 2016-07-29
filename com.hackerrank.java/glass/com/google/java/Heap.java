@@ -109,11 +109,10 @@ public class Heap {
 	}
 
 	private void heapUp (final int nodeIndex) {
-		final int parentIndex = indexOfParent(nodeIndex);
-		if (parentIndex < 0) {
-
+		if (nodeIndex == 0) {
 			return;
 		}
+		final int parentIndex = indexOfParent(nodeIndex);
 // this.print();
 		final byte parent = this.data[parentIndex];
 
