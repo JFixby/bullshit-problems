@@ -113,20 +113,8 @@ public class Heap {
 			return;
 		}
 		final int parentIndex = indexOfParent(nodeIndex);
-// this.print();
+
 		final byte parent = this.data[parentIndex];
-
-		final int indexLeftChild = indexOfLeftChild(parent);
-		final int indexRightChild = indexOfRightChild(parent);
-
-		if (indexLeftChild < this.current_size) {
-
-		}
-
-		if (indexRightChild < this.current_size) {
-
-		}
-
 		final byte node = this.data[nodeIndex];
 
 		if (node > parent) {
