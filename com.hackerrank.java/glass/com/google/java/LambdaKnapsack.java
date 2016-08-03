@@ -99,21 +99,21 @@ public class LambdaKnapsack {
 	}
 
 	public static λw memoization (final λw function) {
-		if (USE_MEMOIZATION) {
-			final HashMap<Integer, Double> cache = new HashMap<Integer, Double>();
-			return w -> {
-
-				Double value = cache.get(w);// check cache
-				if (value == null) {// if not present
-					value = function.evaluate(w);// compute
-					cache.put(w, value);// store computed value
-					MEMORY_USAGE++;
-				}
-				return value;
-			};
-		} else {
+		if (!USE_MEMOIZATION) {
 			return function;
 		}
+		final HashMap<Integer, Double> cache = new HashMap<Integer, Double>();
+		return w -> {
+
+			Double value = cache.get(w);// check cache
+			if (value == null) {// if not present
+				value = function.evaluate(w);// compute
+				cache.put(w, value);// store computed value
+				MEMORY_USAGE++;
+			}
+			return value;
+		};
+
 	}
 
 	public static class Item {
