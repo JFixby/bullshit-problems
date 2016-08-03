@@ -5,14 +5,24 @@ import java.text.NumberFormat;
 import java.util.HashMap;
 
 public class LambdaKnapsack {
+	public static final boolean USE_MEMOIZATION = true;
 
 	public interface λw {
 		public double evaluate (int maxWeight);
 	}
 
-	public static void main (final String[] args) {
+	private static long MEMORY_USAGE = 0;
+	private static long RUNTIME_OPERATIONS = 0;
 
+	public static void main (final String[] args) {
+		// Constructing solution:
 		Item knapsack = Item.EMPTY;
+
+// knapsack = addItem("1", 1, 15, 1, knapsack);
+// knapsack = addItem("2", 5, 10, 1, knapsack);
+// knapsack = addItem("3", 3, 9, 1, knapsack);
+// knapsack = addItem("4", 4, 5, 1, knapsack);
+
 		knapsack = addItem("map", 9, 150, 1, knapsack);
 		knapsack = addItem("compass", 13, 35, 1, knapsack);
 		knapsack = addItem("water", 153, 200, 3, knapsack);
@@ -35,32 +45,36 @@ public class LambdaKnapsack {
 		knapsack = addItem("towel", 18, 12, 2, knapsack);
 		knapsack = addItem("socks", 4, 50, 1, knapsack);
 		knapsack = addItem("book", 30, 10, 2, knapsack);
+// Solved: solution is λw:=knapsack.valueFunction
+
+		printItems(knapsack);
 
 		final int maxWeight = 400;
-		final double value = knapsack.valueFunction.evaluate(maxWeight);
+		unrollSolution(knapsack, maxWeight);
 
-		print(knapsack);
-
-		unroll(knapsack, value, maxWeight);
+		System.out.println("Memory usage              = " + MEMORY_USAGE);
+		System.out.println("Runtime operations        = " + RUNTIME_OPERATIONS);
 
 	}
 
-	private static void unroll (final Item item, final double value, final int maxWeight) {
+	public static void unrollSolution (final Item item, final int maxWeight) {
+		final double value = item.valueFunction.evaluate(maxWeight);// evaluate solution;
 
+		// print result:
 		int w = maxWeight;
 		int solutionWeight = 0;
-		final NumberFormat nf = NumberFormat.getInstance();
 
 		System.out.println("You can carry te following materials " + "in the knapsack:");
 		for (Item i = item; i != Item.EMPTY && w >= 0; i = i.previousItem) {
-			if (i.getInKnapsack(w)) {
+			if (i.isItemTaken(w)) {
 				w = w - i.weight;
 				solutionWeight = solutionWeight + i.weight;
 				System.out.println(i);
 			}
-
 		} // for()
+
 		System.out.println();
+		final NumberFormat nf = NumberFormat.getInstance();
 		System.out.println("Total value              = " + value);
 		System.out.println("Total weight             = " + nf.format(solutionWeight / 1) + " kg");
 		System.out.println("Maximal weight           = " + nf.format(maxWeight / 1) + " kg");
@@ -68,7 +82,7 @@ public class LambdaKnapsack {
 		System.out.println();
 	}
 
-	private static void print (final Item item) {
+	public static void printItems (final Item item) {
 		System.out.println("Items list:");
 		for (Item i = item; i != Item.EMPTY; i = i.previousItem) {
 			System.out.println(i);
@@ -84,19 +98,25 @@ public class LambdaKnapsack {
 		return result;
 	}
 
-	private static λw memoization (final λw function) {
-		final HashMap<Integer, Double> cache = new HashMap<Integer, Double>();
-		return w -> {
-			Double value = cache.get(w);// check cache
-			if (value == null) {// if not present
-				value = function.evaluate(w);// compute
-				cache.put(w, value);// store computed value
-			}
-			return value;
-		};
+	public static λw memoization (final λw function) {
+		if (USE_MEMOIZATION) {
+			final HashMap<Integer, Double> cache = new HashMap<Integer, Double>();
+			return w -> {
+
+				Double value = cache.get(w);// check cache
+				if (value == null) {// if not present
+					value = function.evaluate(w);// compute
+					cache.put(w, value);// store computed value
+					MEMORY_USAGE++;
+				}
+				return value;
+			};
+		} else {
+			return function;
+		}
 	}
 
-	static class Item {
+	public static class Item {
 		final public String ID;
 		final public int weight;
 		final public double value;
@@ -115,29 +135,35 @@ public class LambdaKnapsack {
 			this.index = -1;
 		}
 
-		public Item (final String ID, final int weight, final double value, final Item previousItem) {
+		public Item (final String ID, final int itemWeight, final double itemValue, final Item previousItem) {
 			if (previousItem == null) {
-				throw new Error();
+				throw new Error("Null not allowed.");
 			}
 			this.ID = ID;
-			this.weight = weight;
-			this.value = value;
+			this.weight = itemWeight;
+			this.value = itemValue;
 			this.previousItem = previousItem;
-			this.valueFunction = memoization(//
-				w -> //
-				weight > w ? //
-					previousItem.valueFunction.evaluate(w)//
+			this.valueFunction = memoization(// use memoization
+				w -> // input weight argument
+				itemWeight > w & call() ? // item weight is too big?
+					previousItem.valueFunction.evaluate(w)// yes, ignore item
 					: // else
-					Math.max(//
-						previousItem.valueFunction.evaluate(w), // value 1
-						previousItem.valueFunction.evaluate(w - weight) + value // value 2
+					Math.max(// deciding about the item
+						previousItem.valueFunction.evaluate(w), // discard item
+						previousItem.valueFunction.evaluate(w - itemWeight) + itemValue // take item
 					)//
 			);
 			this.index = previousItem.index + 1;
 		}
 
-		public boolean getInKnapsack (final int j) {
-			return this.valueFunction.evaluate(j) != this.previousItem.valueFunction.evaluate(j);
+		static final private boolean call () {
+			RUNTIME_OPERATIONS++;
+			return true;
+		}
+
+		public boolean isItemTaken (final int weightLimit) {
+			// taking item changes it's value function
+			return this.valueFunction.evaluate(weightLimit) != this.previousItem.valueFunction.evaluate(weightLimit);
 		}
 
 		@Override

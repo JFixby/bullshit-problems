@@ -15,36 +15,36 @@ public class Knapsack {
 
 	public static void main (final String[] args) {
 		DesktopSetup.deploy();
-		final double maxWeight = 200;
+		final double maxWeight = 8;
 		final StartSet<Item> base = new StartSet<Item>();
 
-// base.addElement(new Item("1", 1, 15, 1));
-// base.addElement(new Item("2", 5, 10, 1));
-// base.addElement(new Item("3", 3, 9, 1));
-// base.addElement(new Item("4", 4, 5, 1));
+		base.addElement(new Item("1", 1, 15, 1));
+		base.addElement(new Item("2", 5, 10, 1));
+		base.addElement(new Item("3", 3, 9, 1));
+		base.addElement(new Item("4", 4, 5, 1));
 
-		base.addElement(new Item("map", 9, 150, 1));
-		base.addElement(new Item("compass", 13, 35, 1));
-		base.addElement(new Item("water", 153, 200, 3));
-		base.addElement(new Item("sandwich", 50, 60, 2));
-		base.addElement(new Item("glucose", 15, 60, 2));
-		base.addElement(new Item("tin", 68, 45, 3));
-		base.addElement(new Item("banana", 27, 60, 3));
-		base.addElement(new Item("apple", 39, 40, 3));
-		base.addElement(new Item("cheese", 23, 30, 1));
-		base.addElement(new Item("beer", 52, 10, 3));
-		base.addElement(new Item("suntan cream", 11, 70, 1));
-		base.addElement(new Item("camera", 32, 30, 1));
-		base.addElement(new Item("t-shirt", 24, 15, 2));
-		base.addElement(new Item("trousers", 48, 10, 2));
-		base.addElement(new Item("umbrella", 73, 40, 1));
-		base.addElement(new Item("waterproof trousers", 42, 70, 1));
-		base.addElement(new Item("waterproof overclothes", 43, 75, 1));
-		base.addElement(new Item("note-case", 22, 80, 1));
-		base.addElement(new Item("sunglasses", 7, 20, 1));
-		base.addElement(new Item("towel", 18, 12, 2));
-		base.addElement(new Item("socks", 4, 50, 1));
-		base.addElement(new Item("book", 30, 10, 2));
+// base.addElement(new Item("map", 9, 150, 1));
+// base.addElement(new Item("compass", 13, 35, 1));
+// base.addElement(new Item("water", 153, 200, 3));
+// base.addElement(new Item("sandwich", 50, 60, 2));
+// base.addElement(new Item("glucose", 15, 60, 2));
+// base.addElement(new Item("tin", 68, 45, 3));
+// base.addElement(new Item("banana", 27, 60, 3));
+// base.addElement(new Item("apple", 39, 40, 3));
+// base.addElement(new Item("cheese", 23, 30, 1));
+// base.addElement(new Item("beer", 52, 10, 3));
+// base.addElement(new Item("suntan cream", 11, 70, 1));
+// base.addElement(new Item("camera", 32, 30, 1));
+// base.addElement(new Item("t-shirt", 24, 15, 2));
+// base.addElement(new Item("trousers", 48, 10, 2));
+// base.addElement(new Item("umbrella", 73, 40, 1));
+// base.addElement(new Item("waterproof trousers", 42, 70, 1));
+// base.addElement(new Item("waterproof overclothes", 43, 75, 1));
+// base.addElement(new Item("note-case", 22, 80, 1));
+// base.addElement(new Item("sunglasses", 7, 20, 1));
+// base.addElement(new Item("towel", 18, 12, 2));
+// base.addElement(new Item("socks", 4, 50, 1));
+// base.addElement(new Item("book", 30, 10, 2));
 
 		base.print("maxWeight=" + maxWeight);
 		final SetMask startMask = new SetMask(base.size());
