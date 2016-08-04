@@ -7,7 +7,7 @@ import java.util.HashMap;
 public class LambdaKnapsack {
 	public static final boolean USE_MEMOIZATION = true;
 
-	public interface λw {
+	public interface λ {
 		public double evaluate (int maxWeight);
 	}
 
@@ -98,7 +98,7 @@ public class LambdaKnapsack {
 		return result;
 	}
 
-	public static λw memoization (final λw function) {
+	public static λ memoization (final λ function) {
 		if (!USE_MEMOIZATION) {
 			return function;
 		}
@@ -121,7 +121,7 @@ public class LambdaKnapsack {
 		final public int weight;
 		final public double value;
 		final public Item previousItem;
-		final public λw valueFunction;
+		final public λ valueFunction;
 		final private int index;
 
 		public static final Item EMPTY = new Item();
