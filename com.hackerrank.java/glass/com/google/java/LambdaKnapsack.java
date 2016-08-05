@@ -17,12 +17,13 @@ public class LambdaKnapsack {
 	public static void main (final String[] args) {
 		// Constructing solution:
 		Item knapsack = Item.EMPTY;
-
+// final int maxWeight = 8;
 // knapsack = addItem("1", 1, 15, 1, knapsack);
 // knapsack = addItem("2", 5, 10, 1, knapsack);
 // knapsack = addItem("3", 3, 9, 1, knapsack);
 // knapsack = addItem("4", 4, 5, 1, knapsack);
 
+		final int maxWeight = 400;
 		knapsack = addItem("map", 9, 150, 1, knapsack);
 		knapsack = addItem("compass", 13, 35, 1, knapsack);
 		knapsack = addItem("water", 153, 200, 3, knapsack);
@@ -49,7 +50,6 @@ public class LambdaKnapsack {
 
 		printItems(knapsack);
 
-		final int maxWeight = 400;
 		unrollSolution(knapsack, maxWeight);
 
 		System.out.println("Memory usage              = " + MEMORY_USAGE);
