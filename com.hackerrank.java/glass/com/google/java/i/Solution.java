@@ -97,7 +97,7 @@ public class Solution<T extends Comparable<T>> {
 
 		public static final void d (final Object msg) {
 // LogServer.log(msg);
-			System.out.println("" + msg);
+			System.err.println("" + msg);
 		}
 	}
 
