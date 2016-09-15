@@ -34,7 +34,7 @@ public class SolutionRunner<T extends AbstractSolution> {
 		final File input_folder = home.child("in").child(testName);
 
 		L.d("reading input", input_folder);
-		final ChildrenList testInputs = input_folder.listChildren();
+		final ChildrenList testInputs = input_folder.listDirectChildren();
 		testInputs.print("tests");
 
 		final CollectionScanner<File> testsScanner = (inputFile, i) -> {

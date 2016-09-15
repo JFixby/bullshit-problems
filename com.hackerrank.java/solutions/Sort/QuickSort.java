@@ -50,10 +50,15 @@ public class QuickSort {
 			return;
 		}
 
-// int middleIndex = fromIndex + (toIndex - fromIndex) / 2;
-
 		final int pivot = array[fromIndex];
-// L.d("pivot", pivot);
+		final int middleIndex = rotate(array, pivot, fromIndex, toIndex);
+		sort(array, fromIndex, middleIndex);
+		sort(array, middleIndex + 1, toIndex);
+
+	}
+
+	private static int rotate (final int[] array, final int pivot, final int fromIndex, final int toIndex) {
+
 		int leftIndex = fromIndex + 1;
 		int rightIndex = toIndex;
 
@@ -64,16 +69,14 @@ public class QuickSort {
 			} else {
 				swap(leftIndex, rightIndex, array);
 				rightIndex--;
-// L.d(leftValue + " > " + Arrays.toString(array));
+				// L.d(leftValue + " > " + Arrays.toString(array));
 			}
 		}
 
 		final int middleIndex = rightIndex;
 		swap(fromIndex, middleIndex, array);
-// L.d(" i " + Arrays.toString(array));
-		sort(array, fromIndex, middleIndex);
-		sort(array, middleIndex + 1, toIndex);
 
+		return middleIndex;
 	}
 
 	private static void swap (final int x, final int y, final int[] array) {
