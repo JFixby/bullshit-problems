@@ -3,6 +3,8 @@ package com.google.java.i;
 
 import java.util.ArrayList;
 
+import com.jfixby.cmns.api.log.L;
+
 //
 public class Solution<T extends Comparable<T>> {
 	final Node<T> left = new Node<T>();
@@ -90,21 +92,4 @@ public class Solution<T extends Comparable<T>> {
 
 	}
 
-	public static class L {
-		public static final void d (final Object tag, final Object msg) {
-			d(tag + " > " + msg);
-		}
-
-		public static final void d (final Object msg) {
-// LogServer.log(msg);
-			System.err.println("" + msg);
-		}
-	}
-
-	public static class Err {
-		public static final void reportError (final Throwable e) {
-			// LogServer.reportErr(e);
-			throw new Error(e);
-		}
-	}
 }

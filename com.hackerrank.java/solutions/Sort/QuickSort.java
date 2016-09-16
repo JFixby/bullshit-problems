@@ -3,7 +3,7 @@ package Sort;
 
 import java.util.Arrays;
 
-import com.google.java.i.Solution.L;
+import com.jfixby.cmns.api.log.L;
 
 public class QuickSort {
 
