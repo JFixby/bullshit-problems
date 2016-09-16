@@ -35,11 +35,11 @@ public class WordDistance {
 
 	public void add (final String word) {
 		this.words.add(word);
+		final int currentIndex = this.words.size() - 1;
 
 		Segment segment = this.openSegments.remove(word);
-		final int currentIndex = this.words.size() - 1;
-		if (segment != null) {
 
+		if (segment != null) {
 			segment.closeAt(currentIndex);
 
 			final Segment previous = this.closedSegments.get(word);
