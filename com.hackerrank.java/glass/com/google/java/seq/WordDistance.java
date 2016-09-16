@@ -4,8 +4,30 @@ package com.google.java.seq;
 import com.jfixby.cmns.api.collections.Collections;
 import com.jfixby.cmns.api.collections.List;
 import com.jfixby.cmns.api.collections.Map;
+import com.jfixby.red.desktop.DesktopSetup;
 
 public class WordDistance {
+
+	public static void main (final String[] args) {
+		DesktopSetup.deploy();
+
+		final WordDistance wordDistance = new WordDistance();
+		wordDistance.add("A");
+		wordDistance.add("B");
+		wordDistance.add("C");
+		wordDistance.add("D");
+		wordDistance.add("A");
+		wordDistance.add("D");
+		wordDistance.add("A");
+		wordDistance.add("C");
+		wordDistance.add("X");
+		wordDistance.add("Y");
+		wordDistance.add("Z");
+		wordDistance.add("A");
+
+		wordDistance.printAllDistances();
+
+	}
 
 	final List<String> words = Collections.newList();
 	final Map<String, Segment> openSegments = Collections.newMap();
