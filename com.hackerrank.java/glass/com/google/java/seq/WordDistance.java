@@ -59,7 +59,7 @@ public class WordDistance {
 	public void printAllDistances () {
 		this.words.print("positions");
 		this.closedSegments.print("closed");
-		this.openSegments.print("closed");
+		this.openSegments.print("open");
 	}
 
 	static class Segment {
