@@ -23,7 +23,7 @@ public class RadixBucketSort {
 		final DebugTimer timer = Debug.newTimer();
 		final Random r = new Random(System.currentTimeMillis());
 		final int N = 10000000;
-		final int B = Integer.MAX_VALUE / 100;
+		final int B = 100;
 		final int[] input = new int[N];
 		for (int i = 0; i < input.length; i++) {
 			input[i] = N - 1 - i;
@@ -51,7 +51,7 @@ public class RadixBucketSort {
 
 	public final static void sort (final int[] input) {
 
-		final int DIGIT_SIZE = 100;
+		final int DIGIT_SIZE = 10;
 		final int N = DIGIT_SIZE;
 		final Bucket[] buckets = new Bucket[N];
 		for (int i = 0; i < N; i++) {
