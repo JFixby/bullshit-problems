@@ -22,14 +22,14 @@ public class QuickSort {
 		final Random r = new Random(0);
 		final int N = 2000;
 		final int B = 10;
-		final int[] input = new int[N];
+		final Integer[] input = new Integer[N];
 		for (int i = 0; i < input.length; i++) {
 			input[i] = N - 1 - i;
 			input[i] = r.nextInt();
 		}
 		// r.nextBytes(input);
 
-		final int[] testInput = Arrays.copyOf(input, input.length);
+		final Integer[] testInput = Arrays.copyOf(input, input.length);
 
 		System.out.println("input: " + Arrays.toString(input));
 		L.d("data prepared", N);
@@ -47,11 +47,11 @@ public class QuickSort {
 
 	}
 
-	public static void sort (final int[] array) {
+	public static <T extends Number> void sort (final T[] array) {
 		sort(array, 0, array.length - 1);
 	}
 
-	private static void sort (final int[] array, final int indexFrom, final int indexTo) {
+	private static <T extends Number> void sort (final T[] array, final int indexFrom, final int indexTo) {
 		if (indexTo <= indexFrom) {
 			return;
 		}
@@ -59,16 +59,16 @@ public class QuickSort {
 		final int elementsToSort = indexTo - indexFrom + 1;
 
 		if (elementsToSort == 2) {
-			final int leftValue = array[indexFrom];
-			final int rightValue = array[indexTo];
-			if (leftValue > rightValue) {
+			final T leftValue = array[indexFrom];
+			final T rightValue = array[indexTo];
+			if (leftValue.intValue() > rightValue.intValue()) {
 				swap(array, indexFrom, indexTo);
 			}
 			return;
 		}
 
 		final int mid = indexFrom + elementsToSort / 2;
-		final int pivotValue = array[mid];
+		final T pivotValue = array[mid];
 		final int tmpPivotPosition = indexTo;
 		swap(array, tmpPivotPosition, mid);
 
@@ -76,9 +76,9 @@ public class QuickSort {
 		int pointerRight = indexTo - 1;
 
 		while (pointerLeft <= pointerRight) {
-			final int leftValue = array[pointerLeft];
+			final T leftValue = array[pointerLeft];
 // final int rightValue = array[pointerRight];
-			if (leftValue < pivotValue) {
+			if (leftValue.intValue() < pivotValue.intValue()) {
 				pointerLeft++;
 			} else {
 				swap(array, pointerLeft, pointerRight);
@@ -94,8 +94,8 @@ public class QuickSort {
 
 	}
 
-	private static void swap (final int[] array, final int a, final int b) {
-		final int tmp = array[a];
+	private static <T extends Number> void swap (final T[] array, final int a, final int b) {
+		final T tmp = array[a];
 		array[a] = array[b];
 		array[b] = tmp;
 	}
