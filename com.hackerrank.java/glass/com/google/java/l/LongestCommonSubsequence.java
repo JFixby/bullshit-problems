@@ -28,8 +28,8 @@ public class LongestCommonSubsequence {
 
 	}
 
-	final λ LCSS = this.memoization(this.setupExpression());
-	final HashMap<LCSSInput, Integer> map = new HashMap<LCSSInput, Integer>();
+	final λ λFunction = this.memoization(this.setupExpression());
+	final HashMap<LCSSInput, Integer> cache = new HashMap<LCSSInput, Integer>();
 
 	/*
 	 * Does O(2^(M+N)) operations when false and O(M*N) when true
@@ -53,8 +53,8 @@ public class LongestCommonSubsequence {
 			final Object xi = X[x];
 			final Object yi = Y[y];
 
-			return equals(xi, yi) ? this.LCSS.evaluate(x - 1, y - 1, X, Y) + 1
-				: Math.max(this.LCSS.evaluate(x - 1, y, X, Y), this.LCSS.evaluate(x, y - 1, X, Y));
+			return equals(xi, yi) ? this.λFunction.evaluate(x - 1, y - 1, X, Y) + 1
+				: Math.max(this.λFunction.evaluate(x - 1, y, X, Y), this.λFunction.evaluate(x, y - 1, X, Y));
 		};
 	}
 
@@ -65,10 +65,10 @@ public class LongestCommonSubsequence {
 			}
 
 			final LCSSInput key = keyOf(x, y, X, Y);
-			Integer value = this.map.get(key);
+			Integer value = this.cache.get(key);
 			if (value == null) {
 				value = expression.evaluate(x, y, X, Y);
-				this.map.put(key, value);
+				this.cache.put(key, value);
 			}
 			return value;
 		};
@@ -76,11 +76,11 @@ public class LongestCommonSubsequence {
 
 	public int solve (final Object[] A, final Object[] B) {
 		this.calls = 0;
-		return this.LCSS.evaluate(A.length - 1, B.length - 1, A, B);
+		return this.λFunction.evaluate(A.length - 1, B.length - 1, A, B);
 	}
 
 	public void reset () {
-		this.map.clear();
+		this.cache.clear();
 		this.calls = 0;
 	}
 
@@ -93,7 +93,7 @@ public class LongestCommonSubsequence {
 	}
 
 	public int getCacheSize () {
-		return this.map.size();
+		return this.cache.size();
 	}
 
 	static private boolean equals (final Object x, final Object y) {
