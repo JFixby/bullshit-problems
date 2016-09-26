@@ -25,6 +25,7 @@ public class LongestCommonSubsequence {
 	@Test
 	public void check20x20 () {
 		DesktopSetup.deploy();
+		L.d();
 		final int N = 100;
 		final int common = 50;
 
@@ -54,6 +55,26 @@ public class LongestCommonSubsequence {
 		subsequence.reset();
 
 		assertTrue(common == result);
+
+	}
+
+	@Test
+	public void checkABCDA () {
+		L.d();
+		final Character[] A = new Character[] {'A', 'B', 'C', 'D', 'A'};
+		final Character[] B = new Character[] {'A', 'C', 'B', 'D', 'E', 'A'};
+
+		L.d("A", Arrays.toString(A));
+		L.d("B", Arrays.toString(B));
+
+		final LongestCommonSubsequence subsequence = new LongestCommonSubsequence();
+		subsequence.setUseMemoization(true);
+
+		final int result = subsequence.solve(A, B);
+
+		L.d("LCSS len: " + result, "Memory usage: " + subsequence.getCacheSize() + " Calls: " + subsequence.getCallsDone());
+		subsequence.printSolution();
+		subsequence.reset();
 
 	}
 
