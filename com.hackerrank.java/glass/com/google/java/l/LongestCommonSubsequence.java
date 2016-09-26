@@ -8,6 +8,7 @@ import java.util.HashMap;
 
 import org.junit.Test;
 
+import com.jfixby.cmns.api.err.Err;
 import com.jfixby.cmns.api.log.L;
 import com.jfixby.red.desktop.DesktopSetup;
 
@@ -17,24 +18,27 @@ public class LongestCommonSubsequence {
 		public int evaluate (int x, int y, Object[] X, Object[] Y);
 	}
 
+	private Object[] A;
+	private Object[] B;
+	private Object[] solution;
+
 	@Test
 	public void check20x20 () {
 		DesktopSetup.deploy();
-		final int N = 120;
-		final int common = 11;
+		final int N = 100;
+		final int common = 50;
 
 		final Integer[] A = new Integer[N];
 		final Integer[] B = new Integer[N];
 
 		for (int i = 0; i < N; i++) {
-			A[i] = i * 3;
-			B[i] = i * 3 + 1;
+			A[i] = i * 3 + 1;
+			B[i] = i * 3 + 2;
 		}
 
 		for (int c = 0; c < common; c++) {
 			final int i = c * N / common;
-			A[i] = i * 3 + 2;
-			B[i] = i * 3 + 2;
+			A[i] = B[i] = i * 3 + 0;
 		}
 
 		L.d("A", Arrays.toString(A));
@@ -45,11 +49,61 @@ public class LongestCommonSubsequence {
 
 		final int result = subsequence.solve(A, B);
 
-		L.d(result, "Memory usage: " + subsequence.getCacheSize() + " Calls: " + subsequence.getCallsDone());
+		L.d("LCSS len: " + result, "Memory usage: " + subsequence.getCacheSize() + " Calls: " + subsequence.getCallsDone());
+		subsequence.printSolution();
 		subsequence.reset();
 
 		assertTrue(common == result);
 
+	}
+
+	public void printSolution () {
+		L.d("solution", Arrays.toString(this.getSolution()));
+	}
+
+	public Object[] getSolution () {
+		if (this.solution != null) {
+			return this.solution;
+		}
+		final int S = this.getResult();
+		if (S < 0) {
+			Err.reportError("No solution found");
+		}
+		this.solution = new Object[S];
+		int a_i = this.A.length - 1;
+		int b_i = this.B.length - 1;
+		int s_i = S - 1;
+		while (s_i >= 0) {
+			final Object a = this.A[a_i];
+			final Object b = this.B[b_i];
+			if (equals(a, b)) {
+				this.solution[s_i] = a;
+				a_i--;
+				b_i--;
+				s_i--;
+				continue;
+			}
+
+			final int value = this.λFunction.evaluate(a_i, b_i, this.A, this.B);
+
+			final int value_T = this.λFunction.evaluate(a_i, b_i - 1, this.A, this.B);
+			if (value_T == value) {
+				b_i--;
+				continue;
+			}
+
+			final int value_L = this.λFunction.evaluate(a_i - 1, b_i, this.A, this.B);
+			if (value_L == value) {
+				a_i--;
+				continue;
+			}
+			Err.reportError("Error");
+		}
+		return this.solution;
+	}
+
+	private int getResult () {
+		return this.result;
 	}
 
 	final λ λFunction = this.memoization(this.setupExpression());
@@ -67,6 +121,7 @@ public class LongestCommonSubsequence {
 	boolean useMemoization = true;
 
 	long calls = 0;
+	private int result = -1;
 
 	private λ setupExpression () {
 		return (x, y, X, Y) -> {
@@ -88,7 +143,7 @@ public class LongestCommonSubsequence {
 				return expression.evaluate(x, y, X, Y);
 			}
 
-			final LCSSInput key = keyOf(x, y, X, Y);
+			final LCSSInput key = keyOf(x, y);
 			Integer value = this.cache.get(key);
 			if (value == null) {
 				value = expression.evaluate(x, y, X, Y);
@@ -99,13 +154,18 @@ public class LongestCommonSubsequence {
 	}
 
 	public int solve (final Object[] A, final Object[] B) {
+		this.A = A;
+		this.B = B;
 		this.calls = 0;
-		return this.λFunction.evaluate(A.length - 1, B.length - 1, A, B);
+		return this.result = this.λFunction.evaluate(this.A.length - 1, this.B.length - 1, this.A, this.B);
+
 	}
 
 	public void reset () {
 		this.cache.clear();
 		this.calls = 0;
+		this.result = -1;
+		this.solution = null;
 	}
 
 	public void setUseMemoization (final boolean useMemoization) {
@@ -136,14 +196,11 @@ public class LongestCommonSubsequence {
 	static final class LCSSInput {
 		private final int x;
 		private final int y;
-		private final Object[] X;
-		private final Object[] Y;
 
-		public LCSSInput (final int x, final int y, final Object[] X, final Object[] Y) {
+		public LCSSInput (final int x, final int y) {
 			this.x = x;
 			this.y = y;
-			this.X = X;
-			this.Y = Y;
+
 		}
 
 		@Override
@@ -176,18 +233,13 @@ public class LongestCommonSubsequence {
 			if (this.y != other.y) {
 				return false;
 			}
-			if (!Arrays.equals(this.X, other.X)) {
-				return false;
-			}
-			if (!Arrays.equals(this.Y, other.Y)) {
-				return false;
-			}
+
 			return true;
 		}
 	}
 
-	private static LCSSInput keyOf (final int x, final int y, final Object[] X, final Object[] Y) {
-		return new LCSSInput(x, y, X, Y);
+	private static LCSSInput keyOf (final int x, final int y) {
+		return new LCSSInput(x, y);
 	}
 
 }
