@@ -23,7 +23,7 @@ public class LongestCommonSubsequence {
 	private Object[] solution;
 
 	@Test
-	public void check20x20 () {
+	public void checkNxN () {
 		DesktopSetup.deploy();
 		L.d();
 		final int N = 100;
