@@ -1,8 +1,12 @@
 
 package com.google.java.l;
 
+import static org.junit.Assert.assertTrue;
+
 import java.util.Arrays;
 import java.util.HashMap;
+
+import org.junit.Test;
 
 import com.jfixby.cmns.api.log.L;
 import com.jfixby.red.desktop.DesktopSetup;
@@ -13,10 +17,28 @@ public class LongestCommonSubsequence {
 		public int evaluate (int x, int y, Object[] X, Object[] Y);
 	}
 
-	public static void main (final String[] args) {
+	@Test
+	public void check20x20 () {
 		DesktopSetup.deploy();
-		final Integer[] A = new Integer[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20};
-		final Integer[] B = new Integer[] {0, 2, 0, 4, 0, 6, 0, 8, 0, 10, 00, 12, 00, 14, 00, 16, 00, 18, 00, 20};
+		final int N = 120;
+		final int common = 11;
+
+		final Integer[] A = new Integer[N];
+		final Integer[] B = new Integer[N];
+
+		for (int i = 0; i < N; i++) {
+			A[i] = i * 3;
+			B[i] = i * 3 + 1;
+		}
+
+		for (int c = 0; c < common; c++) {
+			final int i = c * N / common;
+			A[i] = i * 3 + 2;
+			B[i] = i * 3 + 2;
+		}
+
+		L.d("A", Arrays.toString(A));
+		L.d("B", Arrays.toString(B));
 
 		final LongestCommonSubsequence subsequence = new LongestCommonSubsequence();
 		subsequence.setUseMemoization(true);
@@ -25,6 +47,8 @@ public class LongestCommonSubsequence {
 
 		L.d(result, "Memory usage: " + subsequence.getCacheSize() + " Calls: " + subsequence.getCallsDone());
 		subsequence.reset();
+
+		assertTrue(common == result);
 
 	}
 
