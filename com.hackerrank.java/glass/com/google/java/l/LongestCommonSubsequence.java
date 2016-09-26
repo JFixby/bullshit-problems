@@ -16,7 +16,7 @@ public class LongestCommonSubsequence {
 	public static void main (final String[] args) {
 		DesktopSetup.deploy();
 		final Integer[] A = new Integer[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20};
-		final Integer[] B = new Integer[] {0, 2, 0, 4, 0, 6, 0, 8, 0, 10, 0, 12, 0, 14, 0, 16, 0, 18, 0, 20};
+		final Integer[] B = new Integer[] {0, 2, 0, 4, 0, 6, 0, 8, 0, 10, 00, 12, 00, 14, 00, 16, 00, 18, 00, 20};
 
 		final LongestCommonSubsequence subsequence = new LongestCommonSubsequence();
 		subsequence.setUseMemoization(true);
@@ -126,8 +126,8 @@ public class LongestCommonSubsequence {
 		public int hashCode () {
 			final int prime = 31;
 			int result = 1;
-			result = prime * result + Arrays.hashCode(this.X);
-			result = prime * result + Arrays.hashCode(this.Y);
+// result = prime * result + Arrays.hashCode(this.X);
+// result = prime * result + Arrays.hashCode(this.Y);
 			result = prime * result + this.x;
 			result = prime * result + this.y;
 			return result;
@@ -145,16 +145,17 @@ public class LongestCommonSubsequence {
 				return false;
 			}
 			final LCSSInput other = (LCSSInput)obj;
-			if (!Arrays.equals(this.X, other.X)) {
-				return false;
-			}
-			if (!Arrays.equals(this.Y, other.Y)) {
-				return false;
-			}
+
 			if (this.x != other.x) {
 				return false;
 			}
 			if (this.y != other.y) {
+				return false;
+			}
+			if (!Arrays.equals(this.X, other.X)) {
+				return false;
+			}
+			if (!Arrays.equals(this.Y, other.Y)) {
 				return false;
 			}
 			return true;
