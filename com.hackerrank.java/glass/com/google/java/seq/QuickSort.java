@@ -8,6 +8,8 @@ import java.util.Random;
 
 import org.junit.Test;
 
+import com.jfixby.cmns.api.collections.Collections;
+import com.jfixby.cmns.api.collections.Heap;
 import com.jfixby.cmns.api.debug.Debug;
 import com.jfixby.cmns.api.debug.DebugTimer;
 import com.jfixby.cmns.api.log.L;
@@ -20,27 +22,36 @@ public class QuickSort {
 		DesktopSetup.deploy();
 		final DebugTimer timer = Debug.newTimer();
 		final Random r = new Random(0);
-		final int N = 2000;
-		final int B = 10;
+		final int N = 9000;
+		final int B = 2;
 		final Integer[] input = new Integer[N];
 		for (int i = 0; i < input.length; i++) {
-			input[i] = N - 1 - i;
-			input[i] = r.nextInt();
+// input[i] = N - 1 - i;
+			input[i] = r.nextInt(B);
 		}
 		// r.nextBytes(input);
 
 		final Integer[] testInput = Arrays.copyOf(input, input.length);
 
+		final Heap<Integer> heap = Collections.newHeap( (x, y) -> -Integer.compare(x, y));
+
 		System.out.println("input: " + Arrays.toString(input));
 		L.d("data prepared", N);
+
 		timer.reset();
-		Arrays.sort(input);
-		timer.printTime("Arrays.sort()");
+		heap.addAll(input);
+		for (int i = 0; i < input.length; i++) {
+			input[i] = heap.remove();
+// heap.print("heap -" + input[i]);
+		}
+		timer.printTime("Heap.sort()");
 		System.out.println("sorted: " + Arrays.toString(input));
+
 		timer.reset();
 		sort(testInput);
-		timer.printTime("RadixSort.sort()");
+		timer.printTime("QuickSort.sort()");
 		System.out.println("tested: " + Arrays.toString(testInput) + " : ");
+
 		final boolean equals = Arrays.equals(input, testInput);
 		System.out.println("equals: " + equals);
 		assertTrue(equals);
