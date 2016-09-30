@@ -205,15 +205,15 @@ public class PrimSpanningTree {
 		this.queue.addAll(vertices);
 
 		while (this.queue.size() > 0) {
-			this.queue.print("queue");
+// this.queue.print("queue");
 
 			final String vertexFrom = this.queue.remove();
 			if (this.paintedVertices.contains(vertexFrom)) {
 				continue;
 			}
 
-			this.distances.print("distances");
-			this.direction.print("direction");
+// this.distances.print("distances");
+// this.direction.print("direction");
 
 			result.addVertex(vertexFrom);
 			this.paintedVertices.add(vertexFrom);// paint
@@ -242,7 +242,7 @@ public class PrimSpanningTree {
 			}
 
 // this.graph.print("original");
-			result.print("result");
+// result.print("result");
 		}
 
 		return result;
