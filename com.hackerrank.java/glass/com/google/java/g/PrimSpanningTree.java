@@ -144,16 +144,16 @@ public class PrimSpanningTree {
 		graph.addVertex("G");
 		graph.addVertex("H");
 
-		graph.addEdges("A", "B", 6);
-		graph.addEdges("C", "B", 14);
-		graph.addEdges("D", "B", 8);
-		graph.addEdges("D", "C", 3);
-		graph.addEdges("A", "F", 12);
-		graph.addEdges("B", "F", 5);
-		graph.addEdges("E", "F", 7);
-		graph.addEdges("E", "D", 10);
-		graph.addEdges("F", "G", 9);
-		graph.addEdges("E", "H", 15);
+		graph.addEdges("A", "B", 1);
+		graph.addEdges("C", "B", 1);
+		graph.addEdges("D", "B", 1);
+		graph.addEdges("D", "C", 1);
+		graph.addEdges("A", "F", 1);
+		graph.addEdges("B", "F", 1);
+		graph.addEdges("E", "F", 1);
+		graph.addEdges("E", "D", 1);
+		graph.addEdges("F", "G", 1);
+		graph.addEdges("E", "H", 1);
 
 		graph.print("input");
 
@@ -220,7 +220,7 @@ public class PrimSpanningTree {
 
 			final String arrow = this.direction.get(vertexFrom);
 			if (arrow != null) {
-				result.addEdge(vertexFrom, arrow, this.graph.getAttachment(vertexFrom, arrow));
+				result.addEdge(arrow, vertexFrom, this.graph.getAttachment(vertexFrom, arrow));
 			}
 
 			final Collection<String> ajacentVertices = this.graph.ajacentVertices(vertexFrom);
