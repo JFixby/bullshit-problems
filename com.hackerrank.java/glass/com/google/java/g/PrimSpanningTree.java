@@ -10,6 +10,8 @@ import com.jfixby.cmns.api.collections.List;
 import com.jfixby.cmns.api.collections.Map;
 import com.jfixby.cmns.api.collections.Set;
 import com.jfixby.cmns.api.err.Err;
+import com.jfixby.cmns.api.log.L;
+import com.jfixby.cmns.api.util.JUtils;
 import com.jfixby.red.desktop.DesktopSetup;
 
 public class PrimSpanningTree {
@@ -18,7 +20,7 @@ public class PrimSpanningTree {
 
 		void addVertex (String vertexID);
 
-		void print ();
+		void print (String tag);
 
 		void addEdge (String vertexFrom, String vertexTo, T attachment);
 
@@ -27,6 +29,8 @@ public class PrimSpanningTree {
 		Collection<String> listVerices ();
 
 		Collection<String> ajacentVertices (String vertexID);
+
+		T getAttachment (String vertexFrom, String vertexTo);
 
 	}
 
@@ -44,8 +48,45 @@ public class PrimSpanningTree {
 		}
 
 		@Override
-		public void print () {
-			this.list.print("graph");
+		public void print (final String tag) {
+
+			final StringBuilder string = new StringBuilder();
+// final String canonocal_name = "Map[]";
+			final int n = this.list.size();
+
+			final int indent = tag.length() + 3;
+			string.append("---[" + tag + "](" + this.list.size() + ")-------------------------\n");
+			final String indent_str = JUtils.prefix(" ", indent);
+			for (int i = 0; i < n; i++) {
+				string.append(indent_str + "(" + i + ") " + this.list.getKeyAt(i) + " :-> "
+					+ this.toString(this.list.getKeyAt(i), this.list.getValueAt(i)) + "\n");
+			}
+
+			L.d(string.toString());
+		}
+
+		private String toString (final String vertexFrom, final List<String> verticesTo) {
+			final int iMax = verticesTo.size() - 1;
+			if (iMax == -1) {
+				return "[]";
+			}
+
+			final StringBuilder b = new StringBuilder();
+			b.append('[');
+			for (int i = 0;; i++) {
+				final String vertexTo = verticesTo.getElementAt(i);
+
+				b.append(vertexTo);
+				b.append("(");
+				final String key = edge(vertexFrom, vertexTo);
+				b.append(this.attachments.get(key));
+				b.append(")");
+				if (i == iMax) {
+					return b.append(']').toString();
+				}
+				b.append(", ");
+			}
+
 		}
 
 		@Override
@@ -80,6 +121,12 @@ public class PrimSpanningTree {
 			return list;
 		}
 
+		@Override
+		public T getAttachment (final String vertexFrom, final String vertexTo) {
+			final String key = edge(vertexFrom, vertexTo);
+			return this.attachments.get(key);
+		}
+
 	}
 
 	public static final void main (final String[] args) {
@@ -108,30 +155,94 @@ public class PrimSpanningTree {
 		graph.addEdges("F", "G", 9);
 		graph.addEdges("E", "H", 15);
 
-// graph.print();
+		graph.print("input");
 
 		final PrimSpanningTree prim = new PrimSpanningTree(graph);
 		final Graph<Integer> result = prim.findMinSpanningTree("A");
+
+		result.print("result");
 
 	}
 
 	private final Graph<Integer> graph;
 	private final Set<String> paintedVertices = Collections.newSet();
-	private final Heap<VertexEntry> queue = Collections.newHeap(VertexEntry.comparator);
+	private final Map<String, Integer> distances = Collections.newMap();
+	private final Map<String, String> direction = Collections.newMap();
+
+	private final Comparator<String> comparator = new Comparator<String>() {
+		@Override
+		public int compare (final String o1, final String o2) {
+			final Integer o1_distance = PrimSpanningTree.this.notNull(PrimSpanningTree.this.distances.get(o1));
+			final Integer o2_distance = PrimSpanningTree.this.notNull(PrimSpanningTree.this.distances.get(o2));
+			final int compareDistance = -Integer.compare(o1_distance, o2_distance);
+			if (compareDistance != 0) {
+				return compareDistance;
+			}
+
+			final int compareString = -o1.compareTo(o2);
+			return compareString;
+		}
+
+	};
+
+	private Integer notNull (final Integer integer) {
+		if (integer == null) {
+			return Integer.MAX_VALUE;
+		}
+		return integer;
+	}
+
+	private final Heap<String> queue = Collections.newHeap(this.comparator);
 
 	public Graph<Integer> findMinSpanningTree (final String startVertexID) {
 		this.paintedVertices.clear();
 
 		final Graph<Integer> result = new AdjacencyListGreaph<Integer>();
 		this.queue.clear();
-		final Collection<String> vertices = result.listVerices();
-		Collections.scanCollection(vertices,
-			(t, i) -> this.queue.add(new VertexEntry(t, startVertexID.equals(t) ? 0 : Integer.MAX_VALUE)));
+
+		final Collection<String> vertices = this.graph.listVerices();
+		this.distances.put(startVertexID, 0);
+		this.queue.addAll(vertices);
 
 		while (this.queue.size() > 0) {
-			final VertexEntry element = this.queue.remove();
-			this.paintedVertices.add(element.vertexID);// paint
-			final Collection<String> ajacentVertices = this.graph.ajacentVertices(element.vertexID);
+			this.queue.print("queue");
+
+			final String vertexFrom = this.queue.remove();
+			if (this.paintedVertices.contains(vertexFrom)) {
+				continue;
+			}
+
+			this.distances.print("distances");
+			this.direction.print("direction");
+
+			result.addVertex(vertexFrom);
+			this.paintedVertices.add(vertexFrom);// paint
+
+			final String arrow = this.direction.get(vertexFrom);
+			if (arrow != null) {
+				result.addEdge(vertexFrom, arrow, this.graph.getAttachment(vertexFrom, arrow));
+			}
+
+			final Collection<String> ajacentVertices = this.graph.ajacentVertices(vertexFrom);
+			for (int i = 0; i < ajacentVertices.size(); i++) {
+				final String vertexTo = ajacentVertices.getElementAt(i);
+
+				final Integer attachment = this.graph.getAttachment(vertexFrom, vertexTo);
+				final Integer distanceToVertex = this.notNull(this.distances.get(vertexTo));
+				if (distanceToVertex > attachment) {
+// this.queue.print("remove? " + vertexTo);
+// this.queue.remove(vertexTo);
+// this.queue.print("remove! " + vertexTo);
+					this.distances.put(vertexTo, attachment);
+					this.queue.add(vertexTo);
+// this.queue.print("add! " + vertexTo);
+
+					this.direction.put(vertexTo, vertexFrom);
+				}
+			}
+
+// this.graph.print("original");
+			result.print("result");
 		}
 
 		return result;
@@ -139,29 +250,6 @@ public class PrimSpanningTree {
 
 	public PrimSpanningTree (final Graph<Integer> graph) {
 		this.graph = graph;
-	}
-
-	static class VertexEntry {
-
-		protected int distance = Integer.MAX_VALUE;
-		private final String vertexID;
-
-		public VertexEntry (final String vertexID) {
-			this.vertexID = vertexID;
-
-		}
-
-		public VertexEntry (final String vertexID, final int distance) {
-			this.vertexID = vertexID;
-			this.distance = distance;
-		}
-
-		private static final Comparator<VertexEntry> comparator = new Comparator<VertexEntry>() {
-			@Override
-			public int compare (final VertexEntry o1, final VertexEntry o2) {
-				return Integer.compare(o1.distance, o2.distance);
-			}
-		};
 	}
 
 }
