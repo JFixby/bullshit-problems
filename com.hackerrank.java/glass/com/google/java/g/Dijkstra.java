@@ -141,7 +141,7 @@ public class Dijkstra {
 
 		final Dijkstra dijkstra = new Dijkstra(graph);
 
-		final Graph<Integer> result = dijkstra.findShortestPathTree("B");
+		final Graph<Integer> result = dijkstra.findShortestPathTree("A");
 
 		result.print("result");
 
