@@ -27,7 +27,7 @@ public class SortedListToBinaryTree {
 		{
 			final LinkedListNode<Integer> linkedList = copy(array); // case linked list
 			linkedList.print();
-			final λVector<Integer> input = wrap(linkedList);
+			final λVector<Integer> input = linkedListToλVector(linkedList);
 
 			final BinaryTreeNode<Integer> root = toBinaryTree(input, N);
 			root.print();
@@ -128,20 +128,20 @@ public class SortedListToBinaryTree {
 		return node;
 	}
 
-	private static <T extends Comparable<T>> λVector<T> wrap (final LinkedListNode<T> root) {
-		return new λVector<T>() {// linked list
+	private static <T extends Comparable<T>> λVector<T> linkedListToλVector (final LinkedListNode<T> root) {
+		return new λVector<T>() {
 			int lastCalled = -1;
-			LinkedListNode<T> lastReturned = null;
+			LinkedListNode<T> lastReturned = null;// cache previous call result here
 
 			@Override
-			public T elementAt (final int index) {
+			public T elementAt (final int index) {// O(1)
 				if (index == 0) {
 					this.lastReturned = root;
 				} else {
-					if (this.lastCalled + 1 != index) {
-						Err.reportError("Leak!");
+					if (this.lastCalled + 1 != index) { // ensure O(1)
+						Err.reportError("Performance leak!");
 					}
-					this.lastReturned = this.lastReturned.next;
+					this.lastReturned = this.lastReturned.next;// O(1);
 				}
 				this.lastCalled = index;
 				return this.lastReturned.data;
@@ -158,8 +158,9 @@ public class SortedListToBinaryTree {
 		final int mid = fromIndex + (toIndex - fromIndex) / 2;
 		final BinaryTreeNode<T> node = new BinaryTreeNode<T>();
 
-		node.leftChild = toBinaryTree(fromIndex, mid - 1, input);
-		node.data = input.elementAt(mid);
+		node.leftChild = toBinaryTree(fromIndex, mid - 1, input);// "miraculously" number of elements in the left child is == mid,
+																					// thus the last call returned element with index (mid-1)
+		node.data = input.elementAt(mid);// get the mid element
 		node.rightChild = toBinaryTree(mid + 1, toIndex, input);
 
 		return node;
