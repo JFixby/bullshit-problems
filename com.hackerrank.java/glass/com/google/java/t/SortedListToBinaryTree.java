@@ -16,6 +16,8 @@ public class SortedListToBinaryTree {
 		for (int i = 0; i < N; i++) {
 			array[i] = i + off;
 		}
+
+		// λVector is a λ-function
 		{
 			final λVector<Integer> input = i -> array[i];// case: array
 
@@ -32,6 +34,14 @@ public class SortedListToBinaryTree {
 		}
 	}
 
+	/*
+	 * Converts λVector<T> input to binary tree and returns BinaryTreeNode<T>
+	 *
+	 */
+	private static <T extends Comparable<T>> BinaryTreeNode<T> toBinaryTree (final λVector<T> input, final int numberOfElements) {
+		return toBinaryTree(0, numberOfElements - 1, input);
+	}
+
 	static class LinkedListNode<T extends Comparable<T>> {
 		T data;
 		public LinkedListNode<T> next = null;
@@ -41,7 +51,7 @@ public class SortedListToBinaryTree {
 			LinkedListNode<T> x = this;
 			final StringBuilder tmp = new StringBuilder();
 			do {
-				tmp.append("(" + x.data + ")->");
+				tmp.append("(").append(x.data).append(")->");
 				x = x.next;
 			} while (x != null);
 			tmp.append("X");
@@ -138,10 +148,6 @@ public class SortedListToBinaryTree {
 			}
 		};
 
-	}
-
-	private static <T extends Comparable<T>> BinaryTreeNode<T> toBinaryTree (final λVector<T> input, final int numberOfElements) {
-		return toBinaryTree(0, numberOfElements - 1, input);
 	}
 
 	private static <T extends Comparable<T>> BinaryTreeNode<T> toBinaryTree (final int fromIndex, final int toIndex,
