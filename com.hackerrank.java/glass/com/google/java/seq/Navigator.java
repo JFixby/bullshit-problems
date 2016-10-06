@@ -48,17 +48,18 @@ public class Navigator {
 			final int mapDirections = this.map[from];
 
 			final RoadSign worstOption = new RoadSign(from, Integer.MAX_VALUE);
-			int via = to;// not from!
+			int bestConnection = to;// not from!
 			RoadSign bestOption = worstOption;
 			for (int k = 1; k <= mapDirections; k++) {
-				final RoadSign option = this.getDirection(from + k, to);
+				final int via = from + k;
+				final RoadSign option = this.getDirection(via, to);
 				if (option.distance < bestOption.distance) {
 					bestOption = option;
-					via = from + k;
+					bestConnection = via;
 				}
 			}
 
-			final RoadSign solution = new RoadSign(via, bestOption.distance + 1);
+			final RoadSign solution = new RoadSign(bestConnection, bestOption.distance + 1);
 			L.e("    computed distance from <" + from + "> to <" + to + "> is " + solution.distance + " hops");
 			return solution;
 		};
