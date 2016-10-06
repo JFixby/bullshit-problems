@@ -8,6 +8,25 @@ import com.jfixby.red.desktop.DesktopSetup;
 
 public class Navigator {
 
+	public static void main (final String[] args) {
+		DesktopSetup.deploy();
+
+		final int[] map = new int[] {3, 4, 1, 1, 0, 2, 2, 0, 1, 1};
+
+		final int startIndex = 0;
+		final int endIndex = map.length - 1;
+
+		final Navigator navigator = new Navigator(map);
+
+		int currentIndex = startIndex;
+		L.d("To get from the <" + startIndex + "> to the <" + endIndex + ">");
+		while (currentIndex < endIndex) {
+			final RoadSign roadSign = navigator.getDirection(currentIndex, endIndex);
+			L.d(" from <" + currentIndex + "> follow the sign '" + roadSign + "'");
+			currentIndex = roadSign.direction;
+		}
+	}
+
 	private final int[] map;
 	private final λ hops;
 
@@ -29,17 +48,18 @@ public class Navigator {
 			final int mapDirections = this.map[from];
 
 			final RoadSign worstOption = new RoadSign(from, Integer.MAX_VALUE);
-			RoadSign solution = worstOption;
+			int via = to;// not from!
+			RoadSign bestOption = worstOption;
 			for (int k = 1; k <= mapDirections; k++) {
-				final int via = from + k;
-				RoadSign option = this.hops.evaluate(via, to);
-				option = new RoadSign(via, option.distance + 1);
-				if (option.distance < solution.distance) {
-					solution = option;
+				final RoadSign option = this.hops.evaluate(from + k, to);
+				if (option.distance < bestOption.distance) {
+					bestOption = option;
+					via = from + k;
 				}
 			}
 
-			L.e("     computed distance from <" + from + "> to <" + to + "> is " + solution.distance + " km");
+			final RoadSign solution = new RoadSign(via, bestOption.distance + 1);
+			L.e("    computed distance from <" + from + "> to <" + to + "> is " + solution.distance + " hops");
 			return solution;
 		};
 	}
@@ -72,26 +92,7 @@ public class Navigator {
 
 		@Override
 		public String toString () {
-			return "=> <" + this.direction + "> (" + this.distance + " km left)";
-		}
-	}
-
-	public static void main (final String[] args) {
-		DesktopSetup.deploy();
-
-		final int[] map = new int[] {3, 4, 1, 1, 0, 2, 2, 0, 1, 1};
-
-		final int startIndex = 0;
-		final int endIndex = map.length - 1;
-
-		final Navigator navigator = new Navigator(map);
-
-		int currentIndex = startIndex;
-		L.d("To get from the <" + startIndex + "> to the <" + endIndex + ">");
-		while (currentIndex < endIndex) {
-			final RoadSign direction = navigator.getDirection(currentIndex, endIndex);
-			L.d("   from <" + currentIndex + "> head to " + direction);
-			currentIndex = direction.direction;
+			return "=> <" + this.direction + "> (" + this.distance + " hops left)";
 		}
 	}
 
