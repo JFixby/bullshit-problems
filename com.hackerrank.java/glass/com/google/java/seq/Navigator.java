@@ -32,14 +32,14 @@ public class Navigator {
 
 	public Navigator (final int[] map) {
 		this.map = map;
-		this.hops = memoization(this.setupλExpression());
+		this.hops = memoization(this.setupLazyλExpression());
 	}
 
 	public RoadSign getDirection (final int startIndex, final int endIndex) {
 		return this.hops.evaluate(startIndex, endIndex);
 	}
 
-	λ setupλExpression () {
+	λ setupLazyλExpression () {
 		return (from, to) -> {
 			if (from >= to) {
 				return new RoadSign(from, 0);// arrived
@@ -51,7 +51,7 @@ public class Navigator {
 			int via = to;// not from!
 			RoadSign bestOption = worstOption;
 			for (int k = 1; k <= mapDirections; k++) {
-				final RoadSign option = this.hops.evaluate(from + k, to);
+				final RoadSign option = this.getDirection(from + k, to);
 				if (option.distance < bestOption.distance) {
 					bestOption = option;
 					via = from + k;
