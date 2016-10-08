@@ -11,9 +11,9 @@ public class Navigator {
 	public static void main (final String[] args) {
 		DesktopSetup.deploy();
 
-// final int[] map = new int[] {3, 4, 1, 1, 0, 2, 2, 0, 1, 1};
+		final int[] map = new int[] {3, 4, 1, 1, 0, 2, 2, 0, 1, 1};
 // final int[] map = new int[] {2, 2, 2, 1, 1};
-		final int[] map = new int[] {2, 3, 1, 1, 4};
+// final int[] map = new int[] {2, 3, 1, 1, 4};
 
 		final int startIndex = 0;
 		final int endIndex = map.length - 1;
@@ -28,6 +28,34 @@ public class Navigator {
 			currentIndex = roadSign.direction;
 		}
 		navigator.printStats();
+
+		L.d("alt", jump(map));
+	}
+
+	static public int jump (final int[] nums) {
+		if (nums == null || nums.length == 0) {
+			return 0;
+		}
+
+		int lastReach = 0;
+		int reach = 0;
+		int step = 0;
+
+		for (int i = 0; i <= reach && i < nums.length; i++) {
+			// when last jump can not read current i, increase the step by 1
+			if (i > lastReach) {
+				step++;
+				lastReach = reach;
+			}
+			// update the maximal jump
+			reach = Math.max(reach, nums[i] + i);
+		}
+
+		if (reach < nums.length - 1) {
+			return 0;
+		}
+
+		return step;
 	}
 
 	private void printStats () {
