@@ -37,16 +37,14 @@ public class RebuidTree {
 		final Set<String> painted = Collections.newSet();
 		final List<String> E = Collections.newList();
 		final List<String> X = Collections.newList();
+		final List<String> C = Collections.newList();
+
 		DFS(graph, "A", E, X, painted);
 		E.print("E");
 		X.print("X");
 
 		final Graph<Integer> restored = new AdjacencyListGreaph<Integer>();
-
-// for (int i = 0; i < E.size(); i++) {
-// restored.addVertex(E.getElementAt(i));
-// }
-		UNDFS(restored, E.removeElementAt(0), E, X, painted);
+		UNDFS(restored, C, E, X, painted);
 		restored.print("restored == graph is " + restored.equals(graph));
 	}
 
@@ -67,33 +65,25 @@ public class RebuidTree {
 
 	}
 
-	private static void UNDFS (final Graph<Integer> graph, final String current, final List<String> E, final List<String> X,
+	private static void UNDFS (final Graph<Integer> graph, final List<String> C, final List<String> E, final List<String> X,
 		final Set<String> painted) {
-// graph.print("process");
-		graph.addVertex(current);
 
 		while (X.size() > 0) {
-			final String exit = X.getElementAt(0);
-			if (exit.equals(current)) {
-				X.removeElementAt(0);
-				return;
+			if (C.size() == 0) {
+				C.add(E.removeElementAt(0));
+				graph.addVertex(C.getLast());
 			}
-
-			final String next = E.removeElementAt(0);
-			UNDFS(graph, next, E, X, painted);
-			graph.addEdges(current, next, 1);
-
-		} //
-			// while (E.size() > 0) {
-
-// current = E.removeElementAt(0);
-// return;
-// }
-// }
-//
-// final String next = E.getElementAt(0);
-// graph.addEdges(current, next, 1);
-// UNDFS(graph, null, E, X, painted);
+			if (X.getElementAt(0).equals(C.getLast())) {
+				C.removeLast();
+				if (C.size() > 0) {
+					graph.addEdges(X.getElementAt(0), C.getLast(), 1);
+				}
+				X.removeElementAt(0);
+			} else {
+				C.add(E.removeElementAt(0));
+				graph.addVertex(C.getLast());
+			}
+		}
 	}
 
 }
