@@ -47,7 +47,7 @@ public class RebuidTree {
 // restored.addVertex(E.getElementAt(i));
 // }
 		UNDFS(restored, E.removeElementAt(0), E, X, painted);
-		restored.print("restored");
+		restored.print("restored == graph is " + restored.equals(graph));
 	}
 
 	private static void DFS (final Graph<Integer> graph, final String node, final List<String> E, final List<String> X,

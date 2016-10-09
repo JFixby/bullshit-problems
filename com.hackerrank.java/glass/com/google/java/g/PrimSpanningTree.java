@@ -127,6 +127,43 @@ public class PrimSpanningTree {
 			return this.attachments.get(key);
 		}
 
+		@Override
+		public boolean equals (final Object obj) {
+			if (this == obj) {
+				return true;
+			}
+			if (obj == null) {
+				return false;
+			}
+			if (this.getClass() != obj.getClass()) {
+				return false;
+			}
+			final Graph<T> other = (Graph<T>)obj;
+			final Collection<String> myVertices = this.listVerices();
+			final Collection<String> otherVertices = other.listVerices();
+
+			if (otherVertices.size() != myVertices.size()) {
+				return false;
+			}
+			if (!otherVertices.containsAll(myVertices)) {
+				return false;
+			}
+
+			for (int i = 0; i < myVertices.size(); i++) {
+				final String vertex = myVertices.getElementAt(i);
+				final Collection<String> aj = this.ajacentVertices(vertex);
+				final Collection<String> aj2 = other.ajacentVertices(vertex);
+				if (aj.size() != aj2.size()) {
+					return false;
+				}
+				if (!aj.containsAll(aj2)) {
+					return false;
+				}
+			}
+
+			return true;
+		}
+
 	}
 
 	public static final void main (final String[] args) {
