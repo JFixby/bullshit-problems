@@ -34,39 +34,44 @@ public class RebuidTree {
 
 		graph.print("input");
 
-		final Set<String> painted = Collections.newSet();
 		final List<String> E = Collections.newList();
 		final List<String> X = Collections.newList();
 		final List<String> C = Collections.newList();
 
-		DFS(graph, "A", E, X, painted);
+		DFS(graph, C, E, X);
 		E.print("E");
 		X.print("X");
 
 		final Graph<Integer> restored = new AdjacencyListGreaph<Integer>();
-		UNDFS(restored, C, E, X, painted);
+		UNDFS(restored, C, E, X);
 		restored.print("restored == graph is " + restored.equals(graph));
-	}
-
-	private static void DFS (final Graph<Integer> graph, final String node, final List<String> E, final List<String> X,
-		final Set<String> painted) {
-		if (painted.contains(node)) {
-			return;
-		}
-		painted.add(node);
-		E.add(node);
-		final Collection<String> ajacent = graph.ajacentVertices(node);
-		for (int i = 0; i < ajacent.size(); i++) {
-			final String child = ajacent.getElementAt(i);
-
-			DFS(graph, child, E, X, painted);
-		}
-		X.add(node);
+		C.print("C");
+		E.print("E");
+		X.print("X");
 
 	}
 
-	private static void UNDFS (final Graph<Integer> graph, final List<String> C, final List<String> E, final List<String> X,
-		final Set<String> painted) {
+	private static void DFS (final Graph<Integer> graph, final List<String> C, final List<String> E, final List<String> X) {
+
+		final Set<String> painted = Collections.newSet();
+		C.add(graph.listVerices().getElementAt(0));
+
+		while (C.size() > 0) {
+			if (!painted.contains(C.getElementAt(0))) {
+				painted.add(C.getElementAt(0));
+				E.add(C.getElementAt(0));
+				final Collection<String> aj = graph.ajacentVertices(C.getElementAt(0)).filter(e -> !painted.contains(e));
+				C.insertAllAt(aj, 0);
+			} else {
+				X.add(C.getElementAt(0));
+				C.removeElementAt(0);
+			}
+
+		}
+
+	}
+
+	private static void UNDFS (final Graph<Integer> graph, final List<String> C, final List<String> E, final List<String> X) {
 
 		while (X.size() > 0) {
 			if (C.size() == 0) {
