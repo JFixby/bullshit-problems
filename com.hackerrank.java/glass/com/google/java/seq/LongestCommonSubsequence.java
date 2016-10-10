@@ -1,5 +1,5 @@
 
-package com.google.java.l;
+package com.google.java.seq;
 
 import static org.junit.Assert.assertTrue;
 
