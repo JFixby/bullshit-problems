@@ -113,12 +113,8 @@ public class LongestCommonSubsequence {
 				continue;
 			}
 
-			final int value_L = this.λFunction.evaluate(a_i - 1, b_i, this.A, this.B);
-			if (value_L == value) {
-				a_i--;
-				continue;
-			}
-			Err.reportError("Error");
+			a_i--;
+
 		}
 		return this.solution;
 	}
