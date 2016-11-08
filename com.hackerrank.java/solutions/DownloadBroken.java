@@ -45,7 +45,7 @@ public class DownloadBroken {
 
 	}
 
-	private static MapList retrive (final File fileValid) {
+	private static MapList retrive (final File fileValid) throws IOException {
 		MapList valid;
 		if (!fileValid.exists()) {
 			valid = new MapList();

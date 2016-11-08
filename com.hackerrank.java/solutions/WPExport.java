@@ -10,7 +10,6 @@ import com.jfixby.cmns.api.file.File;
 import com.jfixby.cmns.api.file.LocalFileSystem;
 import com.jfixby.cmns.api.json.Json;
 import com.jfixby.cmns.api.log.L;
-import com.jfixby.cmns.api.sys.Sys;
 import com.jfixby.cmns.api.util.JUtils;
 import com.jfixby.cmns.api.util.path.RelativePath;
 import com.jfixby.red.desktop.DesktopSetup;
@@ -44,7 +43,7 @@ public class WPExport {
 		final MapList broken = retrive(fileBroken);
 		broken.clear();
 
-		final HashSet<String> processed = new HashSet<String>();
+		final HashSet<String> processed = new HashSet<>();
 		while (end < data.length() && start >= max) {
 			final String prefix = "href=\"http";
 			start = data.indexOf(prefix, end);
@@ -108,20 +107,16 @@ public class WPExport {
 // L.d(data);
 	}
 
-	private static MapList retrive (final File fileValid) {
+	private static MapList retrive (final File fileValid) throws IOException {
 		MapList valid;
 		if (!fileValid.exists()) {
 			valid = new MapList();
 		} else {
 			String json;
-			try {
-				json = fileValid.readToString();
-				valid = Json.deserializeFromString(MapList.class, json);
-			} catch (final IOException e) {
-				e.printStackTrace();
-				Sys.exit();
-				valid = null;
-			}
+
+			json = fileValid.readToString();
+			valid = Json.deserializeFromString(MapList.class, json);
+
 		}
 		return valid;
 	}

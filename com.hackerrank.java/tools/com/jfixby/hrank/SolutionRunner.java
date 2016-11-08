@@ -1,6 +1,7 @@
 
 package com.jfixby.hrank;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
@@ -41,8 +42,12 @@ public class SolutionRunner<T extends AbstractSolution> {
 			final String testFileName = inputFile.getName();
 			final File expectedOutputFile = home.child("out-expected").child(testName).child(testFileName);
 			final File actualOutputFile = home.child("out-actual").child(testName).child(testFileName);
-			if (!expectedOutputFile.exists()) {
-				Err.reportError("Missing expected output file " + expectedOutputFile);
+			try {
+				if (!expectedOutputFile.exists()) {
+					Err.reportError("Missing expected output file " + expectedOutputFile);
+				}
+			} catch (final IOException e) {
+				e.printStackTrace();
 			}
 			actualOutputFile.parent().makeFolder();
 
@@ -103,7 +108,7 @@ public class SolutionRunner<T extends AbstractSolution> {
 	}
 
 	public static <T extends AbstractSolution> void run (final Class<T> class1) throws Throwable {
-		final SolutionRunner<T> runner = new SolutionRunner<T>(class1);
+		final SolutionRunner<T> runner = new SolutionRunner<>(class1);
 		runner.run();
 	}
 
