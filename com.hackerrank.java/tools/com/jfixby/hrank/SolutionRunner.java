@@ -49,7 +49,12 @@ public class SolutionRunner<T extends AbstractSolution> {
 			} catch (final IOException e) {
 				e.printStackTrace();
 			}
-			actualOutputFile.parent().makeFolder();
+			try {
+				actualOutputFile.parent().makeFolder();
+			} catch (final IOException e) {
+				e.printStackTrace();
+				Err.reportError(e);
+			}
 
 			final TestResult result = this.runTest(inputFile, expectedOutputFile, actualOutputFile);
 			if (result.isPassed()) {
