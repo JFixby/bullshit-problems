@@ -8,6 +8,7 @@ import com.jfixby.cmns.api.collections.Collections;
 import com.jfixby.cmns.api.debug.Debug;
 import com.jfixby.cmns.api.err.Err;
 import com.jfixby.cmns.api.log.L;
+import com.jfixby.cmns.api.math.IntegerMath;
 import com.jfixby.cmns.api.random.Random;
 import com.jfixby.red.desktop.DesktopSetup;
 
@@ -128,8 +129,8 @@ public class HuffmanCompression {
 		Collections.newMap(this.characterToBinaryForm).print("characterToBinaryForm");
 	}
 
-	final HashMap<Character, String> characterToBinaryForm = new HashMap<Character, String>();
-	final HashMap<String, Character> binarytoCharacter = new HashMap<String, Character>();
+	final HashMap<Character, String> characterToBinaryForm = new HashMap<>();
+	final HashMap<String, Character> binarytoCharacter = new HashMap<>();
 
 	private void buildCodingTable () {
 
@@ -169,7 +170,7 @@ public class HuffmanCompression {
 		if (this.orrucences.size() < 1) {
 			Err.reportError("nothing to compress");
 		}
-		final ArrayList<Node> ranking = new ArrayList<Node>();
+		final ArrayList<Node> ranking = new ArrayList<>();
 		for (final Character chr : this.orrucences.keySet()) {
 			final Long occurerncesOfChr = this.orrucences.get(chr);
 			final Node node = new Node();
@@ -245,12 +246,12 @@ public class HuffmanCompression {
 
 		@Override
 		public int compareTo (final Node o) {
-			return Long.compare(this.weight, o.weight);
+			return IntegerMath.compare(this.weight, o.weight);
 		}
 
 	}
 
-	final HashMap<Character, Long> orrucences = new HashMap<Character, Long>();
+	final HashMap<Character, Long> orrucences = new HashMap<>();
 
 	private void collectOccurences (final String original) {
 
