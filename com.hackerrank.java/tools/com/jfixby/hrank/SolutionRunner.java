@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
-import com.jfixby.cmns.api.assets.AssetID;
+import com.jfixby.cmns.api.assets.ID;
 import com.jfixby.cmns.api.assets.Names;
 import com.jfixby.cmns.api.collections.CollectionScanner;
 import com.jfixby.cmns.api.collections.Collections;
@@ -28,7 +28,7 @@ public class SolutionRunner<T extends AbstractSolution> {
 
 	public void run () throws Throwable {
 
-		final AssetID name = Names.newAssetID(this.solutionClass.getCanonicalName()).parent();
+		final ID name = Names.newAssetID(this.solutionClass.getCanonicalName()).parent();
 		final String testName = name.toString();
 		L.d("running solution", testName);
 		final File home = LocalFileSystem.ApplicationHome();
