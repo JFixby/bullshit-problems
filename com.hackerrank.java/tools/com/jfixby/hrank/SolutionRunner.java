@@ -28,7 +28,7 @@ public class SolutionRunner<T extends AbstractSolution> {
 
 	public void run () throws Throwable {
 
-		final ID name = Names.newAssetID(this.solutionClass.getCanonicalName()).parent();
+		final ID name = Names.newID(this.solutionClass.getCanonicalName()).parent();
 		final String testName = name.toString();
 		L.d("running solution", testName);
 		final File home = LocalFileSystem.ApplicationHome();
