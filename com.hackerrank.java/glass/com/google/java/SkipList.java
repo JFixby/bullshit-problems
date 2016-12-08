@@ -9,9 +9,9 @@ import org.junit.Test;
 
 import com.jfixby.cmns.api.debug.Debug;
 import com.jfixby.cmns.api.debug.DebugTimer;
+import com.jfixby.cmns.api.desktop.DesktopSetup;
 import com.jfixby.cmns.api.log.L;
 import com.jfixby.cmns.api.random.Random;
-import com.jfixby.red.desktop.DesktopSetup;
 
 public class SkipList<E extends Comparable<E>> {
 	public SkipList () {

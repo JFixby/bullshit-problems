@@ -3,23 +3,22 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashSet;
 
-import com.jfixby.cmns.adopted.gdx.json.RedJson;
 import com.jfixby.cmns.api.collections.Collections;
 import com.jfixby.cmns.api.collections.Map;
+import com.jfixby.cmns.api.desktop.DesktopSetup;
 import com.jfixby.cmns.api.file.File;
 import com.jfixby.cmns.api.file.LocalFileSystem;
 import com.jfixby.cmns.api.json.Json;
 import com.jfixby.cmns.api.log.L;
 import com.jfixby.cmns.api.util.JUtils;
 import com.jfixby.cmns.api.util.path.RelativePath;
-import com.jfixby.red.desktop.DesktopSetup;
 
 public class WPExport {
 
 	public static void main (final String[] args) throws Throwable {
 
 		DesktopSetup.deploy();
-		Json.installComponent(new RedJson());
+		Json.installComponent("com.jfixby.cmns.adopted.gdx.json.RedJson");
 
 // final String java_path = "D:\\[DEV]\\jfixby.wordpress.2016-07-19.xml";
 		final String java_path = "D:\\[DEV]\\posts-only-jfixby.wordpress.2016-07-19.xml";

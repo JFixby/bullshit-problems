@@ -4,7 +4,7 @@ package com.google.java.seq;
 import com.jfixby.cmns.api.collections.Collections;
 import com.jfixby.cmns.api.collections.List;
 import com.jfixby.cmns.api.collections.Map;
-import com.jfixby.red.desktop.DesktopSetup;
+import com.jfixby.cmns.api.desktop.DesktopSetup;
 
 public class WordDistance {
 

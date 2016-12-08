@@ -12,8 +12,8 @@ import com.jfixby.cmns.api.collections.Collections;
 import com.jfixby.cmns.api.collections.Heap;
 import com.jfixby.cmns.api.debug.Debug;
 import com.jfixby.cmns.api.debug.DebugTimer;
+import com.jfixby.cmns.api.desktop.DesktopSetup;
 import com.jfixby.cmns.api.log.L;
-import com.jfixby.red.desktop.DesktopSetup;
 
 public class QuickSort {
 	@Test

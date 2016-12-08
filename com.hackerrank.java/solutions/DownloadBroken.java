@@ -1,7 +1,7 @@
 import java.io.IOException;
 import java.net.MalformedURLException;
 
-import com.jfixby.cmns.adopted.gdx.json.RedJson;
+import com.jfixby.cmns.api.desktop.DesktopSetup;
 import com.jfixby.cmns.api.file.File;
 import com.jfixby.cmns.api.file.LocalFileSystem;
 import com.jfixby.cmns.api.json.Json;
@@ -10,13 +10,12 @@ import com.jfixby.cmns.api.net.http.Http;
 import com.jfixby.cmns.api.net.http.HttpURL;
 import com.jfixby.cmns.api.sys.Sys;
 import com.jfixby.cmns.api.util.path.RelativePath;
-import com.jfixby.red.desktop.DesktopSetup;
 
 public class DownloadBroken {
 
 	public static void main (final String[] args) throws MalformedURLException, IOException {
 		DesktopSetup.deploy();
-		Json.installComponent(new RedJson());
+		Json.installComponent("com.jfixby.cmns.adopted.gdx.json.RedJson");
 
 		final File fileBroken = LocalFileSystem.ApplicationHome().child("broken-replacements.json");
 		Json.invoke();

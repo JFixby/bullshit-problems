@@ -7,8 +7,8 @@ import java.util.HashMap;
 
 import org.junit.Test;
 
+import com.jfixby.cmns.api.desktop.DesktopSetup;
 import com.jfixby.cmns.api.log.L;
-import com.jfixby.red.desktop.DesktopSetup;
 
 public class StringHasher {
 

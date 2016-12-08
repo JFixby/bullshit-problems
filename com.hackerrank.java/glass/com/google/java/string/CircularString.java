@@ -3,8 +3,8 @@ package com.google.java.string;
 
 import com.jfixby.cmns.api.debug.Debug;
 import com.jfixby.cmns.api.debug.DebugTimer;
+import com.jfixby.cmns.api.desktop.DesktopSetup;
 import com.jfixby.cmns.api.random.Random;
-import com.jfixby.red.desktop.DesktopSetup;
 
 public class CircularString {
 

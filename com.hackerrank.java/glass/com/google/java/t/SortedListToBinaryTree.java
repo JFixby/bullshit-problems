@@ -1,10 +1,10 @@
 
 package com.google.java.t;
 
+import com.jfixby.cmns.api.desktop.DesktopSetup;
 import com.jfixby.cmns.api.err.Err;
 import com.jfixby.cmns.api.log.L;
 import com.jfixby.cmns.api.util.JUtils;
-import com.jfixby.red.desktop.DesktopSetup;
 
 public class SortedListToBinaryTree {
 

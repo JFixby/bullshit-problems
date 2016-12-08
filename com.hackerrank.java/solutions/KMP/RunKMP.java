@@ -1,8 +1,8 @@
 
 package KMP;
 
+import com.jfixby.cmns.api.desktop.DesktopSetup;
 import com.jfixby.hrank.SolutionRunner;
-import com.jfixby.red.desktop.DesktopSetup;
 
 public class RunKMP {
 

@@ -9,9 +9,9 @@ import com.jfixby.cmns.api.collections.Heap;
 import com.jfixby.cmns.api.collections.List;
 import com.jfixby.cmns.api.collections.Map;
 import com.jfixby.cmns.api.collections.Set;
+import com.jfixby.cmns.api.desktop.DesktopSetup;
 import com.jfixby.cmns.api.log.L;
 import com.jfixby.cmns.api.util.JUtils;
-import com.jfixby.red.desktop.DesktopSetup;
 
 public class Dijkstra {
 

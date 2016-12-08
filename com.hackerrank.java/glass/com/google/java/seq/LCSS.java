@@ -4,8 +4,8 @@ package com.google.java.seq;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import com.jfixby.cmns.api.desktop.DesktopSetup;
 import com.jfixby.cmns.api.log.L;
-import com.jfixby.red.desktop.DesktopSetup;
 
 public class LCSS {
 

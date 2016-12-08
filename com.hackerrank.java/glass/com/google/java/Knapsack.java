@@ -6,8 +6,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import com.jfixby.cmns.api.desktop.DesktopSetup;
 import com.jfixby.cmns.api.log.L;
-import com.jfixby.red.desktop.DesktopSetup;
 
 public class Knapsack {
 
