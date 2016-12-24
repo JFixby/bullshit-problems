@@ -4,13 +4,13 @@ package com.google.java;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.jfixby.cmns.api.collections.Collections;
-import com.jfixby.cmns.api.debug.Debug;
-import com.jfixby.cmns.api.desktop.DesktopSetup;
-import com.jfixby.cmns.api.err.Err;
-import com.jfixby.cmns.api.log.L;
-import com.jfixby.cmns.api.math.IntegerMath;
-import com.jfixby.cmns.api.random.Random;
+import com.jfixby.scarabei.api.collections.Collections;
+import com.jfixby.scarabei.api.debug.Debug;
+import com.jfixby.scarabei.api.desktop.DesktopSetup;
+import com.jfixby.scarabei.api.err.Err;
+import com.jfixby.scarabei.api.log.L;
+import com.jfixby.scarabei.api.math.IntegerMath;
+import com.jfixby.scarabei.api.random.Random;
 
 public class HuffmanCompression {
 

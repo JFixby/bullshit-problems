@@ -3,11 +3,11 @@ package com.google.java.g;
 
 import com.google.java.g.PrimSpanningTree.AdjacencyListGreaph;
 import com.google.java.g.PrimSpanningTree.Graph;
-import com.jfixby.cmns.api.collections.Collection;
-import com.jfixby.cmns.api.collections.Collections;
-import com.jfixby.cmns.api.collections.List;
-import com.jfixby.cmns.api.collections.Set;
-import com.jfixby.cmns.api.desktop.DesktopSetup;
+import com.jfixby.scarabei.api.collections.Collection;
+import com.jfixby.scarabei.api.collections.Collections;
+import com.jfixby.scarabei.api.collections.List;
+import com.jfixby.scarabei.api.collections.Set;
+import com.jfixby.scarabei.api.desktop.DesktopSetup;
 
 public class RebuidTree {
 

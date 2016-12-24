@@ -5,17 +5,17 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 
-import com.jfixby.cmns.api.assets.ID;
-import com.jfixby.cmns.api.assets.Names;
-import com.jfixby.cmns.api.collections.CollectionScanner;
-import com.jfixby.cmns.api.collections.Collections;
-import com.jfixby.cmns.api.err.Err;
-import com.jfixby.cmns.api.file.ChildrenList;
-import com.jfixby.cmns.api.file.File;
-import com.jfixby.cmns.api.file.FileInputStream;
-import com.jfixby.cmns.api.file.FileOutputStream;
-import com.jfixby.cmns.api.file.LocalFileSystem;
-import com.jfixby.cmns.api.log.L;
+import com.jfixby.scarabei.api.assets.ID;
+import com.jfixby.scarabei.api.assets.Names;
+import com.jfixby.scarabei.api.collections.CollectionScanner;
+import com.jfixby.scarabei.api.collections.Collections;
+import com.jfixby.scarabei.api.err.Err;
+import com.jfixby.scarabei.api.file.ChildrenList;
+import com.jfixby.scarabei.api.file.File;
+import com.jfixby.scarabei.api.file.FileInputStream;
+import com.jfixby.scarabei.api.file.FileOutputStream;
+import com.jfixby.scarabei.api.file.LocalFileSystem;
+import com.jfixby.scarabei.api.log.L;
 
 public class SolutionRunner<T extends AbstractSolution> {
 

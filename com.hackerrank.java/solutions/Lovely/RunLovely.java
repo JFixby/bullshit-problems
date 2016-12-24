@@ -1,8 +1,8 @@
 
 package Lovely;
 
-import com.jfixby.cmns.api.desktop.DesktopSetup;
 import com.jfixby.hrank.SolutionRunner;
+import com.jfixby.scarabei.api.desktop.DesktopSetup;
 
 public class RunLovely {
 

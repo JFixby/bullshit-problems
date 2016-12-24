@@ -3,11 +3,11 @@ package com.google.java;
 
 import java.util.Arrays;
 
-import com.jfixby.cmns.api.debug.Debug;
-import com.jfixby.cmns.api.debug.DebugTimer;
-import com.jfixby.cmns.api.desktop.DesktopSetup;
-import com.jfixby.cmns.api.log.L;
-import com.jfixby.cmns.api.random.Random;
+import com.jfixby.scarabei.api.debug.Debug;
+import com.jfixby.scarabei.api.debug.DebugTimer;
+import com.jfixby.scarabei.api.desktop.DesktopSetup;
+import com.jfixby.scarabei.api.log.L;
+import com.jfixby.scarabei.api.random.Random;
 
 public class CountSort {
 

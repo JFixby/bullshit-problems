@@ -8,12 +8,12 @@ import java.util.Random;
 
 import org.junit.Test;
 
-import com.jfixby.cmns.api.collections.Collections;
-import com.jfixby.cmns.api.collections.Heap;
-import com.jfixby.cmns.api.debug.Debug;
-import com.jfixby.cmns.api.debug.DebugTimer;
-import com.jfixby.cmns.api.desktop.DesktopSetup;
-import com.jfixby.cmns.api.log.L;
+import com.jfixby.scarabei.api.collections.Collections;
+import com.jfixby.scarabei.api.collections.Heap;
+import com.jfixby.scarabei.api.debug.Debug;
+import com.jfixby.scarabei.api.debug.DebugTimer;
+import com.jfixby.scarabei.api.desktop.DesktopSetup;
+import com.jfixby.scarabei.api.log.L;
 
 public class QuickSort {
 	@Test

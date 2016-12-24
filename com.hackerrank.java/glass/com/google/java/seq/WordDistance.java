@@ -1,10 +1,10 @@
 
 package com.google.java.seq;
 
-import com.jfixby.cmns.api.collections.Collections;
-import com.jfixby.cmns.api.collections.List;
-import com.jfixby.cmns.api.collections.Map;
-import com.jfixby.cmns.api.desktop.DesktopSetup;
+import com.jfixby.scarabei.api.collections.Collections;
+import com.jfixby.scarabei.api.collections.List;
+import com.jfixby.scarabei.api.collections.Map;
+import com.jfixby.scarabei.api.desktop.DesktopSetup;
 
 public class WordDistance {
 

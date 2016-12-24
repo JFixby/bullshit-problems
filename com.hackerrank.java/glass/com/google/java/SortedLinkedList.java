@@ -3,9 +3,9 @@ package com.google.java;
 
 import java.util.ArrayList;
 
-import com.jfixby.cmns.api.desktop.DesktopSetup;
-import com.jfixby.cmns.api.log.L;
-import com.jfixby.cmns.api.random.Random;
+import com.jfixby.scarabei.api.desktop.DesktopSetup;
+import com.jfixby.scarabei.api.log.L;
+import com.jfixby.scarabei.api.random.Random;
 
 public class SortedLinkedList<E extends Comparable<E>> {
 

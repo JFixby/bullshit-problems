@@ -4,8 +4,8 @@ package com.google.java;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 
-import com.jfixby.cmns.api.desktop.DesktopSetup;
-import com.jfixby.cmns.api.log.L;
+import com.jfixby.scarabei.api.desktop.DesktopSetup;
+import com.jfixby.scarabei.api.log.L;
 
 public class Kosaraju {
 

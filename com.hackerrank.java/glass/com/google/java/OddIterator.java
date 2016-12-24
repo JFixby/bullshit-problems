@@ -4,9 +4,9 @@ package com.google.java;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import com.jfixby.cmns.api.debug.Debug;
-import com.jfixby.cmns.api.desktop.DesktopSetup;
-import com.jfixby.cmns.api.log.L;
+import com.jfixby.scarabei.api.debug.Debug;
+import com.jfixby.scarabei.api.desktop.DesktopSetup;
+import com.jfixby.scarabei.api.log.L;
 
 public class OddIterator<T> implements Iterator<T> {
 // original [0,#1,2,3,>#4,5,6,#7>] window size = 3, index in window == 1 (middle)

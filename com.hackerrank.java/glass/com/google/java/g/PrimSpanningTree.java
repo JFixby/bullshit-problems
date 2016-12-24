@@ -3,16 +3,16 @@ package com.google.java.g;
 
 import java.util.Comparator;
 
-import com.jfixby.cmns.api.collections.Collection;
-import com.jfixby.cmns.api.collections.Collections;
-import com.jfixby.cmns.api.collections.Heap;
-import com.jfixby.cmns.api.collections.List;
-import com.jfixby.cmns.api.collections.Map;
-import com.jfixby.cmns.api.collections.Set;
-import com.jfixby.cmns.api.desktop.DesktopSetup;
-import com.jfixby.cmns.api.err.Err;
-import com.jfixby.cmns.api.log.L;
-import com.jfixby.cmns.api.util.JUtils;
+import com.jfixby.scarabei.api.collections.Collection;
+import com.jfixby.scarabei.api.collections.Collections;
+import com.jfixby.scarabei.api.collections.Heap;
+import com.jfixby.scarabei.api.collections.List;
+import com.jfixby.scarabei.api.collections.Map;
+import com.jfixby.scarabei.api.collections.Set;
+import com.jfixby.scarabei.api.desktop.DesktopSetup;
+import com.jfixby.scarabei.api.err.Err;
+import com.jfixby.scarabei.api.log.L;
+import com.jfixby.scarabei.api.util.JUtils;
 
 public class PrimSpanningTree {
 

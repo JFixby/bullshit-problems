@@ -1,6 +1,6 @@
 import java.util.Vector;
 
-import com.jfixby.cmns.api.collections.Collections;
+import com.jfixby.scarabei.api.collections.Collections;
 
 public class MapList {
 
