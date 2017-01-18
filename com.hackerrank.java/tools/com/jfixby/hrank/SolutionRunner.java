@@ -10,7 +10,7 @@ import com.jfixby.scarabei.api.assets.Names;
 import com.jfixby.scarabei.api.collections.CollectionScanner;
 import com.jfixby.scarabei.api.collections.Collections;
 import com.jfixby.scarabei.api.err.Err;
-import com.jfixby.scarabei.api.file.ChildrenList;
+import com.jfixby.scarabei.api.file.FilesList;
 import com.jfixby.scarabei.api.file.File;
 import com.jfixby.scarabei.api.file.FileInputStream;
 import com.jfixby.scarabei.api.file.FileOutputStream;
@@ -35,7 +35,7 @@ public class SolutionRunner<T extends AbstractSolution> {
 		final File input_folder = home.child("in").child(testName);
 
 		L.d("reading input", input_folder);
-		final ChildrenList testInputs = input_folder.listDirectChildren();
+		final FilesList testInputs = input_folder.listDirectChildren();
 		testInputs.print("tests");
 
 		final CollectionScanner<File> testsScanner = (inputFile, i) -> {
