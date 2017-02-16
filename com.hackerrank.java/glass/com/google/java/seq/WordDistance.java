@@ -4,12 +4,12 @@ package com.google.java.seq;
 import com.jfixby.scarabei.api.collections.Collections;
 import com.jfixby.scarabei.api.collections.List;
 import com.jfixby.scarabei.api.collections.Map;
-import com.jfixby.scarabei.api.desktop.DesktopSetup;
+import com.jfixby.scarabei.api.desktop.ScarabeiDesktop;
 
 public class WordDistance {
 
 	public static void main (final String[] args) {
-		DesktopSetup.deploy();
+		ScarabeiDesktop.deploy();
 
 		final WordDistance wordDistance = new WordDistance();
 		wordDistance.add("A");

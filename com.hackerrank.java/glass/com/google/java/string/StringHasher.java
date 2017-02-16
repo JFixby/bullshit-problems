@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 import org.junit.Test;
 
-import com.jfixby.scarabei.api.desktop.DesktopSetup;
+import com.jfixby.scarabei.api.desktop.ScarabeiDesktop;
 import com.jfixby.scarabei.api.log.L;
 
 public class StringHasher {
@@ -224,14 +224,14 @@ public class StringHasher {
 
 	@Test
 	public void testPQ () {
-		DesktopSetup.deploy();
+		ScarabeiDesktop.deploy();
 		final StringHasher hashA = new StringHasher();
 		L.d(hashA.powQ(this.P - 1));
 
 	}
 
 	public static void main (final String[] args) {
-		DesktopSetup.deploy();
+		ScarabeiDesktop.deploy();
 
 		final String A = "ABCD";
 		final String B = "DABC";

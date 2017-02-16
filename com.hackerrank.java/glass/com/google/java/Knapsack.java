@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-import com.jfixby.scarabei.api.desktop.DesktopSetup;
+import com.jfixby.scarabei.api.desktop.ScarabeiDesktop;
 import com.jfixby.scarabei.api.log.L;
 
 public class Knapsack {
@@ -14,7 +14,7 @@ public class Knapsack {
 	private static SetMask bestMask;
 
 	public static void main (final String[] args) {
-		DesktopSetup.deploy();
+		ScarabeiDesktop.deploy();
 		final double maxWeight = 8;
 		final StartSet<Item> base = new StartSet<Item>();
 

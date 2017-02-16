@@ -9,7 +9,7 @@ import com.jfixby.scarabei.api.collections.Heap;
 import com.jfixby.scarabei.api.collections.List;
 import com.jfixby.scarabei.api.collections.Map;
 import com.jfixby.scarabei.api.collections.Set;
-import com.jfixby.scarabei.api.desktop.DesktopSetup;
+import com.jfixby.scarabei.api.desktop.ScarabeiDesktop;
 import com.jfixby.scarabei.api.err.Err;
 import com.jfixby.scarabei.api.log.L;
 import com.jfixby.scarabei.api.util.JUtils;
@@ -168,7 +168,7 @@ public class PrimSpanningTree {
 
 	public static final void main (final String[] args) {
 
-		DesktopSetup.deploy();
+		ScarabeiDesktop.deploy();
 
 		final Graph<Integer> graph = new AdjacencyListGreaph<Integer>();
 

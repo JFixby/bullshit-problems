@@ -1,7 +1,7 @@
 
 package com.google.java.t;
 
-import com.jfixby.scarabei.api.desktop.DesktopSetup;
+import com.jfixby.scarabei.api.desktop.ScarabeiDesktop;
 import com.jfixby.scarabei.api.err.Err;
 import com.jfixby.scarabei.api.log.L;
 import com.jfixby.scarabei.api.util.JUtils;
@@ -9,7 +9,7 @@ import com.jfixby.scarabei.api.util.JUtils;
 public class SortedListToBinaryTree {
 
 	public static void main (final String[] args) {
-		DesktopSetup.deploy();
+		ScarabeiDesktop.deploy();
 		final int N = 9;
 		final int off = 100;
 		final Integer[] array = new Integer[N];

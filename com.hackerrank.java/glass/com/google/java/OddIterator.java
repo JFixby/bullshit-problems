@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import com.jfixby.scarabei.api.debug.Debug;
-import com.jfixby.scarabei.api.desktop.DesktopSetup;
+import com.jfixby.scarabei.api.desktop.ScarabeiDesktop;
 import com.jfixby.scarabei.api.log.L;
 
 public class OddIterator<T> implements Iterator<T> {
@@ -67,7 +67,7 @@ public class OddIterator<T> implements Iterator<T> {
 	}
 
 	public static void main (final String[] args) {
-		DesktopSetup.deploy();
+		ScarabeiDesktop.deploy();
 		final ArrayList<Float> original = new ArrayList<Float>();
 		for (int i = 0; i < 7; i++) {
 			original.add(i * 1f);

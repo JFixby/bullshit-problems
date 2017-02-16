@@ -6,7 +6,7 @@ import java.util.HashMap;
 
 import com.jfixby.scarabei.api.debug.Debug;
 import com.jfixby.scarabei.api.debug.DebugTimer;
-import com.jfixby.scarabei.api.desktop.DesktopSetup;
+import com.jfixby.scarabei.api.desktop.ScarabeiDesktop;
 import com.jfixby.scarabei.api.log.L;
 import com.jfixby.scarabei.api.random.Random;
 
@@ -15,7 +15,7 @@ public class RunningSum {
 
 	public static final void main (final String[] args) {
 
-		DesktopSetup.deploy();
+		ScarabeiDesktop.deploy();
 
 		final int N = 100;
 		final int[] array = new int[N];

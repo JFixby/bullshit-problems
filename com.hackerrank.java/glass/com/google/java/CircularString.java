@@ -5,14 +5,14 @@ import java.util.HashMap;
 
 import com.jfixby.scarabei.api.debug.Debug;
 import com.jfixby.scarabei.api.debug.DebugTimer;
-import com.jfixby.scarabei.api.desktop.DesktopSetup;
+import com.jfixby.scarabei.api.desktop.ScarabeiDesktop;
 import com.jfixby.scarabei.api.log.L;
 import com.jfixby.scarabei.api.random.Random;
 
 public class CircularString {
 
 	public static void main (final String[] args) {
-		DesktopSetup.deploy();
+		ScarabeiDesktop.deploy();
 		Random.setSeed(0);
 		final String A = generate(20000);
 		final String B = rotate(A, A.length() - 1);

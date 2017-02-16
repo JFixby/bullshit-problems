@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 import org.junit.Test;
 
-import com.jfixby.scarabei.api.desktop.DesktopSetup;
+import com.jfixby.scarabei.api.desktop.ScarabeiDesktop;
 import com.jfixby.scarabei.api.err.Err;
 import com.jfixby.scarabei.api.log.L;
 
@@ -24,7 +24,7 @@ public class LongestCommonSubsequence {
 
 	@Test
 	public void checkNxN () {
-		DesktopSetup.deploy();
+		ScarabeiDesktop.deploy();
 		L.d();
 		final int N = 100;
 		final int common = 50;

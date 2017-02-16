@@ -3,7 +3,7 @@ package com.google.java.seq;
 
 import java.util.HashMap;
 
-import com.jfixby.scarabei.api.desktop.DesktopSetup;
+import com.jfixby.scarabei.api.desktop.ScarabeiDesktop;
 import com.jfixby.scarabei.api.log.L;
 
 public class LambdaJumper {
@@ -94,7 +94,7 @@ public class LambdaJumper {
 	}
 
 	public static void main (final String[] args) {
-		DesktopSetup.deploy();
+		ScarabeiDesktop.deploy();
 
 		final int[] map = new int[] {3, 4, 1, 1, 0, 2, 2, 0, 1, 1};
 // final int[] map = new int[1000];

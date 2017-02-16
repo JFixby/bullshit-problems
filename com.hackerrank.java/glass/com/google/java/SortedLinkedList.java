@@ -3,7 +3,7 @@ package com.google.java;
 
 import java.util.ArrayList;
 
-import com.jfixby.scarabei.api.desktop.DesktopSetup;
+import com.jfixby.scarabei.api.desktop.ScarabeiDesktop;
 import com.jfixby.scarabei.api.log.L;
 import com.jfixby.scarabei.api.random.Random;
 
@@ -187,7 +187,7 @@ public class SortedLinkedList<E extends Comparable<E>> {
 	}
 
 	public static void main (final String[] args) {
-		DesktopSetup.deploy();
+		ScarabeiDesktop.deploy();
 
 		final SortedLinkedList<Integer> list = new SortedLinkedList<Integer>();
 		for (int i = 0; i < 10; i++) {

@@ -3,13 +3,13 @@ package FibTree;
 
 import java.util.ArrayList;
 
-import com.jfixby.scarabei.api.desktop.DesktopSetup;
+import com.jfixby.scarabei.api.desktop.ScarabeiDesktop;
 import com.jfixby.scarabei.api.log.L;
 
 public class Fibonator {
 
 	public static void main (final String[] args) {
-		DesktopSetup.deploy();
+		ScarabeiDesktop.deploy();
 		final StringBuilder builder = new StringBuilder();
 		builder.append("static Long[] values = new Long[] {");
 		for (int i = 0; i < 3100; i++) {

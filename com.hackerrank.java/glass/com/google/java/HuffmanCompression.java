@@ -6,7 +6,7 @@ import java.util.HashMap;
 
 import com.jfixby.scarabei.api.collections.Collections;
 import com.jfixby.scarabei.api.debug.Debug;
-import com.jfixby.scarabei.api.desktop.DesktopSetup;
+import com.jfixby.scarabei.api.desktop.ScarabeiDesktop;
 import com.jfixby.scarabei.api.err.Err;
 import com.jfixby.scarabei.api.log.L;
 import com.jfixby.scarabei.api.math.IntegerMath;
@@ -15,7 +15,7 @@ import com.jfixby.scarabei.api.random.Random;
 public class HuffmanCompression {
 
 	public static void main (final String[] args) {
-		DesktopSetup.deploy();
+		ScarabeiDesktop.deploy();
 		Random.setSeed(0);
 		final String original = generateString(1000);// chars
 

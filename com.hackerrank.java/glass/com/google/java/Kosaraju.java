@@ -4,13 +4,13 @@ package com.google.java;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 
-import com.jfixby.scarabei.api.desktop.DesktopSetup;
+import com.jfixby.scarabei.api.desktop.ScarabeiDesktop;
 import com.jfixby.scarabei.api.log.L;
 
 public class Kosaraju {
 
 	public static void main (final String[] args) {
-		DesktopSetup.deploy();
+		ScarabeiDesktop.deploy();
 
 		final Graph graph = new Graph(13);
 		graph.addEdge(0, 6);

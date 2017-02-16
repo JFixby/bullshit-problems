@@ -12,14 +12,14 @@ import com.jfixby.scarabei.api.collections.Collections;
 import com.jfixby.scarabei.api.collections.Heap;
 import com.jfixby.scarabei.api.debug.Debug;
 import com.jfixby.scarabei.api.debug.DebugTimer;
-import com.jfixby.scarabei.api.desktop.DesktopSetup;
+import com.jfixby.scarabei.api.desktop.ScarabeiDesktop;
 import com.jfixby.scarabei.api.log.L;
 
 public class QuickSort {
 	@Test
 	public void main () {
 
-		DesktopSetup.deploy();
+		ScarabeiDesktop.deploy();
 		final DebugTimer timer = Debug.newTimer();
 		final Random r = new Random(0);
 		final int N = 9000;

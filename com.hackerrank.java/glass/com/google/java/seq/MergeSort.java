@@ -10,14 +10,14 @@ import org.junit.Test;
 
 import com.jfixby.scarabei.api.debug.Debug;
 import com.jfixby.scarabei.api.debug.DebugTimer;
-import com.jfixby.scarabei.api.desktop.DesktopSetup;
+import com.jfixby.scarabei.api.desktop.ScarabeiDesktop;
 import com.jfixby.scarabei.api.log.L;
 
 public class MergeSort {
 	@Test
 	public void main () {
 
-		DesktopSetup.deploy();
+		ScarabeiDesktop.deploy();
 		final DebugTimer timer = Debug.newTimer();
 		final Random r = new Random(0);
 		final int N = 10000;

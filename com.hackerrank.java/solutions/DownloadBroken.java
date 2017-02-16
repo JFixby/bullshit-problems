@@ -1,7 +1,7 @@
 import java.io.IOException;
 import java.net.MalformedURLException;
 
-import com.jfixby.scarabei.api.desktop.DesktopSetup;
+import com.jfixby.scarabei.api.desktop.ScarabeiDesktop;
 import com.jfixby.scarabei.api.file.File;
 import com.jfixby.scarabei.api.file.LocalFileSystem;
 import com.jfixby.scarabei.api.json.Json;
@@ -14,7 +14,7 @@ import com.jfixby.scarabei.api.util.path.RelativePath;
 public class DownloadBroken {
 
 	public static void main (final String[] args) throws MalformedURLException, IOException {
-		DesktopSetup.deploy();
+		ScarabeiDesktop.deploy();
 		Json.installComponent("com.jfixby.cmns.adopted.gdx.json.RedJson");
 
 		final File fileBroken = LocalFileSystem.ApplicationHome().child("broken-replacements.json");

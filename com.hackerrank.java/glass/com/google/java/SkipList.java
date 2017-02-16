@@ -9,7 +9,7 @@ import org.junit.Test;
 
 import com.jfixby.scarabei.api.debug.Debug;
 import com.jfixby.scarabei.api.debug.DebugTimer;
-import com.jfixby.scarabei.api.desktop.DesktopSetup;
+import com.jfixby.scarabei.api.desktop.ScarabeiDesktop;
 import com.jfixby.scarabei.api.log.L;
 import com.jfixby.scarabei.api.random.Random;
 
@@ -364,7 +364,7 @@ public class SkipList<E extends Comparable<E>> {
 
 	@Test
 	public void testB () {
-		DesktopSetup.deploy();
+		ScarabeiDesktop.deploy();
 		final DebugTimer timer = Debug.newTimer();
 		final int N = 100000;
 		final ArrayList<Integer> check = new ArrayList<Integer>(N);
@@ -468,7 +468,7 @@ public class SkipList<E extends Comparable<E>> {
 
 	public static void main (final String[] args) {
 
-		DesktopSetup.deploy();
+		ScarabeiDesktop.deploy();
 		final DebugTimer timer = Debug.newTimer();
 		final int N = 100_000;
 		final ArrayList<Integer> check = new ArrayList<Integer>(N);

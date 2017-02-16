@@ -5,14 +5,14 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import com.jfixby.scarabei.api.desktop.DesktopSetup;
+import com.jfixby.scarabei.api.desktop.ScarabeiDesktop;
 import com.jfixby.scarabei.api.log.L;
 
 public class IntegerParser {
 
 	@Test
 	public void test () {
-		DesktopSetup.deploy();
+		ScarabeiDesktop.deploy();
 
 		final long[] values = new long[] {1, 2, 1000, +1000, -1000, +5123, +50000, Integer.MAX_VALUE * 4L};
 		for (int i = 0; i < values.length; i++) {

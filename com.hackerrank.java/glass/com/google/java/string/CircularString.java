@@ -3,13 +3,13 @@ package com.google.java.string;
 
 import com.jfixby.scarabei.api.debug.Debug;
 import com.jfixby.scarabei.api.debug.DebugTimer;
-import com.jfixby.scarabei.api.desktop.DesktopSetup;
+import com.jfixby.scarabei.api.desktop.ScarabeiDesktop;
 import com.jfixby.scarabei.api.random.Random;
 
 public class CircularString {
 
 	public static void main (final String[] args) {
-		DesktopSetup.deploy();
+		ScarabeiDesktop.deploy();
 		Random.setSeed(0);
 		final String A = generate(200_000_00);
 		final String B = rotate(A, 2);

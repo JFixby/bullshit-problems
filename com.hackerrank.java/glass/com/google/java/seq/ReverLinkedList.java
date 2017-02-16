@@ -1,7 +1,7 @@
 
 package com.google.java.seq;
 
-import com.jfixby.scarabei.api.desktop.DesktopSetup;
+import com.jfixby.scarabei.api.desktop.ScarabeiDesktop;
 import com.jfixby.scarabei.api.log.L;
 
 public class ReverLinkedList {
@@ -25,7 +25,7 @@ public class ReverLinkedList {
 	}
 
 	public static void main (final String[] args) {
-		DesktopSetup.deploy();
+		ScarabeiDesktop.deploy();
 		final int N = 10;
 		Node<Integer> input = null;
 

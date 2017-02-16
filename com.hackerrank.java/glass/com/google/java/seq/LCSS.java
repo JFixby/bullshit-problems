@@ -4,7 +4,7 @@ package com.google.java.seq;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import com.jfixby.scarabei.api.desktop.DesktopSetup;
+import com.jfixby.scarabei.api.desktop.ScarabeiDesktop;
 import com.jfixby.scarabei.api.log.L;
 
 public class LCSS {
@@ -73,7 +73,7 @@ public class LCSS {
 
 	public static void main (final String[] args) {
 
-		DesktopSetup.deploy();
+		ScarabeiDesktop.deploy();
 		{
 			L.d();
 			final Character[] A = new Character[] {'A', 'B', 'C', 'D', 'A'};

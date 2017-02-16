@@ -11,7 +11,7 @@ import org.junit.Test;
 
 import com.jfixby.scarabei.api.debug.Debug;
 import com.jfixby.scarabei.api.debug.DebugTimer;
-import com.jfixby.scarabei.api.desktop.DesktopSetup;
+import com.jfixby.scarabei.api.desktop.ScarabeiDesktop;
 import com.jfixby.scarabei.api.log.L;
 
 public class RadixBucketSort {
@@ -19,7 +19,7 @@ public class RadixBucketSort {
 
 	@Test
 	public void test () {
-		DesktopSetup.deploy();
+		ScarabeiDesktop.deploy();
 		final DebugTimer timer = Debug.newTimer();
 		final Random r = new Random(System.currentTimeMillis());
 		final int N = 10000000;

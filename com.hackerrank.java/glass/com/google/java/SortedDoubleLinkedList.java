@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import com.jfixby.scarabei.api.debug.Debug;
 import com.jfixby.scarabei.api.debug.DebugTimer;
-import com.jfixby.scarabei.api.desktop.DesktopSetup;
+import com.jfixby.scarabei.api.desktop.ScarabeiDesktop;
 import com.jfixby.scarabei.api.log.L;
 import com.jfixby.scarabei.api.random.Random;
 
@@ -147,7 +147,7 @@ public class SortedDoubleLinkedList<E extends Comparable<E>> {
 	@Test
 	public void testa () {
 
-		DesktopSetup.deploy();
+		ScarabeiDesktop.deploy();
 		final DebugTimer timer = Debug.newTimer();
 		final int N = 1000;
 
@@ -219,7 +219,7 @@ public class SortedDoubleLinkedList<E extends Comparable<E>> {
 	}
 
 	public static void main (final String[] args) {
-		DesktopSetup.deploy();
+		ScarabeiDesktop.deploy();
 
 		final SortedDoubleLinkedList<Integer> list = new SortedDoubleLinkedList<Integer>();
 		for (int i = 0; i < 10; i++) {
