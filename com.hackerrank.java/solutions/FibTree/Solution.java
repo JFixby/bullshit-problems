@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.Vector;
 
 import com.jfixby.hrank.AbstractSolution;
 
@@ -88,7 +87,7 @@ public class Solution extends AbstractSolution {
 
 		}
 
-		final HashMap<String, Path> knownPaths = new HashMap<String, Path>();
+		final HashMap<String, Path> knownPaths = new HashMap<>();
 
 		public Path findPath (final Node x, final Node y) {
 			final Path result = new Path();
@@ -98,8 +97,8 @@ public class Solution extends AbstractSolution {
 				return result;
 			}
 
-			final LinkedList<Node> stepsX = new LinkedList<Node>();
-			final Vector<Node> stepsY = new Vector<Node>();
+			final LinkedList<Node> stepsX = new LinkedList<>();
+			final ArrayList<Node> stepsY = new ArrayList<>();
 // final HashSet<Node> visited = new HashSet<Node>();
 
 			stepsX.add(x);
@@ -135,7 +134,7 @@ public class Solution extends AbstractSolution {
 					}
 					final Node yParent = lastY.parent;
 					if (yParent != null) {
-						stepsY.insertElementAt(yParent, 0);
+						stepsY.add(0, yParent);
 					}
 				}
 
@@ -192,7 +191,7 @@ public class Solution extends AbstractSolution {
 		}
 
 		Node parent;
-		final List<Node> children = new ArrayList<Node>();
+		final List<Node> children = new ArrayList<>();
 		public Long value = 0L;
 
 // @Override
@@ -209,7 +208,7 @@ public class Solution extends AbstractSolution {
 	}
 
 	static class Path {
-		final ArrayList<Node> steps = new ArrayList<Node>();
+		final ArrayList<Node> steps = new ArrayList<>();
 
 		@Override
 		public String toString () {
@@ -254,7 +253,7 @@ public class Solution extends AbstractSolution {
 
 	public static final class Fibonacci extends F {
 		public static int N = MODULO();
-		static ArrayList<Long> appendix = new ArrayList<Long>();
+		static ArrayList<Long> appendix = new ArrayList<>();
 
 		public static Long valueOf (final int k) {
 			if (k < values.length) {

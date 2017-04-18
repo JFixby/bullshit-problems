@@ -3,7 +3,6 @@ package Hanoi;
 
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.Vector;
 
 import com.jfixby.hrank.AbstractSolution;
 
@@ -63,7 +62,7 @@ public class Solution extends AbstractSolution {
 
 		}
 
-		final Vector<Disk> disks = new Vector<Disk>();
+		final ArrayList<Disk> disks = new ArrayList<>();
 
 		final int number;
 		final String name;
@@ -93,7 +92,7 @@ public class Solution extends AbstractSolution {
 			}
 
 			disk.currentTower = this;
-			this.disks.insertElementAt(disk, 0);
+			this.disks.add(0, disk);// WARNING!
 
 		}
 
@@ -190,7 +189,7 @@ public class Solution extends AbstractSolution {
 
 		}
 
-		final ArrayList<Move> steps = new ArrayList<Move>();
+		final ArrayList<Move> steps = new ArrayList<>();
 
 		public void addMove (final Tower from, final Tower to, final Disk disk) {
 			final Move nextMove = new Move(from, to, disk);

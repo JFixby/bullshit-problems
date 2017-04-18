@@ -1,4 +1,4 @@
-import java.util.Vector;
+import java.util.ArrayList;
 
 import com.jfixby.scarabei.api.collections.Collections;
 
@@ -7,7 +7,7 @@ public class MapList {
 	public MapList () {
 	}
 
-	public final Vector<Mapping> list = new Vector<Mapping>();
+	public final ArrayList<Mapping> list = new ArrayList<Mapping>();
 
 	public Mapping find (final String url, final String transfer) {
 		for (int i = 0; i < this.list.size(); i++) {
