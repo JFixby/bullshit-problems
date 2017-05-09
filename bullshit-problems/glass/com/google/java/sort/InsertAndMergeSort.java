@@ -20,7 +20,7 @@ public class InsertAndMergeSort {
 
 	@Test
 	public void testReverse () {
-
+		ScarabeiDesktop.deploy();
 		assertTrue(this.checkSorting(new byte[] {}));
 		assertTrue(this.checkSorting(new byte[] {1}));
 		assertTrue(this.checkSorting(new byte[] {1, 2}));
@@ -62,8 +62,11 @@ public class InsertAndMergeSort {
 		for (int i = 0; i < array.length; i++) {
 			heap.add(array[i]);
 		}
+
+// heap.print();
+// Sys.exit();
 		for (int i = 0; i < array.length; i++) {
-			array[i] = heap.remove();
+			array[array.length - i - 1] = heap.remove();
 		}
 	}
 
