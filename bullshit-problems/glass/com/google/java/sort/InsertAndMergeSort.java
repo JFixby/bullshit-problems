@@ -41,7 +41,7 @@ public class InsertAndMergeSort {
 
 		Arrays.sort(java_array);
 // this.insertSort(merge_array);
-		this.mergeSort(merge_array);
+		this.heapSort(merge_array);
 
 		final boolean areEqual = Arrays.equals(java_array, merge_array);
 		if (!areEqual) {
@@ -55,6 +55,16 @@ public class InsertAndMergeSort {
 // System.out.println();
 		}
 		return areEqual;
+	}
+
+	private void heapSort (final byte[] array) {
+		final Heap heap = new Heap(array.length);
+		for (int i = 0; i < array.length; i++) {
+			heap.add(array[i]);
+		}
+		for (int i = 0; i < array.length; i++) {
+			array[i] = heap.remove();
+		}
 	}
 
 	private void mergeSort (final byte[] merge_array) {
