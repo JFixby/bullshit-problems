@@ -65,48 +65,28 @@ public class Sortings {
 			return;
 		}
 		byte min = Byte.MAX_VALUE;
+		byte max = Byte.MIN_VALUE;
 		for (int i = 0; i < bytes.length; i++) {
 			min = this.min(bytes[i], min);
+			max = this.max(bytes[i], max);
 		}
-
-		final IntOrdered[] toSort = new IntOrdered[bytes.length];
-
+		final int[] toSort = new int[bytes.length];
 		for (int i = 0; i < bytes.length; i++) {
-			final int order = bytes[i] - min;
-			toSort[i] = new IntOrdered() {
-				final int value = order;
-
-				@Override
-				public String toString () {
-					return this.value + "";
-				}
-
-				@Override
-				public int order (final int mode) {
-
-					if (mode == -1) {
-						return order;
-					}
-					final int digit = digitAt(order, mode);
-
-					return digit;
-
-				}
-			};
+			toSort[i] = (bytes[i] - min);
 		}
-		final int counterSize = 10;
-
-		this.countingSort(toSort, counterSize, 2);
-// System.out.println(" test 2" + "(" + Arrays.toString(toSort) + ")");
-
-		this.countingSort(toSort, counterSize, 1);
-// System.out.println(" test 1" + "(" + Arrays.toString(toSort) + ")");
-
-		this.countingSort(toSort, counterSize, 0);
-// System.out.println(" test 0" + "(" + Arrays.toString(toSort) + ")");
-
+		{
+			final int counterSize = 10;
+// System.out.println(" toSort" + "(" + Arrays.toString(toSort) + ")");
+			this.countingSort(toSort, counterSize, 2);
+// System.out.println(" toSort" + "(" + Arrays.toString(toSort) + ")");
+			this.countingSort(toSort, counterSize, 1);
+// System.out.println(" toSort" + "(" + Arrays.toString(toSort) + ")");
+			this.countingSort(toSort, counterSize, 0);
+// System.out.println(" toSort" + "(" + Arrays.toString(toSort) + ")");
+// System.out.println();
+		}
 		for (int i = 0; i < bytes.length; i++) {
-			bytes[i] = (byte)(toSort[i].order(-1) + min);
+			bytes[i] = (byte)(toSort[i] + min);
 		}
 	}
 
@@ -120,45 +100,32 @@ public class Sortings {
 			min = this.min(bytes[i], min);
 			max = this.max(bytes[i], max);
 		}
-
-		final IntOrdered[] toSort = new IntOrdered[bytes.length];
-
+		final int[] toSort = new int[bytes.length];
 		for (int i = 0; i < bytes.length; i++) {
-			final int order = bytes[i] - min;
-			toSort[i] = mode -> order;
+			toSort[i] = (bytes[i] - min);
 		}
-		final int counterSize = max - min + 1;
-		this.countingSort(toSort, counterSize, -1);
+		{
+			final int counterSize = max - min + 1;
+			this.countingSort(toSort, counterSize, -1);
+		}
 		for (int i = 0; i < bytes.length; i++) {
-			bytes[i] = (byte)(toSort[i].order(-1) + min);
+			bytes[i] = (byte)(toSort[i] + min);
 		}
 	}
 
-	static private int digitAt (final int order, final int digit) {
-		if (digit == 0) {
-			return order / 100;
-		}
-		if (digit == 1) {
-			return (order - digitAt(order, 0) * 100) / 10;
-		}
-		if (digit == 2) {
-			return (order - digitAt(order, 0) * 100 - digitAt(order, 1) * 10);
-		}
-		throw new Error();
-	}
-
-	public interface IntOrdered {
-		public int order (int mode);
-	}
-
-	private void countingSort (final IntOrdered[] output, final int counterSize, final int mode) {
-		final IntOrdered[] input = new IntOrdered[output.length];
-		System.arraycopy(output, 0, input, 0, output.length);
+	private void countingSort (final int[] output, final int counterSize, final int mode) {
+		final int[] input = this.copy(output);
 
 		final int[] counter = new int[counterSize];
 		for (int i = 0; i < input.length; i++) {
-			final IntOrdered value = input[i];
+			final int value = input[i];
 			final int key = this.keyOf(value, mode);
+			if (key < 0) {
+				throw new Error();
+			}
+			if (key >= counter.length) {
+				throw new Error();
+			}
 			counter[key]++;
 		}
 		int total = 0;
@@ -168,7 +135,7 @@ public class Sortings {
 			total = total + oldValue;
 		}
 		for (int i = 0; i < input.length; i++) {
-			final IntOrdered value = input[i];
+			final int value = input[i];
 			final int key = this.keyOf(value, mode);
 			output[counter[key]] = value;
 			counter[key]++;
@@ -176,8 +143,12 @@ public class Sortings {
 
 	}
 
-	private int keyOf (final IntOrdered value, final int mode) {
-		return value.order(mode);
+	private int keyOf (final int value, final int digit) {
+		if (digit == -1) {
+			return value;
+		}
+		final int result = Integer.parseInt(((value + 1000) + "").charAt(digit + 1) + "");
+		return result;
 	}
 
 	private byte max (final byte a, final byte b) {
@@ -295,6 +266,12 @@ public class Sortings {
 
 	private byte[] copy (final byte[] src) {
 		final byte[] copy = new byte[src.length];
+		System.arraycopy(src, 0, copy, 0, src.length);
+		return copy;
+	}
+
+	private int[] copy (final int[] src) {
+		final int[] copy = new int[src.length];
 		System.arraycopy(src, 0, copy, 0, src.length);
 		return copy;
 	}
