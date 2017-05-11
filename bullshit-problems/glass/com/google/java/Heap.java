@@ -23,6 +23,8 @@ public class Heap {
 		}
 
 		heap.print();
+		final TreeNode toPrint = new HeapTreeNode(heap, 0);
+		TreePrinter.print(toPrint);
 	}
 
 	private void print () {
@@ -54,7 +56,7 @@ public class Heap {
 		return r;
 	}
 
-	private int childrenSize (final int index) {
+	public int childrenSize (final int index) {
 		int size = 0;
 
 		final int l = indexOfLeftChild(index);

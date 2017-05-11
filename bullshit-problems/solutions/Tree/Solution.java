@@ -18,7 +18,6 @@ public class Solution extends AbstractSolution {
 		for (int i = 1; i <= nV; i++) {
 			graph.addVertex("" + i);
 		}
-		graph.print();
 		for (int i = 1; i <= nE; i++) {
 			final int v = in.nextInt();
 			final int u = in.nextInt();
