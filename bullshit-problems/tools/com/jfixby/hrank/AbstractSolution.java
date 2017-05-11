@@ -9,5 +9,5 @@ public abstract class AbstractSolution {
 		output.println(msg);
 	}
 
-	public abstract void run (String[] strings);
+	abstract public void run (final String[] args);
 }
