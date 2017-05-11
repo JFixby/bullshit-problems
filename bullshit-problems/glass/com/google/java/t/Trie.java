@@ -106,7 +106,7 @@ public class Trie {
 			target = target.obtainChildFor(C);
 		}
 		target.store(string);
-
+		TreePrinter.print(this.root);
 	}
 
 }
