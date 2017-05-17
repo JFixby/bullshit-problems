@@ -82,7 +82,7 @@ public class Robber2 {
 			if (rob) {
 				return n.value + this.robResult.compute(n.left, false) + this.robResult.compute(n.right, false);
 			}
-
+// else
 			final long optionL = this.robResult.compute(n.left, true) + this.robResult.compute(n.right, false);
 			final long optionR = this.robResult.compute(n.left, false) + this.robResult.compute(n.right, true);
 			final long optionRL = this.robResult.compute(n.left, true) + this.robResult.compute(n.right, true);
