@@ -8,7 +8,7 @@ public class RunSolveMeFirst {
 
 	public static void main (final String[] args) throws Throwable {
 		ScarabeiDesktop.deploy();
-		SolutionRunner.run(SolveMeFirst.Solution.class);
+		SolutionRunner.run(Solution.class);
 	}
 
 }
