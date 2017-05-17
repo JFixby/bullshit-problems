@@ -11,7 +11,10 @@ public class SmallestLeft {
 
 	public static void main (final String[] args) {
 		ScarabeiDesktop.deploy();
+// final byte arr[] = {1, 6, 4, 10, 2, 5};
 		final byte arr[] = {1, 6, 4, 10, 2, 5};
+
+// final byte arr[] = {1, 3, 0, 2, 5};
 
 		final Byte[] result = solve(arr);
 		L.d("", Arrays.toString(result));
@@ -31,13 +34,13 @@ public class SmallestLeft {
 				continue;
 			}
 			Byte s = null;
-			while (stack.size() > 0) {
+			do {
 				s = touch(stack);
-				if (isBiggerThan(a, s)) {
+				if (isBiggerThan(a, s)) {// also checks and triggers if stack is empty
 					break;
 				}
 				remove(stack);
-			}
+			} while (true);
 
 			stack.add(a);
 			result[i] = s;
