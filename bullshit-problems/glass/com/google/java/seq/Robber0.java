@@ -12,25 +12,30 @@ public class Robber0 {
 		long compute (int house);
 	}
 
-	public Robber0 (final byte[] arr) {
-		this.arr = arr;
+	public Robber0 () {
+
 	}
 
-	private final byte[] arr;
+	private byte[] arr;
+	private λ robResult;
 
-	final λ robResult = this.memo(this.setupExpression());
-
-	private final boolean useMemoization = !true;
+	public boolean useMemoization = !true;
+	private int fromHouse;
+	private int toHouse;
 
 	private λ setupExpression () {
 		return h -> {
-			if (h == 0) {
-				return this.arr[0];
+			if (h < this.fromHouse) {
+				return 0;
 			}
-			if (h == 1) {
-				return max(this.arr[0], this.arr[1]);
+			if (h > this.toHouse) {
+				return 0;
 			}
-			// h==n+1
+
+			if (h == this.fromHouse) {
+				return this.arr[this.fromHouse];
+			}
+
 			return max(this.robResult.compute(h - 1), this.robResult.compute(h - 2) + this.arr[h]);
 		};
 	}
@@ -59,15 +64,20 @@ public class Robber0 {
 		ScarabeiDesktop.deploy();
 // final byte arr[] = {50, 1, 1, 50};
 		final byte arr[] = {10, 13, 23, 17, 6, 11, 18, 16};
+// final byte arr[] = new byte[1000];
 
-		final Robber0 robber = new Robber0(arr);
-
-		L.d("", robber.solve());
+		final Robber0 robber = new Robber0();
+		robber.useMemoization = true;
+		L.d("result", robber.solve(arr, 0, arr.length - 1));
 
 	}
 
-	private long solve () {
-		return this.robResult.compute(this.arr.length - 1);
+	public long solve (final byte[] arr, final int fromHouse, final int toHouse) {
+		this.arr = arr;
+		this.fromHouse = fromHouse;
+		this.toHouse = toHouse;
+		this.robResult = this.memo(this.setupExpression());
+		return this.robResult.compute(toHouse);
 	}
 
 	private static long max (final long x, final long y) {
